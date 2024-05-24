@@ -69,7 +69,7 @@ Main content of the topic goes here. Describe the key points and details. Use re
 
 <!-- expandable_section:start -->
 <ExpandableSection>
-  <title>Expandable Section Title</title>
+  <header>Detailed Information</header>
   <preview>This section provides additional details for readers who want to dive deeper into the topic.</preview>
   <content>
     Additional content goes here. This content is initially hidden and can be expanded by clicking the "See More" button. Provide detailed explanations, examples, or any other information that might be relevant to the topic.
@@ -77,6 +77,7 @@ Main content of the topic goes here. Describe the key points and details. Use re
 </ExpandableSection>
 <!-- expandable_section:end -->
 
+<br><br>
 The expandable section above provides additional details for readers who want to dive deeper into the topic. This feature can be used anywhere in the article to offer optional, detailed content without overwhelming the main text.
 
 ---
