@@ -4,6 +4,9 @@ date: '2016-03-08'
 tags: ['markdown', 'code', 'features']
 draft: false
 summary: Example of a markdown file with code blocks and syntax highlighting
+thumbnail: '/static/images/glossary/reorg.png'
+authors: ['default', 'sparrowhawk']
+relatedTopics: ['pictures-of-canada', 'code-sample', 'new-features-in-v1']
 
 ---
 
@@ -12,6 +15,20 @@ A sample post with markdown.
 ## Inline Highlighting
 
 Sample of inline highlighting `sum = parseInt(num1) + parseInt(num2)`
+
+<ExpandableSection
+  title="Example Expandable Section"
+  preview="This is a short preview of the content inside the expandable section."
+>
+  <p>
+    This is the long content inside the expandable section. It can include any
+    valid MDX content, such as text, images, or videos.
+  </p>
+  <img src="https://docs.docker.com/get-started/images/docker-architecture.webp" alt="Example Image" />
+  <p>
+    You can add more paragraphs, lists, or any other MDX elements here.
+  </p>
+</ExpandableSection>
 
 ## Code Blocks
 
@@ -37,7 +54,3 @@ def fib():
 for index, fibonacci_number in zip(range(10), fib()):
      print('{i:3}: {f:3}'.format(i=index, f=fibonacci_number))
 ```
-
-
-Test image
-![Github Traffic](/images/authors/default.jpeg)
