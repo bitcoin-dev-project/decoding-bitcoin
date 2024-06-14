@@ -13,59 +13,40 @@ relatedtopics: ['hd-wallet', 'bech32']
 
 ## Introduction
 
-Segregated Witness (SegWit) is a protocol upgrade for Bitcoin that was implemented in 2017. It separates the transaction signature (witness) from the transaction data, allowing for more efficient use of block space.
+is a Bitcoin transaction type that allows the sender to commit funds to a script hash. The recipient must provide a script matching the hash and the necessary data to satisfy the script.
 
-## How SegWit Works
+## How P2SH Works
 
-SegWit removes the signature data from the original portion of the transaction and appends it as a separate structure at the end. This reduces the size of transactions and allows more transactions to fit into each block.
+In a P2SH transaction, the sender pays to the hash of a redeem script instead of a public key. The recipient must provide the redeem script and the required inputs to unlock the funds.
 
-## Benefits of SegWit
+## Benefits of P2SH
 
-- **Increased Block Capacity**: By reducing transaction size, SegWit increases the number of transactions that can be included in each block.
-- **Lower Transaction Fees**: Smaller transaction sizes lead to lower fees.
-- **Fixes Transaction Malleability**: SegWit eliminates the ability to alter transaction IDs, enhancing security and enabling second-layer solutions like the Lightning Network.
+- **Enhanced Flexibility**: Supports complex scripts, enabling functionalities like multi-signature and time-locked transactions.
+- **Increased Privacy**: The redeem script is not revealed until it is used, providing privacy for the transaction structure.
+- **Standardization**: Simplifies the creation of custom transaction types by abstracting script details.
 
-## Implementing SegWit
+## Example P2SH Transaction
 
-Here's a simple example of a SegWit transaction using BitcoinJS:
+Here's an example of creating a P2SH address and redeeming a P2SH transaction using BitcoinJS:
 
 ```js
 const bitcoin = require('bitcoinjs-lib');
 
-// Create a SegWit transaction
-function createSegWitTransaction(inputs, outputs, changeAddress, feeRate) {
-  const psbt = new bitcoin.Psbt();
+// Create a P2SH address
+const redeemScript = bitcoin.script.compile([
+  bitcoin.opcodes.OP_HASH160,
+  Buffer.from('20-byte-hash-of-redeem-script', 'hex'),
+  bitcoin.opcodes.OP_EQUAL
+]);
+const { address } = bitcoin.payments.p2sh({ redeem: { output: redeemScript } });
 
-  inputs.forEach(input => {
-    psbt.addInput({
-      hash: input.txid,
-      index: input.vout,
-      witnessUtxo: {
-        script: Buffer.from(input.script, 'hex'),
-        value: input.value,
-      },
-      redeemScript: Buffer.from(input.redeemScript, 'hex')
-    });
-  });
+console.log(`P2SH Address: ${address}`);
 
-  outputs.forEach(output => {
-    psbt.addOutput({
-      address: output.address,
-      value: output.value,
-    });
-  });
+// Redeem a P2SH transaction
+const txb = new bitcoin.TransactionBuilder();
+txb.addInput('txid', 0);
+txb.addOutput('recipient-address', amount);
+txb.sign(0, keyPair, redeemScript);
 
-  psbt.addOutput({
-    address: changeAddress,
-    value: inputs.reduce((sum, input) => sum + input.value, 0) - outputs.reduce((sum, output) => sum + output.value, 0) - feeRate
-  });
-
-  // Sign inputs
-  inputs.forEach((input, index) => {
-    psbt.signInput(index, input.keyPair);
-  });
-
-  // Finalize and get transaction hex
-  psbt.finalizeAllInputs();
-  return psbt.extractTransaction().toHex();
-}
+const tx = txb.build();
+console.log(`Transaction: ${tx.toHex()}`);
