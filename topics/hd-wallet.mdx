@@ -1,0 +1,43 @@
+---
+title: Hierarchical Deterministic (HD) Wallets
+date: '2024-06-14'
+lastmod: '2024-06-14'
+tags: ['bitcoin', 'hd-wallets', 'security']
+draft: false
+summary: This article provides an overview of Hierarchical Deterministic (HD) Wallets, their benefits, and how they enhance Bitcoin wallet management and security.
+featured: true
+thumbnail: '/glossary-repo/static/images/topics/hd-wallets.jpeg'
+authors: ['default', 'author2']
+relatedtopics: ['wallet-security', 'bip32']
+---
+
+## Introduction
+
+Hierarchical Deterministic (HD) Wallets are a type of Bitcoin wallet that allows the generation of multiple addresses from a single seed phrase. This enhances security and simplifies wallet management.
+
+## How HD Wallets Work
+
+HD Wallets use a single seed phrase to generate a tree of private keys. Each key can derive multiple child keys, allowing for an organized and hierarchical structure of addresses. This is defined in BIP 32.
+
+## Benefits of HD Wallets
+
+- **Enhanced Security**: The seed phrase can be used to recover the entire wallet, ensuring funds are not lost if the wallet is compromised.
+- **Simplified Backup**: Only one seed phrase needs to be backed up to secure all derived addresses.
+- **Organized Management**: Different accounts and addresses can be managed under a single wallet structure.
+
+## Example HD Wallet Creation
+
+Here's an example of creating an HD Wallet using BitcoinJS:
+
+```js
+const bitcoin = require('bitcoinjs-lib');
+
+// Generate a seed phrase
+const seed = bitcoin.bip39.mnemonicToSeedSync('praise you muffin lion enable neck grocery crumble super myself license ghost');
+const root = bitcoin.bip32.fromSeed(seed);
+
+// Generate the first address from the HD wallet
+const account = root.derivePath("m/44'/0'/0'/0");
+const { address } = bitcoin.payments.p2pkh({ pubkey: account.publicKey });
+
+console.log(`HD Wallet Address: ${address}`);

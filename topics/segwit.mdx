@@ -1,0 +1,71 @@
+---
+title: Segregated Witness (SegWit)
+date: '2024-06-14'
+lastmod: '2024-06-14'
+tags: ['bitcoin', 'scalability', 'transaction']
+draft: false
+summary: This article provides a concise overview of Segregated Witness (SegWit), its benefits, and its impact on Bitcoin transactions.
+featured: true
+thumbnail: '/glossary-repo/static/images/topics/segwit.jpeg'
+authors: ['default', 'author2']
+relatedtopics: ['bitcoin-upgrades', 'transaction-efficiency']
+---
+
+## Introduction
+
+Segregated Witness (SegWit) is a protocol upgrade for Bitcoin that was implemented in 2017. It separates the transaction signature (witness) from the transaction data, allowing for more efficient use of block space.
+
+## How SegWit Works
+
+SegWit removes the signature data from the original portion of the transaction and appends it as a separate structure at the end. This reduces the size of transactions and allows more transactions to fit into each block.
+
+## Benefits of SegWit
+
+- **Increased Block Capacity**: By reducing transaction size, SegWit increases the number of transactions that can be included in each block.
+- **Lower Transaction Fees**: Smaller transaction sizes lead to lower fees.
+- **Fixes Transaction Malleability**: SegWit eliminates the ability to alter transaction IDs, enhancing security and enabling second-layer solutions like the Lightning Network.
+
+## Implementing SegWit
+
+Here's a simple example of a SegWit transaction using BitcoinJS:
+
+```js
+const bitcoin = require('bitcoinjs-lib');
+
+// Create a SegWit transaction
+function createSegWitTransaction(inputs, outputs, changeAddress, feeRate) {
+  const psbt = new bitcoin.Psbt();
+
+  inputs.forEach(input => {
+    psbt.addInput({
+      hash: input.txid,
+      index: input.vout,
+      witnessUtxo: {
+        script: Buffer.from(input.script, 'hex'),
+        value: input.value,
+      },
+      redeemScript: Buffer.from(input.redeemScript, 'hex')
+    });
+  });
+
+  outputs.forEach(output => {
+    psbt.addOutput({
+      address: output.address,
+      value: output.value,
+    });
+  });
+
+  psbt.addOutput({
+    address: changeAddress,
+    value: inputs.reduce((sum, input) => sum + input.value, 0) - outputs.reduce((sum, output) => sum + output.value, 0) - feeRate
+  });
+
+  // Sign inputs
+  inputs.forEach((input, index) => {
+    psbt.signInput(index, input.keyPair);
+  });
+
+  // Finalize and get transaction hex
+  psbt.finalizeAllInputs();
+  return psbt.extractTransaction().toHex();
+}

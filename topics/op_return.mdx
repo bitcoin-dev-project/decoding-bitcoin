@@ -1,0 +1,45 @@
+
+---
+title: OP_RETURN
+date: '2024-06-14'
+lastmod: '2024-06-14'
+tags: ['bitcoin', 'op_return', 'scripting']
+draft: false
+summary: This article provides an overview of the OP_RETURN script opcode, its uses, and its implications for Bitcoin transactions.
+featured: true
+thumbnail: '/glossary-repo/static/images/topics/opreturn.jpeg'
+authors: ['default', 'author2']
+relatedtopics: ['bitcoin-scripting', 'data-storage']
+---
+
+## Introduction
+
+OP_RETURN is a script opcode used in Bitcoin transactions to embed data in the blockchain. It allows for the insertion of up to 80 bytes of arbitrary data without affecting the spendability of the output.
+
+## How OP_RETURN Works
+
+In a Bitcoin transaction, the OP_RETURN opcode marks an output as invalid, meaning it cannot be spent. This output can store arbitrary data, making it useful for various applications like data anchoring and metadata storage.
+
+## Benefits of OP_RETURN
+
+- **Data Anchoring**: Securely store data hashes on the blockchain, proving data existence at a specific time.
+- **Metadata Storage**: Embed metadata directly in transactions for tracking and identification purposes.
+- **Immutable Records**: Once recorded, the data is immutable and cannot be altered or deleted.
+
+## Example OP_RETURN Transaction
+
+Here's an example of creating an OP_RETURN transaction using BitcoinJS:
+
+```js
+const bitcoin = require('bitcoinjs-lib');
+
+// Create a transaction with OP_RETURN
+const txb = new bitcoin.TransactionBuilder();
+txb.addInput('txid', 0);
+txb.addOutput(bitcoin.script.compile([
+  bitcoin.opcodes.OP_RETURN,
+  Buffer.from('your-data-here', 'utf8')
+]), 0);
+
+const tx = txb.buildIncomplete();
+console.log(`Transaction: ${tx.toHex()}`);
