@@ -1,0 +1,89 @@
+In p2pk, bitcoins are sent to a public key,
+The recipient must provide a valid signature to spend it
+
+*Despite being the simplest script for locking bitcoins to someone's public key, P2PK is not used as much as the similar P2PKH script
+## How does it work:
+
+
+
+The ability to lock and unlock coins is the mechanism by which we transfer bitcoin. _Locking_ is giving some bitcoins to some entity. 
+_Unlocking_ is spending some bitcoins that you have received.
+
+#### 1- Locking (ScriptPubKey):
+When creating a P2PK transaction, the sender specifies the recipient's public key in the ScriptPubKey.
+**ScriptPubKey**: A pay-to-public-key locking script looks like this:
+```
+<recipient's public key> OP_CHECKSIG
+```
+
+ This script specifies the conditions that must be met to spend the bitcoins in the future.
+ and it's Placed within the output of a transaction.
+ 
+#### 2- Unlocking (ScriptSig)
+
+To spend Bitcoin sent to a P2PK address, the recipient must provide a valid signature corresponding to the public key. 
+**ScriptSig:** would look like this:
+```
+<signature>
+```
+
+#### 3- Validation
+
+When a transaction is validated, the ScriptSig and ScriptPubKey are concatenated.
+```
+<signature> <recipient's public key> OP_CHECKSIG
+```
+
+
+> [!NOTE]
+> OP_CHECK SIG
+
+ 
+## Script Validation:
+The combined script is executed using stack operations. 
+
+Let’s break down how it works using this animation:
+
+<ScriptStackVisualizer type="p2pk"></ScriptStackVisualizer>
+
+
+
+<ExpandableSection title="Element VS Operation" preview="This is a short preview of the content inside the expandable section."></ExpandableSection>
+
+
+
+### Examples:
+For a hands-on example, we can look at some of the very early Bitcoin transactions, many of which were P2PK. One notable transaction is from block 170 (**irst Bitcoin transaction in history**), which includes a payment from Satoshi Nakamoto to Hal Finney. 
+###### Example Details:
+
+- **Transaction ID**: 0d6fe5213c0b3297bde922a8045c10c85b9a749bdaab8940446851b97ef6f484
+- **Block**: 170
+- **Date**: January 12, 2009
+
+
+### Problems with P2PK
+### P2PK Challenges: Quick Overview
+
+| **Issue**             | **Explanation**                                   | **Impact**                                 |
+| --------------------- | ------------------------------------------------- | ------------------------------------------ |
+| **Key Length**        | Public keys are 65 bytes (130 hex characters).    | Difficult to handle, not user-friendly.    |
+| **Storage Demands**   | Uncompressed keys increase blockchain size.       | Reduces node scalability.                  |
+| **Security Exposure** | Public keys are visible, risking future breaches. | Potential future risks if ECDSA is broken. |
+| **Block Space**       | Uses more block space than necessary.             | Inefficient use of valuable space.         |
+
+### P2PKH Advantages
+Transitioning to P2PKH mitigates these issues by using hashed addresses, which are:
+- **Shorter**: Reduced to 20 bytes from public keys.
+- **More Secure**: Public key remains hidden until the coins are spent.
+- **Space Efficient**: Optimizes block space usage.
+
+### Example Transition
+**Old P2PK Address Style**:
+- Public key (130 hex characters): `04b0bd634234abbb1ba1e986e884185c
+
+
+
+Exercise:
+
+#eded
+
