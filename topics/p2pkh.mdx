@@ -1,0 +1,15 @@
+---
+title: "P2PKH (DRAFT)"
+date: 2024-07-05T15:32:14Z
+lastmod: "2024-07-06"
+tags: ["bitcoin", "privacy"]
+draft: false
+category: Scripts
+layout: PostSimple
+---
+
+P2PKH is similar to [P2PK](https://river.com/learn/terms/p/p2pk/) transactions, except that the bitcoin is locked to the hash of the public key rather than the public key itself.
+
+-   If Alice wants to send 1 BTC to Bob in a P2PKH transaction, Bob provides Alice with an address from his wallet. Bob’s address is included in the transaction. When Bob tries to spend the bitcoin he receives, he must sign the transaction with the private key corresponding to the public key whose hash matches the hash provided in Alice’s transaction.
+-   Pay-to-Public-Key-Hash (P2PKH) is a method of sending bitcoin to a specific address. In this method, instead of sending money to a public key, as in P2PK transactions, a hash of the public key is used.
+-   By using the hash of the public key rather than the public key itself, P2PKH enchances bitcoin security. This is because the hash is secured by SHA-256 encryption. Currently no known quantum algorithms can break the SHA-256 encryption. This means that even if a quantum computer were to be used to try to derive the private key from the public key, it would not be able to do so because the public key is not visible on the blockchain, only its hash is.
