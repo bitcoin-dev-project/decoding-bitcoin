@@ -211,29 +211,24 @@ setDecodedKey(result);
 };
 
 return (
+
 <div className="container">
-<h1>P2PK Script Decoder</h1>
-<div>
-<input
-type="text"
-value={inputScript}
-onChange={(e) => setInputScript(e.target.value)}
-placeholder="Enter P2PK Script"
-/>
-<button onClick={handleDecode}>Decode</button>
+    <h1>P2PK Script Decoder</h1>
+    <div>
+        <input
+            type="text"
+            value={inputScript}
+            onChange={(e) => setInputScript(e.target.value)}
+            placeholder="Enter P2PK Script"
+        />
+        <button onClick={handleDecode}>Decode</button>
+    </div>
+    <div>
+        <h2>Decoded Public Key:</h2>
+        <p>{decodedKey || "No key decoded yet"}</p>
+    </div>
 </div>
-<div>
-<h2>Decoded Public Key:</h2>
-<p>{decodedKey || 'No key decoded yet'}</p>
-</div>
-</div>
-);
-}
-`,
-hidden: false,
-},
-}}
-/>
+); } `, hidden: false, }, }} />
 
 #### Exercise Instructions
 
@@ -260,13 +255,14 @@ You can use these P2PK scripts to test your implementation:
 Good luck!
 
 <CodeSolution
-  title="Solution code"
+  title="Solution code "
   preview=" ..."
 >
 ```python
 import hashlib
 
-...
+def decode_p2pk_script(hex_script): # Step 1: Decode the hex script
+
 # Example usage
 
 hex_script = '4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac'
