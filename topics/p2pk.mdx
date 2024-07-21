@@ -266,42 +266,7 @@ Good luck!
 ```python
 import hashlib
 
-def decode_p2pk_script(hex_script): # Step 1: Decode the hex script
-script_bytes = bytes.fromhex(hex_script)
-
-    # Step 2: Extract the public key (the script is P2PK, so the first byte indicates the length of the key)
-    pub_key_length = script_bytes[0]
-    pub_key = script_bytes[1:1 + pub_key_length]
-
-    # Step 3: Convert public key to Bitcoin address
-    sha256_1 = hashlib.sha256(pub_key).digest()
-    ripemd160 = hashlib.new('ripemd160', sha256_1).digest()
-
-    # Step 4: Add version byte (0x00 for mainnet)
-    extended_ripemd160 = b'\x00' + ripemd160
-
-    # Step 5: Double SHA-256 hash
-    sha256_2 = hashlib.sha256(extended_ripemd160).digest()
-    sha256_3 = hashlib.sha256(sha256_2).digest()
-
-    # Step 6: Take the first 4 bytes of the second SHA-256 hash as checksum
-    checksum = sha256_3[:4]
-
-    # Step 7: Append the checksum to the extended RIPEMD-160 hash
-    bin_addr = extended_ripemd160 + checksum
-
-    # Step 8: Convert to base58
-    alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-    num = int.from_bytes(bin_addr, 'big')
-    base58_addr = ''
-    while num > 0:
-        num, rem = divmod(num, 58)
-        base58_addr = alphabet[rem] + base58_addr
-
-    # Handle leading zero bytes
-    num_leading_zeros = len(bin_addr) - len(bin_addr.lstrip(b'\0'))
-    return '1' * num_leading_zeros + base58_addr
-
+...
 # Example usage
 
 hex_script = '4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac'
