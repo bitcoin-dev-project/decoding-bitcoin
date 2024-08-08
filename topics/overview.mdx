@@ -1,0 +1,47 @@
+---
+title: "Overview"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: PostSimple
+children: ["overview-1", "overview-2", "overview-3", "overview-4", "overview-5"]
+order: 2
+---
+
+Bitcoin scripts are simple programs written in a language called Script or Bitcoin Script. These scripts define the conditions under which Bitcoin can be spent or transferred.
+
+Key features of Bitcoin Script include:
+
+1. **Stack-based**: Operates using a stack data structure, similar to the Forth programming language from the 1960s.
+2. **Turing incomplete**: Cannot create infinite loops, preventing potential denial-of-service attacks.
+3. **Stateless**: Each script contains all necessary information for validation, requiring no external data.
+
+## How Scripts Work in Bitcoin
+
+1. Scripts control the Unspent Transaction Outputs (UTXOs) in the Bitcoin ledger.
+2. UTXOs are "locked" by scripts that specify conditions for spending.
+3. To spend Bitcoin, users must provide a script that satisfies these conditions.
+4. Common conditions include providing a valid digital signature from a specific private key.
+
+## Script Execution
+
+1. When a transaction is made, two scripts are combined:
+    - The locking script (from the previous transaction)
+    - The unlocking script (from the current transaction)
+2. These scripts are executed sequentially by Bitcoin nodes.
+3. If the execution results in a "true" value, the transaction is valid.
+
+## Importance of Scripts
+
+1. Enable complex conditions for Bitcoin transfers beyond simple payments.
+2. Form the basis for more advanced features like multi-signature wallets and time-locked transactions.
+3. Allow for the implementation of simple smart contracts on the Bitcoin network.
+
+## Simplicity and Security
+
+The simplicity of Bitcoin Script, chosen by Satoshi Nakamoto, offers several advantages:
+
+1. Minimal storage requirements
+2. Easier to secure and audit
+3. Reduces the attack surface for potential vulnerabilities

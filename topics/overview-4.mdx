@@ -1,0 +1,34 @@
+---
+title: "Script Success and failure"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 2
+---
+
+A valid script execution follows these rules:
+
+1. It runs from left to right.
+2. It continues until one of two things happens, either the script reaches its end naturally or an operation within the script signals a failure.
+3. If the script completes without any early failure, the success or failure of the script depends solely on the top item of the stack.
+
+<img
+    src="/bitcoin-topics/static/images/topics/overview/valid_invalid_script.png"
+    alt="P2PK transaction illustration"
+/>
+
+In essence, a script is considered successful if it runs to completion and leaves a single "true" or any non-zero value on top of the stack.
+
+Any other outcome - early termination, an empty stack, or a "false" value on top - results in the script being considered invalid or failed.
+
+<ExpandableAlert
+  title="Other types of errors"
+  type="important"
+  expandable={false}
+>
+If you'd like to learn more about these type of errors you can check the [script_error.cpp](https://github.com/bitcoin/bitcoin/blob/master/src/script/script_error.cpp) file from bitcoin core source code 
+<MinimalVideoPlayer src="/bitcoin-topics/static/images/topics/overview/script_error.mov" />
+
+</ExpandableAlert>

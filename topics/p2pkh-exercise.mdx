@@ -1,0 +1,60 @@
+---
+title: "Exercise 1: ScriptPubKey Decoder"
+date: 2024-10-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 6
+---
+
+## P2PKH ScriptPubKey Decoder
+
+In this exercise, you'll decode a Pay-to-Public-Key-Hash (P2PKH) ScriptPubKey from hex to Assembly (ASM) format.
+
+1. Examine each byte of the ScriptPubKey.
+2. Determine if it's an Opcode, Data, or Data Length.
+3. Click the corresponding button.
+4. Continue until you've decoded the entire script.
+
+<ScriptDecoder scriptHex="76A91433f5a20ff6a0fa36a55c6149cd32db04a1054fb288AC" />
+
+This will help you understand the structure of P2PKH scripts, a fundamental part of Bitcoin transactions.
+
+After completing, you should recognize the standard P2PKH ScriptPubKey structure:
+
+```
+OP_DUP OP_HASH160 [20-byte public key hash] OP_EQUALVERIFY OP_CHECKSIG
+```
+
+<ExpandableAlert
+  title="ScriptPubKey Decoding (Hex to ASM) Explanation"
+  type="success"
+  expandable={false}
+>
+1. The process starts with a hex string representing the ScriptPubKey.
+2. The hex is converted to a sequence of bytes.
+3. These bytes are then processed one at a time:
+
+    - If a byte is between 0x01 and 0x4b (1-75), it indicates that the next n bytes should be read as a data element.
+    - If the byte is greater than 0x4b, it represents an opcode.
+
+4. For data elements:
+
+    - The bytes are kept as hex in the ASM representation.
+
+5. For opcodes:
+
+    - The byte is converted to its corresponding symbolic name (e.g., 0x76 becomes OP_DUP).
+
+6. Special cases for longer data elements:
+
+    - OP_PUSHDATA1 (0x4c): The next byte indicates how many subsequent bytes to read as data.
+    - OP_PUSHDATA2 (0x4d): The next two bytes indicate how many subsequent bytes to read as data.
+    - OP_PUSHDATA4 (0x4e): The next four bytes indicate how many subsequent bytes to read as data.
+
+7. The decoded elements (both data and opcodes) are then joined together with spaces to form the final ASM string.
+
+8. This process allows for the conversion of any ScriptPubKey from its raw byte representation to a more human-readable format, regardless of the specific script type (P2PK, P2PKH, or others).
+
+</ExpandableAlert>

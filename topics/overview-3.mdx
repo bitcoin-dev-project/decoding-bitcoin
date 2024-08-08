@@ -1,0 +1,46 @@
+---
+title: "Locking & unlocking"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 2
+---
+
+Locking and Unlocking script are used to define the conditions under which a transaction can be spent.
+
+## Locking Script
+
+A locking script, also known as a ScriptPubKey, is placed on every output you create in a transaction. It specifies the conditions that must be met for the output to be spent.
+
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/overview/lock_script.svg"
+    width="90%"
+    height="auto"
+/>
+
+## Unlocking Script
+
+An unlocking script, also known as a ScriptSig or Witness, is provided for every input you want to spend in a transaction. It contains the data needed to satisfy the conditions set by the locking script.
+
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/overview/unlock_script.svg"
+    width="90%"
+    height="auto"
+/>
+
+## Execution
+
+When a transaction is processed, each node in the network checks both the locking and unlocking scripts for each input.
+
+The unlocking script is executed first, followed by the locking script.
+
+If the unlocking script successfully satisfies the conditions set by the locking script, the transaction is considered valid and is added to the blockchain.
+Otherwise, it is rejected.
+
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/lock_unlock.svg"
+    width="90%"
+    height="auto"
+/>

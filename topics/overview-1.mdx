@@ -1,0 +1,47 @@
+---
+title: "OpCodes"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 2
+---
+
+The visualization below includes an explanation of the most commonly used opcodes in the pubkey scripts of standard transactions.
+
+<ExpandableAlert title="Understanding Opcodes" type="info" expandable={false}>
+    Getting to know the opcode in this visualization helps you understand most
+    standard Bitcoin transactions
+</ExpandableAlert>
+
+<OpCodeExplorer></OpCodeExplorer>
+
+## Categories of Opcodes
+
+1. **Constants**: Push values onto the stack (e.g., OP_0, OP_1, OP_16).
+
+2. **Flow Control**: Conditionally execute code (e.g., OP_IF, OP_ELSE, OP_ENDIF).
+
+3. **Stack**: Manipulate items on the stack (e.g., OP_DUP, OP_SWAP, OP_DROP).
+
+4. **Splice**: Operations for string manipulation (e.g., OP_CAT, OP_SUBSTR, OP_SIZE).
+
+5. **Bitwise Logic**: Perform bitwise operations (e.g., OP_AND, OP_OR, OP_XOR).
+
+6. **Arithmetic**: Perform numeric operations (e.g., OP_ADD, OP_SUB, OP_MUL).
+
+7. **Cryptographic**: Perform cryptographic operations (e.g., OP_RIPEMD160, OP_SHA1, OP_CHECKSIG).
+
+8. **Locktime**: Deal with timelock features (e.g., OP_CHECKLOCKTIMEVERIFY).
+
+## Key Characteristics
+
+-   Opcodes are typically one byte in size.
+-   Some opcodes have been disabled for security reasons.
+
+<ExpandableAlert title="New Opcodes">
+    New opcodes can be added through soft forks to enable new functionality. Eg:
+    [OP_CTV](https://bitcoinops.org/en/topics/op_checktemplateverify),
+    [OP_CAT](https://bitcoinops.org/en/topics/op_cat), ...
+</ExpandableAlert>
