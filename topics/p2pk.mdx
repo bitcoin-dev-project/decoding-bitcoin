@@ -21,8 +21,10 @@ We will explore this transaction in detail to understand how P2PK works, from it
 
 **TLDR:** P2PK allows bitcoins to be sent directly to a _public key_. To spend the bitcoins, the recipient must provide a _valid signature_.
 
-> [!NOTE]
-> Despite being simple, P2PK is not as widely used as P2PKH. We'll cover **why** this is the case later on.
+<ExpandableAlert title="NOTE" type="info">
+    Despite being simple, P2PK is not as widely used as P2PKH. We'll cover why
+    this is the case later on.
+</ExpandableAlert>
 
 ### How does it work ?
 
@@ -38,10 +40,15 @@ The ability to lock and unlock coins is the mechanism by which we transfer bitco
 
 #### 1- Locking (ScriptPubKey):
 
-When creating this P2PK transaction, Satoshi specifies **Finney's public key in the ScriptPubKey**.
+<div className="mx-auto w-2/3">
+    <img
+        src="/bitcoin-topics/static/images/topics/p2pk/spk.svg"
+        alt="P2PK transaction illustration"
+    />
+</div>
+When creating this P2PK transaction, Satoshi specifies **Finney's public key in
+the ScriptPubKey**.
 
-<article className="flex flex-row">
-  <div className="w-2/3">
       This script specifies the conditions that must be met to spend the bitcoins in the future, and it's placed within the output of a transaction.
 
     **ScriptPubKey**: A P2PK locking script looks like this:
@@ -49,12 +56,6 @@ When creating this P2PK transaction, Satoshi specifies **Finney's public key in 
 ```
 <Public key Finney> OP_CHECKSIG
 ```
-
-  </div>
-  <div className="w-1/3 ml-10">
-    <img src="/bitcoin-topics/static/images/topics/p2pk/spk.png" alt="P2PK transaction illustration" />
-  </div>
-</article>
 
 Click on **Output 1** of the transaction below to view the scriptPubKey that Satoshi used to lock 10 BTC to Finney's public key and see this in action.
 
@@ -69,22 +70,31 @@ Click on **Output 1** of the transaction below to view the scriptPubKey that Sat
 -   **0411db ... b412a3**: Represents Hal Finney's uncompressed public key
 -   **OP_CHECKSIG**: (0xac in Hex) Verifies the signature for the provided public key. It returns TRUE (1) if valid, otherwise FALSE (0)
 
-<ExpandableSection
+<ExpandableAlert
   title="Why Satoshi used Uncompressed pub key (65 bytes) ?"
-  preview="Satoshi didn't know about compressed public keys ..."
+  type="warning"
+  expandable={true}
+  initialLines={1}
 >
-Some have [speculated](https://bitcoin.stackexchange.com/a/5960) that Satoshi was unaware of public key compression. It wasn't until Pieter Wuille discovered that the compressed SEC format existed in OpenSSL that people start using it.   
-The advantage of using Compressed pub key is:   
+Some have [speculated](https://bitcoin.stackexchange.com/a/5960) that Satoshi was unaware of public key compression.
+
+It wasn't until Pieter Wuille discovered that the compressed SEC format existed in OpenSSL that people start using it.  
+The advantage of using Compressed pub key is:  
 their public keys are smaller => smaller transaction on the network => save block space
 
-</ExpandableSection>
+</ExpandableAlert>
 
 #### 2- Unlocking (ScriptSig)
 
+<div className="mx-auto w-2/3">
+    <img
+        src="/bitcoin-topics/static/images/topics/p2pk/scriptSig.svg"
+        alt="P2PK transaction illustration"
+    />
+</div>
+
 To spend bitcoin that Satoshi sent, Finney must provide a valid signature corresponding to the public key.
 
-<article className="flex flex-row">
-  <div className="w-2/3">
     This signature proves that Finney has the private key corresponding to the public key specified in the ScriptPubKey.
 
 **ScriptSig:** A P2PK Unlocking script looks like this:
@@ -92,12 +102,6 @@ To spend bitcoin that Satoshi sent, Finney must provide a valid signature corres
 ```
 <Signature Finney>
 ```
-
-  </div>
-  <div className="w-1/3 ml-10">
-    <img src="/bitcoin-topics/static/images/topics/p2pk/scriptSig.png" alt="P2PK transaction illustration" />
-  </div>
-</article>
 
 Click on **Input 1** of this transaction to view the scriptSig created by Hal Finney.
 
@@ -127,18 +131,24 @@ The combined script will validate if the signature is valid, but fail if the sig
 
 The ScriptSig will only unlock the ScriptPubKey if the signature is valid for that public key. In other words, only someone with knowledge of the private key can produce a valid ScriptSig.
 
-> [!NOTE]
-> For the script to be valid, the top element of the stack must be **nonzero** after evaluation
+<ExpandableAlert title="NOTE" type="info">
+    For the script to be valid, the top element of the stack must be non-zero
+    after evaluation
+</ExpandableAlert>
 
 You can play with this tool below to see step by step how we evaluate P2PK the stack
 
 <ScriptStackVisualizer type="p2pk"></ScriptStackVisualizer>
 
-<ExpandableSection
+<ExpandableAlert
   title="Element VS Operation (Optional)"
-  preview="In the previous example, Signature and Public Key are elements, while OP_CHECKSIG is an operation. To understand the difference between an Element and an Operation, read this."
+  type="info"
+  expandable={true}
+  initialLines={1}
 >
-**Elements:**  Data pushed onto the stack.
+In the previous example, Signature and Public Key are elements, while OP_CHECKSIG is an operation. To understand the difference between an Element and an Operation, read this.
+
+**Elements:** Data pushed onto the stack.
 
 -   **Type:** Byte strings (1 to 520 bytes).
 -   **Example:** `Signatures` or `public keys`
@@ -163,7 +173,7 @@ You can play with this tool below to see step by step how we evaluate P2PK the s
 | **Operation** | Hashes the top stack element     | OP_HASH160    | 1 element   | 1 element       |
 | **Operation** | Verifies a signature             | OP_CHECKSIG   | 2 elements  | 1 element (0/1) |
 
-</ExpandableSection>
+</ExpandableAlert>
 
 ### Problems with P2PK
 
@@ -177,9 +187,9 @@ You can play with this tool below to see step by step how we evaluate P2PK the s
 
 P2PKH fixes this. Read the next topic to learn how
 
-> [!IMPORTANT] > **Next Topic:** In the next topic, we'll dive deeper into the specifics of
-> P2PKH.
-
+<ExpandableAlert title="Element VS Operation (Optional)" type="important">
+    In the next topic, we'll dive deeper into the specifics of P2PKH
+</ExpandableAlert>
 ---
 
 ### Pay-to-Public-Key (P2PK) Script Decoder Exercise
@@ -216,10 +226,14 @@ You can use these P2PK scripts to test your implementation:
 
 Good luck!
 
-<CodeSolution
-  title="Solution code "
-  preview=" ..."
+<ExpandableAlert
+  title="Solution code"
+  type="success"
+  expandable={true}
+  initialLines={0}
+
 >
+
 ```python
 import hashlib
 
@@ -232,5 +246,5 @@ address = decode_p2pk_script(hex_script)
 print(f'Bitcoin Address: {address}')
 
 ```
-</CodeSolution>
-```
+
+</ExpandableAlert>
