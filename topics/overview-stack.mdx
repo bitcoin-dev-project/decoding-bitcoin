@@ -1,0 +1,41 @@
+---
+title: "Stack"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 6
+parent: overview
+---
+
+A stack is a Last-In-First-Out (LIFO) data structure. Think of it like a stack of plates:
+
+-   You add (push) new plates to the top.
+-   You remove (pop) plates from the top.
+
+Let's visualize this with our Bitcoin Stack component.  
+Try pushing some values onto the stack and see how they stack up!
+
+<StackSimulator showOperations={false} />
+
+### 2. Basic Stack Operations
+
+Bitcoin's script uses stack operations to process data. Let's explore two operations as an example:
+
+`OP_ADD`: pops the top two values from the stack, adds them, and pushes the result back.
+
+1. Push the number 3 onto the stack
+2. Push the number 4 onto the stack
+3. Click the `OP_ADD` button
+
+<StackSimulator showOperations={true} />
+
+`OP_EQUAL`: compares the top two stack items. If they're equal, it pushes `1` (true), otherwise `0` (false).
+
+1. Push the number 5 twice
+2. Click the `OP_EQUAL` button
+
+<StackSimulator showOperations={true} />
+
+Now try with different numbers!

@@ -1,0 +1,42 @@
+---
+title: "Project: Build bitcoin Stack"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: PostSimple
+project: true
+order: 8
+---
+
+## Programming bitcoin Script Transaction
+
+In this project you will build your own bitcoin stack machine from cratch and run your own bitcoin ops (operations)...
+
+Adding 2+2 in bitcoin Script starting from zero / scratch:
+
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/stack.png"
+    width="60%"
+    height="auto"
+/>
+
+bitcoin script notation reads:
+
+```
+ScriptSig (input):    ?
+ScriptPubKey:         OP_2 OP_ADD OP_4 OP_EQUAL
+```
+
+If you check all bitcoin script operations -
+the following ops should no longer be a mystery:
+
+Constants
+
+| Word           | Opcode | Hex       | Input    | Output        | Description                                                                                             |
+| -------------- | ------ | --------- | -------- | ------------- | ------------------------------------------------------------------------------------------------------- |
+| OP_0, OP_FALSE | 0      | 0x00      | Nothing. | (empty value) | An empty array of bytes is pushed onto the stack. (This is not a no-op: an item is added to the stack.) |
+| OP_1, OP_TRUE  | 81     | 0x51      | Nothing. | 1             | The number 1 is pushed onto the stack.                                                                  |
+| OP_2-OP_16     | 82-96  | 0x52-0x60 | Nothing. | 2-16          | The number in the word name (2-16) is pushed onto the stack.                                            |
+
+Bitwise logic

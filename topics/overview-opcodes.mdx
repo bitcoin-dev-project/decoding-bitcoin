@@ -1,0 +1,217 @@
+---
+title: "OpCodes"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 3
+parent: overview
+---
+
+The visualization below includes an explanation of the most commonly used opcodes in standard transactions.
+
+<ExpandableAlert title="Understanding Opcodes" type="info" expandable={false}>
+    Getting to know the opcode in this visualization helps you understand most
+    standard bitcoin transactions
+</ExpandableAlert>
+
+<OpCodeExplorer></OpCodeExplorer>
+
+## Categories of Opcodes
+
+1. **Constants**: Push values onto the stack (e.g., OP_0, OP_1, OP_16).
+
+2. **Flow Control**: Conditionally execute code (e.g., OP_IF, OP_ELSE, OP_ENDIF).
+
+3. **Stack**: Manipulate items on the stack (e.g., OP_DUP, OP_SWAP, OP_DROP).
+
+4. **Splice**: Operations for string manipulation (e.g., OP_CAT, OP_SUBSTR, OP_SIZE).
+
+5. **Bitwise Logic**: Perform bitwise operations (e.g., OP_AND, OP_OR, OP_XOR).
+
+6. **Arithmetic**: Perform numeric operations (e.g., OP_ADD, OP_SUB, OP_MUL).
+
+7. **Cryptographic**: Perform cryptographic operations (e.g., OP_RIPEMD160, OP_SHA1, OP_CHECKSIG).
+
+8. **Locktime**: Deal with timelock features (e.g., OP_CHECKLOCKTIMEVERIFY).
+
+## Key Characteristics
+
+-   Opcodes are typically one byte in size.
+-   Some opcodes have been disabled for security reasons.
+
+<ExpandableAlert title="New Opcodes">
+    New opcodes can be added through soft forks to enable new functionality. Eg:
+    [OP_CTV](https://bitcoinops.org/en/topics/op_checktemplateverify),
+    [OP_CAT](https://bitcoinops.org/en/topics/op_cat), ...
+</ExpandableAlert>
+
+## Exercise: Implement OP_ADD
+
+Your task is to implement the `OP_ADD` function in the interactive code editor below. Use the provided template and follow the steps outlined in the comments.
+
+Test your implementation by:
+
+1. Pushing numbers onto the stack using the input field and "Push" button.
+2. Clicking the "OP_ADD" button to execute your implementation.
+3. Observing the result on the stack and the feedback message.
+
+<SandpackComponent
+  template="react"
+  options={{
+    externalResources: ["https://cdn.tailwindcss.com"],
+    showLineNumbers: true,
+    showInlineErrors: true,
+    editorHeight: 600
+  }}
+  customSetup={{
+    dependencies: {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0",
+      "lucide-react": "^0.263.1"
+    },
+  }}
+  files={{
+    "/OP_ADD.js": {
+        code: 
+            `
+const OP_ADD = (stack) => {
+  if (stack.length < 2) {
+    return false; // Not enough elements in the stack
+  }
+
+// Your code here:
+
+// TODO: Implement OP_ADD here
+// 1. Check if there are at least 2 elements in the stack
+// 2. If so, pop the top two elements
+// 3. Add them together
+// 4. Push the result back onto the stack
+// 5. Return true if successful, false otherwise
+
+return true; // Operation successful
+};
+
+export default OP_ADD
+;`
+        ,
+        active: true
+    }
+,
+    "/App.js": `
+import React, { useState } from "react"
+import { Plus, Trash2 } from "lucide-react"
+import OP_ADD from "./OP_ADD"
+
+const App = () => {
+const [stack, setStack] = useState([]);
+const [input, setInput] = useState("");
+const [message, setMessage] = useState("");
+
+const pushToStack = () => {
+if (input.trim() !== "") {
+setStack([...stack, parseInt(input)]);
+setInput("");
+setMessage("");
+}
+};
+
+const clearStack = () => {
+setStack([]);
+setMessage("");
+};
+
+const executeOpAdd = () => {
+const newStack = [...stack];
+const result = OP_ADD(newStack);
+if (result) {
+setStack(newStack);
+setMessage("OP_ADD executed successfully!");
+} else {
+setMessage("Error: Not enough elements for OP_ADD");
+}
+};
+
+return (
+
+<div className="bg-[#272E35] p-4 m-6 rounded-lg text-sm">
+<h1 className="text-2xl font-bold mb-4 text-[#E5E6F1]">Bitcoin Stack Simulator: OP_ADD</h1>
+
+      <div className="mb-4 flex">
+        <input
+          type="number"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="bg-[#454C54] text-[#E5E6F1] border border-[#5A6270] p-2 mr-2 rounded"
+          placeholder="Enter a number"
+        />
+        <button onClick={pushToStack} className="bg-[#454C54] text-[#E5E6F1] p-2 rounded hover:bg-[#5A6270]">
+          Push
+        </button>
+      </div>
+
+      <div className="mb-4">
+        <button onClick={executeOpAdd} className="bg-orange-500 text-white p-2 rounded mr-2 hover:bg-orange-600">
+          <Plus className="inline mr-1" size={18} /> OP_ADD
+        </button>
+        <button onClick={clearStack} className="bg-[#454C54] text-[#E5E6F1] p-2 rounded hover:bg-[#5A6270]">
+          <Trash2 className="inline mr-1" size={18} /> Clear Stack
+        </button>
+      </div>
+
+      <div className="border border-[#454C54] p-4 mb-4 rounded-lg bg-[#1D2127]">
+        <h2 className="text-xl font-semibold mb-2 text-[#E5E6F1]">Stack:</h2>
+        {stack.length === 0 ? (
+          <p className="text-[#E5E6F1]">Stack is empty</p>
+        ) : (
+          <ul className="list-disc pl-5 text-[#E5E6F1]">
+            {stack.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {message && <p className="text-sm text-orange-500">{message}</p>}
+    </div>
+
+);
+};
+
+export default App
+;`,
+    "/index.js": `
+import React from "react"
+import { createRoot } from "react-dom/client"
+import App from "./App"
+
+const root = createRoot(document.getElementById("root"));
+root.render(<App />);
+`
+}}
+/>
+
+<ExpandableAlert
+  title="Solution code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+```javascript
+const OP_ADD = (stack) => {
+  if (stack.length < 2) {
+    return false; // Not enough elements in the stack
+  }
+
+const b = stack.pop();
+const a = stack.pop();
+const result = a + b;
+stack.push(result);
+
+return true; // Operation successful
+};
+
+export default OP_ADD;
+```
+</ExpandableAlert>
