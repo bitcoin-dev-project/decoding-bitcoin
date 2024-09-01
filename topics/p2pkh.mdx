@@ -6,8 +6,10 @@ draft: false
 category: Scripts
 layout: PostSimple
 order: 5
+icon: "FaHashtag"
 children:
-    - p2pkh-exercise
+    - p2pkh-exercise1
+    - p2pkh-exercise2
 ---
 
 Have you ever heard about the guy who bought two [pizzas](https://bitcointalk.org/index.php?topic=137.0) for 10,000 BTC? This transaction was a P2PKH transaction
@@ -41,3 +43,7 @@ This is the 10.000 BTC pizza transaction
 -   By using the hash of the public key rather than the public key itself, P2PKH enchances bitcoin security. This is because the hash is secured by SHA-256 encryption. Currently no known quantum algorithms can break the SHA-256 encryption. This means that even if a quantum computer were to be used to try to derive the private key from the public key, it would not be able to do so because the public key is not visible on the blockchain, only its hash is.
 
 <ScriptStackVisualizer type="p2pkh"></ScriptStackVisualizer>
+
+---
+
+<MailingListSignup />

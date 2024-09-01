@@ -1,0 +1,357 @@
+---
+title: "Implement Script Parser"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 8
+project: true
+---
+
+Bitcoin uses a stack-based scripting language to validate transactions. Understanding how to parse and interpret these scripts is crucial for working with Bitcoin transactions.
+
+## Task
+
+Complete the `parseScript` function in `challenges/ScriptParser.js`:
+
+1. Implement a function that takes a hexadecimal string representing a Bitcoin script and returns an array of parsed operations and data pushes.
+2. The function should handle various opcodes and data push operations, including OP_PUSHDATA1, OP_PUSHDATA2, and OP_PUSHDATA4.
+3. For each script element, return an object with `type` (either 'opcode' or 'data') and `value` (the opcode name or the data in hexadecimal).
+
+## Implementation
+
+<SandpackComponent
+  template="react"
+  options={{
+    showLineNumbers: true,
+    showInlineErrors: true,
+    editorHeight: 600
+  }}
+  customSetup={{
+    dependencies: {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0",
+      "lucide-react": "^0.390.0",
+      "framer-motion": "^11.3.21",
+    },
+  }}
+  files={{
+    "/challenges/ScriptParser.js": {
+      code: `
+import { OpCode } from './OpCodes';
+
+export function parseScript(scriptHex) {
+  const script = Buffer.from(scriptHex.replace(/^0x/, ''), 'hex');
+  const parsedScript = [];
+  let offset = 0;
+
+while (offset < script.length) {
+// TODO: Implement script parsing logic
+// 1. Read the current byte
+// 2. Determine if it's an opcode or data push
+// 3. Handle data pushes (including OP_PUSHDATA1, OP_PUSHDATA2, OP_PUSHDATA4)
+// 4. Add the parsed element to the parsedScript array
+// 5. Update the offset
+}
+
+return parsedScript;
+}
+`,
+      hidden: false
+    },
+    "/challenges/OpCodes.js": {
+      code: `
+export const OpCode = {
+// Data push opcodes
+OP_0: 0x00,
+OP_PUSHDATA1: 0x4c,
+OP_PUSHDATA2: 0x4d,
+OP_PUSHDATA4: 0x4e,
+OP_1NEGATE: 0x4f,
+OP_1: 0x51,
+OP_16: 0x60,
+
+// Flow control
+OP_NOP: 0x61,
+OP_IF: 0x63,
+OP_NOTIF: 0x64,
+OP_ELSE: 0x67,
+OP_ENDIF: 0x68,
+OP_VERIFY: 0x69,
+OP_RETURN: 0x6a,
+
+// Stack
+OP_TOALTSTACK: 0x6b,
+OP_FROMALTSTACK: 0x6c,
+OP_IFDUP: 0x73,
+OP_DEPTH: 0x74,
+OP_DROP: 0x75,
+OP_DUP: 0x76,
+OP_NIP: 0x77,
+OP_OVER: 0x78,
+OP_PICK: 0x79,
+OP_ROLL: 0x7a,
+OP_ROT: 0x7b,
+OP_SWAP: 0x7c,
+OP_TUCK: 0x7d,
+
+// Splice
+OP_CAT: 0x7e,
+OP_SUBSTR: 0x7f,
+OP_LEFT: 0x80,
+OP_RIGHT: 0x81,
+OP_SIZE: 0x82,
+
+// Bitwise logic
+OP_INVERT: 0x83,
+OP_AND: 0x84,
+OP_OR: 0x85,
+OP_XOR: 0x86,
+OP_EQUAL: 0x87,
+OP_EQUALVERIFY: 0x88,
+
+// Arithmetic
+OP_1ADD: 0x8b,
+OP_1SUB: 0x8c,
+OP_2MUL: 0x8d,
+OP_2DIV: 0x8e,
+OP_NEGATE: 0x8f,
+OP_ABS: 0x90,
+OP_NOT: 0x91,
+OP_0NOTEQUAL: 0x92,
+OP_ADD: 0x93,
+OP_SUB: 0x94,
+OP_MUL: 0x95,
+OP_DIV: 0x96,
+OP_MOD: 0x97,
+OP_LSHIFT: 0x98,
+OP_RSHIFT: 0x99,
+OP_BOOLAND: 0x9a,
+OP_BOOLOR: 0x9b,
+OP_NUMEQUAL: 0x9c,
+OP_NUMEQUALVERIFY: 0x9d,
+OP_NUMNOTEQUAL: 0x9e,
+OP_LESSTHAN: 0x9f,
+OP_GREATERTHAN: 0xa0,
+OP_LESSTHANOREQUAL: 0xa1,
+OP_GREATERTHANOREQUAL: 0xa2,
+OP_MIN: 0xa3,
+OP_MAX: 0xa4,
+OP_WITHIN: 0xa5,
+
+// Crypto
+OP_RIPEMD160: 0xa6,
+OP_SHA1: 0xa7,
+OP_SHA256: 0xa8,
+OP_HASH160: 0xa9,
+OP_HASH256: 0xaa,
+OP_CODESEPARATOR: 0xab,
+OP_CHECKSIG: 0xac,
+OP_CHECKSIGVERIFY: 0xad,
+OP_CHECKMULTISIG: 0xae,
+OP_CHECKMULTISIGVERIFY: 0xaf,
+
+// Locktime
+OP_CHECKLOCKTIMEVERIFY: 0xb1,
+OP_CHECKSEQUENCEVERIFY: 0xb2,
+};
+
+export const OP_CODE_NAMES = Object.fromEntries(
+    Object.entries(OpCode).map(([name, code]) => [code, name])
+)
+;`,
+      hidden: false
+    },
+    "/ScriptParserSimulator.js": {
+      code: `
+import React, { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { parseScript } from "./challenges/ScriptParser"
+
+const ScriptParserSimulator = () => {
+const [scriptHex, setScriptHex] = useState('');
+const [parsedScript, setParsedScript] = useState([]);
+
+    const handleScriptHexChange = (e) => {
+        const value = e.target.value;
+        if (/^[0-9A-Fa-f]*$/.test(value)) {
+            setScriptHex(value);
+        }
+    };
+
+    const parseScriptHex = () => {
+        try {
+            const result = parseScript(scriptHex);
+            setParsedScript(result);
+        } catch (error) {
+            console.error("Error parsing script:", error);
+            setParsedScript([{ type: 'error', value: error.message }]);
+        }
+    };
+
+    return (
+        <div className="w-full max-w-3xl mx-auto py-1">
+            <motion.div
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+                    Bitcoin Script Parser
+                </div>
+                <div className="mb-4">
+                    <input
+                        type="text"
+                        value={scriptHex}
+                        onChange={handleScriptHexChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="Enter script hex"
+                    />
+                </div>
+                <motion.button
+                    onClick={parseScriptHex}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                >
+                    Parse Script
+                </motion.button>
+                <div className="mt-4 border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                    <div className="font-semibold mb-2 text-gray-800 dark:text-white">
+                        Parsed Script:
+                    </div>
+                    <AnimatePresence>
+                        {parsedScript.length === 0 ? (
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="text-gray-500 dark:text-gray-400 text-center py-2"
+                            >
+                                No script parsed yet
+                            </motion.p>
+                        ) : (
+                            <div className="space-y-2">
+                                {parsedScript.map((item, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 20 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={\`p-2 rounded-md \${item.type === 'opcode' ? 'bg-purple-500' : item.type === 'data' ? 'bg-green-500' : 'bg-red-500'} text-white\`}
+                                    >
+                                        <div className="font-mono">
+                                            {item.type}: {item.value}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </motion.div>
+        </div>
+    );
+
+};
+
+export default ScriptParserSimulator
+;`,
+      hidden: false
+    },
+    "/App.js": {
+      code: `
+import React from "react"
+import ScriptParserSimulator from "./ScriptParserSimulator"
+
+const App = () => {
+return (
+
+<div className="p-4">
+    <h1 className="text-2xl font-bold mb-4">Bitcoin Script Parser Challenge</h1>
+    <ScriptParserSimulator />
+</div>
+); };
+
+export default App;
+`,
+      hidden: false
+    }
+  }}
+/>
+
+## Hints
+
+<Hint
+    title="Implementation Tips"
+    hints={[
+        "Use a while loop to iterate through the script buffer",
+        "Handle data push operations for opcodes 0x01 to 0x4b",
+        "Implement special cases for OP_PUSHDATA1, OP_PUSHDATA2, and OP_PUSHDATA4",
+        "Use the OpCode and OP_CODE_NAMES objects for opcode lookup",
+        "Remember to handle edge cases and potential errors"
+    ]}
+/>
+
+## Solution
+
+<ExpandableAlert
+  title="Solution Code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+
+```javascript
+import { OpCode, OP_CODE_NAMES } from "./OpCodes"
+
+export function parseScript(scriptHex) {
+    const script = Buffer.from(scriptHex.replace(/^0x/, ""), "hex")
+    const parsedScript = []
+    let offset = 0
+
+    while (offset < script.length) {
+        const opcode = script[offset]
+        offset++
+
+        if (opcode >= 0x01 && opcode <= 0x4b) {
+            // Data push of opcode bytes
+            const data = script.slice(offset, offset + opcode)
+            parsedScript.push({ type: "data", value: data.toString("hex") })
+            offset += opcode
+        } else if (opcode === OpCode.OP_PUSHDATA1) {
+            const dataLength = script.readUInt8(offset)
+            offset++
+            const data = script.slice(offset, offset + dataLength)
+            parsedScript.push({ type: "data", value: data.toString("hex") })
+            offset += dataLength
+        } else if (opcode === OpCode.OP_PUSHDATA2) {
+            const dataLength = script.readUInt16LE(offset)
+            offset += 2
+            const data = script.slice(offset, offset + dataLength)
+            parsedScript.push({ type: "data", value: data.toString("hex") })
+            offset += dataLength
+        } else if (opcode === OpCode.OP_PUSHDATA4) {
+            const dataLength = script.readUInt32LE(offset)
+            offset += 4
+            const data = script.slice(offset, offset + dataLength)
+            parsedScript.push({ type: "data", value: data.toString("hex") })
+            offset += dataLength
+        } else {
+            // Opcode
+            const opcodeName =
+                OP_CODE_NAMES[opcode] || `UNKNOWN_${opcode.toString(16)}`
+            parsedScript.push({ type: "opcode", value: opcodeName })
+        }
+    }
+
+    return parsedScript
+}
+```
+
+</ExpandableAlert>
+
+Test your implementation using the Bitcoin Script Parser Simulator above. Try various script hexadecimal inputs to ensure your parser handles different scenarios correctly.

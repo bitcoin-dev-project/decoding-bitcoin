@@ -1,0 +1,108 @@
+---
+title: "Exercise 1"
+date: 2024-10-07T10:00:00Z
+lastmod: "2024-10-07"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 2
+parent: p2pk
+---
+
+## P2PK ScriptPubKey Construction Exercise
+
+In this exercise, you'll construct a P2PK (Pay-to-Public-Key) ScriptPubKey for a given public key within a partially constructed transaction.
+
+### Given Transaction (Coinbase)
+
+Here's a breakdown of the partially constructed transaction:
+Here's a more compact representation of the partially constructed transaction:
+
+| Field                    | Value                                                            |
+| ------------------------ | ---------------------------------------------------------------- |
+| Version                  | 01000000                                                         |
+| Input Count              | 01                                                               |
+| Input TXID               | 0000000000000000000000000000000000000000000000000000000000000000 |
+| Input VOUT               | ffffffff                                                         |
+| ScriptSig Size           | N/A                                                              |
+| ScriptSig                | N/A                                                              |
+| Sequence                 | ffffffff                                                         |
+| Output Count             | 01                                                               |
+| Output Amount            | 00f2052a01000000                                                 |
+| Output ScriptPubKey Size | 23                                                               |
+| Output ScriptPubKey      | N/A                                                              |
+| Locktime                 | 00000000                                                         |
+
+The hexadecimal representation of this transaction is:
+
+<CodeSnippet
+    code="
+  01000000
+  01
+  0000000000000000000000000000000000000000000000000000000000000000
+  ffffffff
+  [scriptSig]
+  ffffffff
+  01
+  00f2052a01000000
+  23
+  [scriptPubKey]
+  00000000
+  "
+    language="text"
+    highlightLines={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+    showLineNumbers={true}
+/>
+
+For easier copying, here's the same transaction in a single line:
+
+<CodeSnippet
+    code="01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff-[scriptSig]-ffffffff0100f2052a0100000023-[scriptPubKey]-00000000"
+    language="text"
+    showLineNumbers={true}
+/>
+
+### Exercise
+
+Your task is to prepare the scriptPubKey component for a P2PK type, which locks the funds to the following public key:
+
+<CodeSnippet
+    code="public key: 02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4"
+    language="text"
+    showLineNumbers={true}
+/>
+
+### Hint
+
+You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
+
+<Hint
+    title="Step-by-Step Hints"
+    hints={[
+        "Remember that a P2PK ScriptPubKey consists of two parts: the public key and OP_CHECKSIG.",
+        "The public key is already provided in the exercise.",
+        "Look up the hex value for OP_CHECKSIG in the Bitcoin Script wiki.",
+        "Combine the public key and OP_CHECKSIG to form the complete ScriptPubKey."
+    ]}
+/>
+
+<ExpandableAlert
+  title="Solution"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+
+The correct P2PK ScriptPubKey for the given public key is:
+
+```
+2102802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4ac
+```
+
+Breakdown:
+
+-   `21`: Length of the public key (33 bytes)
+-   `02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4`: The public key
+-   `ac`: OP_CHECKSIG
+
+</ExpandableAlert>

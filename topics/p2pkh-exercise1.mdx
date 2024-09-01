@@ -1,0 +1,114 @@
+---
+title: "Exercise 1"
+date: 2024-10-08T10:00:00Z
+lastmod: "2024-10-08"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 3
+parent: p2pkh
+---
+
+## P2PKH ScriptPubKey Construction Exercise
+
+In this exercise, you'll construct P2PKH (Pay-to-Public-Key-Hash) ScriptPubKeys for given public keys within a partially constructed transaction.
+
+### Given Transaction
+
+Here's a breakdown of the partially constructed transaction:
+
+| Field                     | Value                                                            |
+| ------------------------- | ---------------------------------------------------------------- |
+| Version                   | 01000000                                                         |
+| Input Count               | 01                                                               |
+| Input TXID                | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
+| Input VOUT                | 01000000                                                         |
+| ScriptSig Size            | N/A                                                              |
+| ScriptSig Signature       | N/A                                                              |
+| ScriptSig PubKey          | N/A                                                              |
+| Sequence                  | ffffffff                                                         |
+| Output Count              | 02                                                               |
+| Output1 Amount            | 8023430000000000                                                 |
+| Output1 ScriptPubKey Size | 19                                                               |
+| Output1 ScriptPubKey      | N/A                                                              |
+| Output2 Amount            | 00e1f50500000000                                                 |
+| Output2 ScriptPubKey Size | 19                                                               |
+| Output2 ScriptPubKey      | N/A                                                              |
+| Locktime                  | 00000000                                                         |
+
+The hexadecimal representation of this transaction is:
+
+<CodeSnippet
+    code="
+  010000000197211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd11333801000000
+  [signature]
+  ffffffff
+  028023430000000000
+  [scriptPubKey1]
+  00e1f50500000000
+  [scriptPubKey2]
+  00000000
+  "
+    language="text"
+    highlightLines={[2, 3, 4, 5, 6, 7, 8, 9]}
+    showLineNumbers={true}
+/>
+
+For easier copying, here's the same transaction in a single line:
+
+<CodeSnippet
+    code="010000000197211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd11333801000000-[signature]-ffffffff028023430000000000-[scriptPubKey1]-00e1f50500000000-[scriptPubKey2]-00000000"
+    language="text"
+    showLineNumbers={true}
+/>
+
+### Exercise
+
+Your task is to prepare the scriptPubKey components for each output with the P2PKH type, which locks the funds to the following public keys:
+
+<CodeSnippet
+    code="Public Key 1: 037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb
+Public Key 2: 02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5"
+    language="text"
+    showLineNumbers={true}
+/>
+
+### Hint
+
+You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
+
+<Hint
+    title="Step-by-Step Hints"
+    hints={[
+        "Remember that a P2PKH ScriptPubKey consists of: OP_DUP OP_HASH160 <PubKeyHash> OP_EQUALVERIFY OP_CHECKSIG",
+        "You need to hash the public keys using RIPEMD160(SHA256(public_key))",
+        "Look up the hex values for the required opcodes in the Bitcoin Script wiki",
+        "Combine the opcodes and the public key hashes to form the complete ScriptPubKeys"
+    ]}
+/>
+
+<ExpandableAlert
+  title="Solution"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+
+The correct P2PKH ScriptPubKeys for the given public keys are:
+
+```
+Output1 ScriptPubKey: 76a91426ae24c8c84af2272dafeca63d554c3c4d561ddd88ac
+Output2 ScriptPubKey: 76a914e3f624c6cd05acb89000446bd522df426e37d75988ac
+```
+
+Breakdown:
+
+-   `76`: OP_DUP
+-   `a9`: OP_HASH160
+-   `14`: Push 20 bytes to the stack
+-   `26ae24c8c84af2272dafeca63d554c3c4d561ddd` : Output1 Public Key Hash
+-   `e3f624c6cd05acb89000446bd522df426e37d759` : Output2 Public Key Hash
+-   `88`: OP_EQUALVERIFY
+-   `ac`: OP_CHECKSIG
+
+</ExpandableAlert>

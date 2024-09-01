@@ -1,0 +1,81 @@
+---
+title: "Setup local development"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: PostSimple
+order: 8
+project: true
+---
+
+To get started on this project, we've prepared a starter repository with some code for you.
+
+The project source code exists on Github, at the following URL: https://github.com/jrakibi/bitcoin-stack
+
+If you're familiar with Git, you can fork this project and clone it onto your own computer.  
+If you're not familiar with Git, you can download a .zip file containing everything you need:
+
+<div className="relative w-full h-[400px] mb-32">
+    <Image
+        src="/bitcoin-topics/static/images/topics/project-bitcoin-stack/repo-download.svg"
+        alt="Purple toaster"
+        layout="fill"
+        objectFit="cover"
+        className="rounded-lg"
+    />
+</div>
+
+To run a local development server, we first need to install third-party dependencies (eg. React, bitcoin-js). This can be done by cd-ing into the root project folder and running the following command:
+
+<CodeSnippet
+    code={` 
+  $ npm install
+
+`}
+language="shell"
+showLineNumbers={false}
+/>
+
+Once the dependencies have been downloaded, you can run a dev server with the following command:
+
+<CodeSnippet
+    code={` 
+  $ npm run dev
+  
+`}
+    language="shell"
+    showLineNumbers={false}
+/>
+
+This will start a local development server. The terminal output should look something like this:
+
+<div className="flex justify-center my-4">
+    <div className="w-3/4 relative">
+        <div className="absolute inset-0 bg-black opacity-5 filter blur-sm rounded-lg"></div>
+        <Image
+            src="/bitcoin-topics/static/images/topics/project-bitcoin-stack/terminal.png"
+            alt="Purple toaster"
+            width={1200}
+            height={675}
+            layout="responsive"
+            className="rounded-lg relative z-10 shadow-lg"
+        />
+    </div>
+</div>
+
+After downloading the project repository and starting a development server (npm run dev), you should see the following initial page:
+
+<div className="relative w-full h-screen mb-32 overflow-hidden">
+    <Image
+        src="/bitcoin-topics/static/images/topics/project-bitcoin-stack/bitcoin-stack-app.png"
+        alt="Bitcoin Stack App initial page"
+        layout="fill"
+        objectFit="contain"
+        className="rounded-lg"
+    />
+</div>
+
+If you have any questions about this project, feel free to ask in [Discord!](https://discord.com/invite/EAy9XMufbY)
+
+Have fun! 😄
