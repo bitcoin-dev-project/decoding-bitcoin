@@ -274,6 +274,7 @@ const [messageHash, setMessageHash] = useState('0x' + '00'.repeat(32));
             </motion.div>
 
 {showMessageHashModal && (
+
 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
 <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
 <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Message Hash for OP_CHECKSIG</h3>
@@ -318,12 +319,12 @@ import OpcodeSimulator from "./OpcodeSimulator"
 
 const App = () => {
 return (
+
 <div className="p-4">
-<h1 className="text-2xl font-bold mb-4">Bitcoin OP_CHECKSIG Challenge</h1>
-<OpcodeSimulator />
+    <h1 className="text-2xl font-bold mb-4">Bitcoin OP_CHECKSIG Challenge</h1>
+    <OpcodeSimulator />
 </div>
-);
-};
+); };
 
 export default App;
 `,
