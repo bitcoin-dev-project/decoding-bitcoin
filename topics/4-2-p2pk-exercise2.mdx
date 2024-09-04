@@ -5,20 +5,21 @@ lastmod: "2024-10-06"
 draft: false
 category: Scripts
 layout: PostSimple
-order: 1
-parent: p2pkh
+order: 2
+parent: 4-p2pk
 ---
 
-## P2PKH ScriptPubKey to ASM Converter
+## P2PK ScriptPubKey to ASM Converter
 
 In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-Key) ScriptPubKey from its hexadecimal representation to ASM format.
 
-1. Implement the decodeP2PKHScriptPubKey function in the code editor below.
+![P2PK Problems](/bitcoin-topics/static/images/topics/p2pk/asm_hex.png)
+
+1. Implement the `decodeP2PKScriptPubKey` function in the code editor below.
 2. The function should convert the input hex string to a Buffer.
-3. Verify that the script starts with OP_DUP (0x76) and OP_HASH160 (0xA9).
-4. Extract the public key hash (20 bytes).
-5. Verify that the script ends with OP_EQUALVERIFY (0x88) and OP_CHECKSIG (0xAC).
-6. Construct and return the ASM string: `OP_DUP OP_HASH160 <pubKeyHash> OP_EQUALVERIFY OP_CHECKSIG`
+3. Extract the public key (the first byte indicates the length: 0x41 for uncompressed, 0x21 for compressed).
+4. Verify that the last byte is OP_CHECKSIG (0xAC).
+5. Construct and return the ASM string: `<public key in hex> OP_CHECKSIG`
 
 <SandpackComponent
         template="react"
@@ -39,25 +40,19 @@ In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-K
             code: `
 // Simplified OPS object for this exercise
 const OPS = {
-  OP_DUP: 118,        // 0x76 in decimal
-  OP_HASH160: 169,    // 0xA9 in decimal
-  OP_EQUALVERIFY: 136, // 0x88 in decimal
-  OP_CHECKSIG: 172,   // 0xAC in decimal
+  OP_CHECKSIG: 172,  // 0xac in decimal
 };
 
 const REVERSE_OPS = {
-118: 'OP_DUP',
-169: 'OP_HASH160',
-136: 'OP_EQUALVERIFY',
 172: 'OP_CHECKSIG',
 };
 
-export function decodeP2PKHScriptPubKey(hexScript) {
-    // TODO: Implement the decodeP2PKHScriptPubKey function
+export function decodeP2PKScriptPubKey(hexScript) {
+    // TODO: Implement the decodeP2PKScriptPubKey function
     // 1. Convert the hexScript to a Buffer
-    // 2. Verify the script starts with OP_DUP and OP_HASH160
-    // 3. Extract the public key hash (20 bytes)
-    // 4. Verify the script ends with OP_EQUALVERIFY and OP_CHECKSIG
+    // 2. Extract the length of the public key (first byte)
+    // 3. Extract the public key
+    // 4. Verify the last byte is OP_CHECKSIG
     // 5. Verify the script length
     // 6. Return the ASM format string
     // Your code here
@@ -69,7 +64,7 @@ export function decodeP2PKHScriptPubKey(hexScript) {
             code: `
 // App.js
 import React, { useState } from "react"
-import { decodeP2PKHScriptPubKey } from "./decoder"
+import { decodeP2PKScriptPubKey } from "./decoder"
 
 export default function Home() {
   const [inputScript, setInputScript] = useState('');
@@ -77,14 +72,14 @@ export default function Home() {
   const [error, setError] = useState('');
 
 const handleDecode = () => {
-if (typeof decodeP2PKHScriptPubKey !== 'function') {
+if (typeof decodeP2PKScriptPubKey !== 'function') {
 setError('');
-setAsmResult("Decoder function not implemented yet. Please implement the decodeP2PKHScriptPubKey function.");
+setAsmResult("Decoder function not implemented yet. Please implement the decodeP2PKScriptPubKey function.");
 return;
 }
 
     try {
-      const result = decodeP2PKHScriptPubKey(inputScript);
+      const result = decodeP2PKScriptPubKey(inputScript);
       setAsmResult(result);
       setError('');
     } catch (err) {
@@ -96,20 +91,20 @@ return;
 
 const testCases = [
 {
-input: '76a9147d1980cd67f0ed29a94793823b866bf47eab965e88ac',
-output: 'OP_DUP OP_HASH160 7d1980cd67f0ed29a94793823b866bf47eab965e OP_EQUALVERIFY OP_CHECKSIG',
-type: 'Standard P2PKH'
+input: '410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac',
+output: '0411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3 OP_CHECKSIG',
+type: 'Uncompressed'
 },
 {
-input: '76a9141234567890abcdef1234567890abcdef123456788ac',
-output: 'OP_DUP OP_HASH160 1234567890abcdef1234567890abcdef12345678 OP_EQUALVERIFY OP_CHECKSIG',
-type: 'Another P2PKH example'
+input: '2102E9A095A6A5790BC82FEADE07EE6FC77B05BC4DE7F3790C36D2ECC886D9EC0AC0ac',
+output: '02e9a095a6a5790bc82feade07ee6fc77b05bc4de7f3790c36d2ecc886d9ec0ac0 OP_CHECKSIG',
+type: 'Compressed'
 }
 ];
 
 return (
 
-<div className="max-w-3xl mx-auto p-6">
+<div className="max-w-3xl mx-auto p-6 bg-black">
 <h1 className="text-3xl font-bold mb-6 text-center text-orange-600">P2PK ScriptPubKey Decoder</h1>
 
       <div className="mb-6">
@@ -172,9 +167,10 @@ hidden: false
 <Hint
     title="Step-by-Step Hints"
     hints={[
-        "Remember, P2PKH scripts always start with OP_DUP (0x76) and OP_HASH160 (0xA9).",
-        "The public key hash is always 20 bytes long.",
-        "Don't forget to check for OP_EQUALVERIFY (0x88) and OP_CHECKSIG (0xAC) at the end!"
+        "Start by converting the hexadecimal input to a Buffer using `Buffer.from(hexScript, 'hex')`. This allows you to work with the script as bytes.",
+        "Remember that the first byte of the script indicates the length of the public key. Use this to extract the public key from the Buffer.",
+        "The last byte of the script should always be OP_CHECKSIG (0xAC or 172 in decimal). Make sure to verify this.",
+        "To construct the ASM string, you'll need to convert the public key back to a hexadecimal string and append the OP_CHECKSIG operation. Use `toString('hex')` to convert the public key Buffer to a hex string."
     ]}
 />
 
@@ -187,50 +183,35 @@ hidden: false
 >
 
 ```
-// Simplified OPS object for this exercise
 const OPS = {
-  OP_DUP: 118,        // 0x76 in decimal
-  OP_HASH160: 169,    // 0xA9 in decimal
-  OP_EQUALVERIFY: 136, // 0x88 in decimal
-  OP_CHECKSIG: 172,   // 0xAC in decimal
+    OP_CHECKSIG: 172,
 };
 
 const REVERSE_OPS = {
-118: 'OP_DUP',
-169: 'OP_HASH160',
-136: 'OP_EQUALVERIFY',
-172: 'OP_CHECKSIG',
+    172: 'OP_CHECKSIG',
 };
-
-export function decodeP2PKHScriptPubKey(hexScript) {
-    // Convert the hexScript to a Buffer
+export function decodeP2PKScriptPubKey(hexScript) {
     const scriptBuffer = Buffer.from(hexScript, 'hex');
 
-    // Verify the script starts with OP_DUP and OP_HASH160
-    if (scriptBuffer[0] !== OPS.OP_DUP || scriptBuffer[1] !== OPS.OP_HASH160) {
-        throw new Error('Invalid P2PKH script: does not start with OP_DUP OP_HASH160');
-    }
+    // P2PK script should be: <public key> OP_CHECKSIG
+    // The first byte is the length of the public key
+    const pubKeyLength = scriptBuffer[0];
 
-    // Extract the public key hash (20 bytes)
-    const pubKeyHashLength = scriptBuffer[2];
-    if (pubKeyHashLength !== 20) {
-        throw new Error('Invalid P2PKH script: public key hash should be 20 bytes');
-    }
-    const pubKeyHash = scriptBuffer.slice(3, 23);
+    // Extract the public key
+    const pubKey = scriptBuffer.slice(1, 1 + pubKeyLength);
 
-    // Verify the script ends with OP_EQUALVERIFY and OP_CHECKSIG
-    if (scriptBuffer[23] !== OPS.OP_EQUALVERIFY || scriptBuffer[24] !== OPS.OP_CHECKSIG) {
-        throw new Error('Invalid P2PKH script: does not end with OP_EQUALVERIFY OP_CHECKSIG');
+    // Verify the last byte is OP_CHECKSIG
+    if (scriptBuffer[scriptBuffer.length - 1] !== OPS.OP_CHECKSIG) {
+        throw new Error('Invalid P2PK script: missing OP_CHECKSIG');
     }
 
     // Verify the script length
-    if (scriptBuffer.length !== 25) {
-        throw new Error('Invalid P2PKH script: incorrect length');
+    if (scriptBuffer.length !== pubKeyLength + 2) {
+        throw new Error('Invalid P2PK script: incorrect length');
     }
 
-    // Return the ASM format string
-    return `${REVERSE_OPS[OPS.OP_DUP]} ${REVERSE_OPS[OPS.OP_HASH160]} ${pubKeyHash.toString('hex')} ${REVERSE_OPS[OPS.OP_EQUALVERIFY]} ${REVERSE_OPS[OPS.OP_CHECKSIG]}`;
-
+    // Return the ASM format
+    return `${pubKey.toString('hex')} ${REVERSE_OPS[OPS.OP_CHECKSIG]}`;
 }
 
 ```

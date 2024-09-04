@@ -6,7 +6,7 @@ draft: false
 category: Scripts
 layout: PostSimple
 order: 2
-parent: overview
+parent: 3-overview
 ---
 
 The visualization below includes an explanation of the most commonly used opcodes in standard transactions.
@@ -143,10 +143,10 @@ return (
           type="number"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="bg-[#454C54] text-[#E5E6F1] border border-[#5A6270] p-2 mr-2 rounded"
+          className="bg-[#3c3c3c] text-[#E5E6F1] border border-[#5A6270] p-2 mr-2 rounded"
           placeholder="Enter a number"
         />
-        <button onClick={pushToStack} className="bg-[#454C54] text-[#E5E6F1] p-2 rounded hover:bg-[#5A6270]">
+        <button onClick={pushToStack} className="bg-[#3c3c3c] text-[#E5E6F1] p-2 rounded hover:bg-[#5A6270]">
           Push
         </button>
       </div>
@@ -155,12 +155,12 @@ return (
         <button onClick={executeOpAdd} className="bg-orange-500 text-white p-2 rounded mr-2 hover:bg-orange-600">
           <Plus className="inline mr-1" size={18} /> OP_ADD
         </button>
-        <button onClick={clearStack} className="bg-[#454C54] text-[#E5E6F1] p-2 rounded hover:bg-[#5A6270]">
+        <button onClick={clearStack} className="bg-[#3c3c3c] text-[#E5E6F1] p-2 rounded hover:bg-[#5A6270]">
           <Trash2 className="inline mr-1" size={18} /> Clear Stack
         </button>
       </div>
 
-      <div className="border border-[#454C54] p-4 mb-4 rounded-lg bg-[#1D2127]">
+      <div className="border border-[#3c3c3c] p-4 mb-4 rounded-lg bg-[#1D2127]">
         <h2 className="text-xl font-semibold mb-2 text-[#E5E6F1]">Stack:</h2>
         {stack.length === 0 ? (
           <p className="text-[#E5E6F1]">Stack is empty</p>
