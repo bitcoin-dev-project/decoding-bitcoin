@@ -12,6 +12,55 @@ children:
     - 5-2-p2pkh-exercise2
 ---
 
+Before we dive into the technical details of P2PKH (Pay To Public Key Hash)
+
+<Quiz
+    questions={[
+        {
+            question: "What does P2PKH stand for?",
+            options: [
+                "Pay To Public Key Hash",
+                "Public To Private Key Hash",
+                "Pay To Private Key Hash"
+            ],
+            correctAnswer: "Pay To Public Key Hash",
+            explanation:
+                "P2PKH stands for Pay To Public Key Hash, which is a type of Bitcoin transaction output."
+        },
+        {
+            question: "Which of the following is true about P2PKH?",
+            options: [
+                "It reveals the full public key when receiving funds",
+                "It uses the hash of the public key instead of the full public key",
+                "It requires multiple signatures to spend funds"
+            ],
+            correctAnswer:
+                "It uses the hash of the public key instead of the full public key",
+            explanation:
+                "P2PKH uses the hash of the public key, which provides an extra layer of security compared to revealing the full public key."
+        },
+        {
+            question: "What's a key advantage of P2PKH over P2PK?",
+            options: [
+                "Faster transaction processing",
+                "Lower fees",
+                "Enhanced privacy and security"
+            ],
+            correctAnswer: "Enhanced privacy and security",
+            explanation:
+                "P2PKH offers enhanced privacy and security by not revealing the full public key until the funds are spent."
+        }
+    ]}
+/>
+
+Don't worry if you didn't get all the answers right - we'll be covering all of these concepts in detail throughout this lesson 😃.
+
+\*_Feel free to come back and retake the quiz after you've gone through the material to see how much you've learned!_
+
+Now, let's dive deeper into P2PKH and explore how it works.
+
+---
+
 Have you ever heard about the guy who bought two [pizzas](https://bitcointalk.org/index.php?topic=137.0) for 10,000 BTC? This transaction was a P2PKH transaction
 
 P2PKH is similar to [P2PK](https://river.com/learn/terms/p/p2pk/) transactions, except that the bitcoin is locked to the **_hash_** of the public key rather than the public key itself.
@@ -22,11 +71,17 @@ P2PKH is similar to [P2PK](https://river.com/learn/terms/p/p2pk/) transactions
     height="auto"
 />
 
-In P2PKH, the scriptPubKey contains the hash of the public key, while the ScriptSig includes the signature and the public key.  
-The public key is only visible on the blockchain when the coins are spent, and not when they are received.
+In P2PKH, the scriptPubKey contains the hash of the public key.
+
+So when we say Alice has transferred some bitcoins to Bob, it means that Alice has created an output transaction with a locking script (scriptPubKey) that locks the output to Bob’s public key hash.
+
+Bob’s actual public key is only revealed on the blockchain when he spends the coins, not when he receives them
 
 <ExpandableAlert title="NOTE" type="info">
-    P2PKH addresses start with a "1"
+    A P2PKH Bitcoin address is derived from the hash of the public key. It
+    typically starts with the number `1 (mainnet)` or `m/n (testnet)` **We'll
+    learn about Bitcoin addresses in upcoming topics, so it's okay if you're not
+    fully familiar with them yet.*
 </ExpandableAlert>
 
 This is the 10.000 BTC pizza transaction
@@ -38,11 +93,51 @@ This is the 10.000 BTC pizza transaction
     highlightIndex={{ outputs: 0 }}
 />
 
--   If Alice wants to send 1 BTC to Bob in a P2PKH transaction, Bob provides Alice with an address from his wallet. Bob’s address is included in the transaction. When Bob tries to spend the bitcoin he receives, he must sign the transaction with the private key corresponding to the public key whose hash matches the hash provided in Alice’s transaction.
--   Pay-to-Public-Key-Hash (P2PKH) is a method of sending bitcoin to a specific address. In this method, instead of sending money to a public key, as in P2PK transactions, a hash of the public key is used.
--   By using the hash of the public key rather than the public key itself, P2PKH enchances bitcoin security. This is because the hash is secured by SHA-256 encryption. Currently no known quantum algorithms can break the SHA-256 encryption. This means that even if a quantum computer were to be used to try to derive the private key from the public key, it would not be able to do so because the public key is not visible on the blockchain, only its hash is.
+## How P2PKH Works
+
+Let's break down the P2PKH process with a simple example:
+
+1. **Address Generation**:
+   Bob generates a private key and derives a public key from it. He then hashes this public key to create his Bitcoin address.
+
+2. **Sending Bitcoin**:
+   Alice wants to send 1 BTC to Bob. She creates a transaction with a P2PKH output:
+
+<CodeSnippet
+    code={` 
+    OP_DUP OP_HASH160 <Bob Public Key Hash> OP_EQUALVERIFY OP_CHECKSIG
+  `}
+    language="javascript"
+/>
+3. **Spending the Bitcoin**: When Bob wants to spend this bitcoin, he needs to
+provide: - His public key - A signature created with his private key
 
 <ScriptStackVisualizer type="p2pkh"></ScriptStackVisualizer>
+
+## Benefits of P2PKH
+
+1. **Privacy**: The public key is not revealed until the bitcoin is spent.
+2. **Quantum Resistance**: Even if quantum computers could break ECDSA, they'd still need to break SHA-256 to derive the public key from its hash.
+3. **Shorter Addresses**: Hashed public keys are shorter, leading to more compact addresses.
+
+<Quiz
+    questions={[
+        {
+            question: "Why is P2PKH considered more secure than P2PK?",
+            options: [
+                "It uses a longer public key",
+                "It hides the public key until spending",
+                "It requires multiple signatures",
+                "It uses a different encryption algorithm"
+            ],
+            correctAnswer: 1,
+            explanation:
+                "P2PKH is more secure because it hides the public key until the bitcoin is spent, protecting against potential future vulnerabilities in public key cryptography."
+        }
+    ]}
+/>
+
+Remember, understanding P2PKH is crucial as it's one of the most common transaction types in Bitcoin. In the next exercises, we'll dive deeper into creating and analyzing P2PKH transactions!
 
 ---
 

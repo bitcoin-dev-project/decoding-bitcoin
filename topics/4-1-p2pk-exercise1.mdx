@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1"
+title: "Exercise 1: Easy"
 date: 2024-10-07T10:00:00Z
 lastmod: "2024-10-07"
 draft: false
@@ -9,100 +9,74 @@ order: 1
 parent: 4-p2pk
 ---
 
-## P2PK ScriptPubKey Construction Exercise
+In this exercise, we'll be looking at the ScriptPubKey from the transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi sent 10 BTC to Hal Finney.
 
-In this exercise, you'll construct a P2PK (Pay-to-Public-Key) ScriptPubKey for a given public key within a partially constructed transaction.
+### Your Task
 
-### Given Transaction (Coinbase)
+Your task is to identify the different components of the P2PK ScriptPubKey in its hexadecimal representation.
 
-Here's a breakdown of the partially constructed transaction:
-Here's a more compact representation of the partially constructed transaction:
+\*_Use the interactive highlighter below to select the correct parts of the script when prompted._
 
-| Field                    | Value                                                            |
-| ------------------------ | ---------------------------------------------------------------- |
-| Version                  | 01000000                                                         |
-| Input Count              | 01                                                               |
-| Input TXID               | 0000000000000000000000000000000000000000000000000000000000000000 |
-| Input VOUT               | ffffffff                                                         |
-| ScriptSig Size           | N/A                                                              |
-| ScriptSig                | N/A                                                              |
-| Sequence                 | ffffffff                                                         |
-| Output Count             | 01                                                               |
-| Output Amount            | 00f2052a01000000                                                 |
-| Output ScriptPubKey Size | 23                                                               |
-| Output ScriptPubKey      | N/A                                                              |
-| Locktime                 | 00000000                                                         |
-
-The hexadecimal representation of this transaction is:
-
-<CodeSnippet
-    code="
-  01000000
-  01
-  0000000000000000000000000000000000000000000000000000000000000000
-  ffffffff
-  [scriptSig]
-  ffffffff
-  01
-  00f2052a01000000
-  23
-  [scriptPubKey]
-  00000000
-  "
-    language="text"
-    highlightLines={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
-    showLineNumbers={true}
-/>
-
-For easier copying, here's the same transaction in a single line:
-
-<CodeSnippet
-    code="01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff-[scriptSig]-ffffffff0100f2052a0100000023-[scriptPubKey]-00000000"
-    language="text"
-    showLineNumbers={true}
-/>
-
-### Exercise
-
-Your task is to prepare the scriptPubKey component for a P2PK type, which locks the funds to the following public key:
-
-<CodeSnippet
-    code="public key: 02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4"
-    language="text"
-    showLineNumbers={true}
-/>
-
-### Hint
-
-You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
-
-<Hint
-    title="Step-by-Step Hints"
-    hints={[
-        "Remember that a P2PK ScriptPubKey consists of two parts: the public key and OP_CHECKSIG.",
-        "The public key is already provided in the exercise.",
-        "Look up the hex value for OP_CHECKSIG in the Bitcoin Script wiki.",
-        "Combine the public key and OP_CHECKSIG to form the complete ScriptPubKey."
+<HexTransactionHighlighter
+    hexString="4104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac"
+    title="P2PK ScriptPubKey Highlighter"
+    fields={[
+        { name: "OP_PUSHBYTES_65", start: 0, end: 2 },
+        { name: "OP_CHECKSIG", start: 132, end: 134 }
+        { name: "Public Key", start: 2, end: 132 },
     ]}
 />
 
-<ExpandableAlert
-  title="Solution"
-  type="solution"
-  expandable={true}
-  initialLines={0}
->
+### Components to Identify:
 
-The correct P2PK ScriptPubKey for the given public key is:
+1. **OP_PUSHBYTES_65**: This opcode indicates that the next 65 bytes should be pushed onto the stack.
+2. **Public Key**: The actual public key (65 bytes in uncompressed format).
+3. **OP_CHECKSIG**: The opcode that verifies the signature against the public key.
 
-```
-2102802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4ac
-```
+<Hint
+    title="Additional Hints"
+    hints={[
+        "Remember that in hexadecimal, each byte is represented by two characters.",
+        "The public key takes up 65 bytes (130 hexadecimal characters).",
+        "The public key starts immediately after OP_PUSHBYTES_65 and is 130 characters long in hex.",
+        "OP_CHECKSIG is represented by 'ac' in hexadecimal and appears at the end of the script."
+    ]}
+/>
 
-Breakdown:
+After completing this exercise, try to answer the following questions:
 
--   `21`: Length of the public key (33 bytes)
--   `02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4`: The public key
--   `ac`: OP_CHECKSIG
+<Quiz
+    questions={[
+        {
+            question:
+                "What is the purpose of OP_PUSHBYTES_65 in a P2PK script?",
+            options: [
+                "To push the public key onto the stack",
+                "To verify the signature",
+                "To hash the public key"
+            ],
+            correctAnswer: "To push the public key onto the stack",
+            explanation:
+                "OP_PUSHBYTES_65 instructs the script to push the next 65 bytes (the public key) onto the stack."
+        },
+        {
+            question: "Why is the public key 65 bytes long in this script?",
+            options: [
+                "It's a compressed public key",
+                "It's an uncompressed public key",
+                "It includes a checksum"
+            ],
+            correctAnswer: "It's an uncompressed public key",
+            explanation:
+                "Uncompressed public keys in Bitcoin are 65 bytes long, starting with 0x04 followed by the x and y coordinates (32 bytes each)."
+        }
+    ]}
+/>
 
-</ExpandableAlert>
+By completing this exercise, you'll gain a better understanding of how P2PK scripts are structured and how to interpret their hexadecimal representations.
+
+This will be helpful as we explore more complex script types in future lessons.
+
+---
+
+<MailingListSignup />

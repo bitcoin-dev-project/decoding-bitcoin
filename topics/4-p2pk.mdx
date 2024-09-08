@@ -8,8 +8,10 @@ layout: TopicBanner
 order: 4
 icon: "FaKey"
 children:
+    - 4-0-p2pk-problems
     - 4-1-p2pk-exercise1
     - 4-2-p2pk-exercise2
+    - 4-3-p2pk-exercise3
 ---
 
 The first bitcoin transaction was a P2PK transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi Nakamoto sent 10 BTC to Hal Finney
@@ -44,12 +46,12 @@ The ability to lock and unlock coins is the mechanism by which we transfer bitco
 
 #### 1- Locking (ScriptPubKey):
 
-<div className="mx-auto w-2/3">
-    <img
-        src="/bitcoin-topics/static/images/topics/p2pk/spk.svg"
-        alt="P2PK transaction illustration"
-    />
-</div>
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/spk.svg"
+    width="44%"
+    height="auto"
+/>
+
 When creating this P2PK transaction, Satoshi specifies **Finney's public key in
 the ScriptPubKey**.
 
@@ -93,12 +95,11 @@ their public keys are smaller => smaller transaction on the network => save bloc
 
 #### 2- Unlocking (ScriptSig)
 
-<div className="mx-auto w-2/3">
-    <img
-        src="/bitcoin-topics/static/images/topics/p2pk/scriptsig.svg"
-        alt="P2PK transaction illustration"
-    />
-</div>
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/scriptsig.svg"
+    width="44%"
+    height="auto"
+/>
 
 To spend bitcoin that Satoshi sent, Finney must provide a valid signature corresponding to the public key.
 
@@ -186,22 +187,6 @@ In the previous example, Signature and Public Key are elements, while OP_CHECKSI
 | **Operation** | Hashes the top stack element     | OP_HASH160    | 1 element   | 1 element       |
 | **Operation** | Verifies a signature             | OP_CHECKSIG   | 2 elements  | 1 element (0/1) |
 
-</ExpandableAlert>
-
-### Problems with P2PK
-
--   **❌ Public keys are long:** Your username on a website is usually less than 20 characters, but bitcoin public keys are far larger, posing a practical issue. Uncompressed public keys contain 65 bytes, resulting in 130 hexadecimal characters when converted, and compressed keys have 33 bytes, which doubles to 66 characters in hexadecimal. This is because each byte is represented by two hexadecimal characters (1 byte = 8 bits = 2 × 4 bits)
--   **❌ Larger public keys = larger UTXO:** These keys must be stored and indexed, requiring more resources for full nodes.
--   **❌ If ECDSA is broken**, these outputs could be stolen because everyone can see the public key in the scriptPubKey field.
-
-![P2PK Problems](/bitcoin-topics/static/images/topics/p2pk/p2pk-problems.png)
-
-### Solving the Problems with p2pkh
-
-P2PKH fixes this. Read the next topic to learn how
-
-<ExpandableAlert title="Element VS Operation (Optional)" type="important">
-    In the next topic, we'll dive deeper into the specifics of P2PKH
 </ExpandableAlert>
 
 ---

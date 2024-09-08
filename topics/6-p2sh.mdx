@@ -130,11 +130,30 @@ Click on input 1 to see this in action
 
 <ScriptStackVisualizer type="p2sh"></ScriptStackVisualizer>
 
-## Address :
+## Address:
 
-The P2SH locking script pattern has been assigned its own address.
+The P2SH locking script pattern has its own address format. Unlike P2PKH addresses that start with `1`, P2SH addresses start with `3`.
+
+Here's how it works:
+
+1. Create the redeem script
+2. Hash the redeem script (SHA256 then RIPEMD160)
+3. Add version byte (0x05 for P2SH)
+4. Calculate checksum
+5. Encode in Base58Check
+
+This results in an address that represents the hash of the script, not the script itself.  
+When funds are sent to this address, they are locked to the hash of the redeem script.
+
+Use the tool below to see how a script hash translates to a P2SH address:
 
 ## <P2SHEncoder initialScriptHash="9ded082e689c0d409cae7e414983a1fc528fd61f" />
+
+<ExpandableAlert title="Still confused about Bitcoin addresses?" type="warning">
+    Don't worry if you're still struggling to understand how addresses work in
+    Bitcoin. We'll cover this topic in more depth in a dedicated module later in
+    the course.
+</ExpandableAlert>
 
 ### Test Your Knowledge: Find the Script Hash
 
