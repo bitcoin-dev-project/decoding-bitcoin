@@ -15,29 +15,22 @@ In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-K
 
 ![P2PK Problems](/bitcoin-topics/static/images/topics/p2pk/asm_hex.png)
 
-1. Implement the `decodeP2PKScriptPubKey` function in the code editor below.
-2. The function should convert the input hex string to a Buffer.
-3. Extract the public key (the first byte indicates the length: 0x41 for uncompressed, 0x21 for compressed).
-4. Verify that the last byte is OP_CHECKSIG (0xAC).
-5. Construct and return the ASM string: `<public key in hex> OP_CHECKSIG`
-
-<SandpackComponent
-        template="react"
-        options={{
-          externalResources: ["https://cdn.tailwindcss.com"],
-          showLineNumbers: true,
-          showInlineErrors: true,
-          editorHeight: 600
-        }}
-        customSetup={{
-          dependencies: {
-            "react": "^18.0.0",
-            "react-dom": "^18.0.0",
-          },
-        }}
-        files={{
-          "/decoder.js": {
-            code: `
+<ExerciseSelector
+  sandpackConfig={{
+    options: {
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 600,
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+      },
+    },
+    files: {
+      "/decoder.js": {
+        code: `
 // Simplified OPS object for this exercise
 const OPS = {
   OP_CHECKSIG: 172,  // 0xac in decimal
@@ -58,10 +51,10 @@ export function decodeP2PKScriptPubKey(hexScript) {
     // Your code here
 }
 ;`,
-            active: true
-          },
-          "/App.js": {
-            code: `
+        active: true
+      },
+      "/App.js": {
+        code: `
 // App.js
 import React, { useState } from "react"
 import { decodeP2PKScriptPubKey } from "./decoder"
@@ -161,7 +154,9 @@ return (
 }`,
 hidden: false
 }
+}
 }}
+trinketUrl="https://trinket.io/embed/python3/dab730fe0ca4"
 />
 
 <Hint
@@ -179,19 +174,17 @@ hidden: false
   type="solution"
   expandable={true}
   initialLines={0}
-
 >
-
 ```
 const OPS = {
     OP_CHECKSIG: 172,
 };
 
 const REVERSE_OPS = {
-    172: 'OP_CHECKSIG',
+172: 'OP_CHECKSIG',
 };
 export function decodeP2PKScriptPubKey(hexScript) {
-    const scriptBuffer = Buffer.from(hexScript, 'hex');
+const scriptBuffer = Buffer.from(hexScript, 'hex');
 
     // P2PK script should be: <public key> OP_CHECKSIG
     // The first byte is the length of the public key
@@ -212,8 +205,9 @@ export function decodeP2PKScriptPubKey(hexScript) {
 
     // Return the ASM format
     return `${pubKey.toString('hex')} ${REVERSE_OPS[OPS.OP_CHECKSIG]}`;
+
 }
 
 ```
-
 </ExpandableAlert>
+```
