@@ -1,5 +1,5 @@
 ---
-title: "Exercise 2: Hard"
+title: "Exercise 2"
 date: 2024-10-05T15:32:14Z
 lastmod: "2024-10-06"
 draft: false
@@ -109,8 +109,8 @@ type: 'Another P2PKH example'
 
 return (
 
-<div className="max-w-3xl mx-auto rounded-md m-4 mr-3 ml-3 p-4 bg-white shadow-md">
-<h1 className="text-3xl font-bold mb-6 text-center text-gray-800">P2PKH ScriptPubKey Decoder</h1>
+<div className="max-w-3xl mx-auto p-6">
+<h1 className="text-3xl font-bold mb-6 text-center text-orange-600">P2PK ScriptPubKey Decoder</h1>
 
       <div className="mb-6">
         <div className="flex">
@@ -118,8 +118,8 @@ return (
             type="text"
             value={inputScript}
             onChange={(e) => setInputScript(e.target.value)}
-            placeholder="Enter P2PKH ScriptPubKey (hex)"
-            className="flex-grow p-3 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+            placeholder="Enter P2PK ScriptPubKey (hex)"
+            className="flex-grow p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
           <button
             onClick={handleDecode}
@@ -144,15 +144,15 @@ return (
         </div>
       )}
 
-      <div className="bg-gray-100 p-4 rounded-md shadow">
-        <h3 className="font-bold text-lg mb-2 text-gray-800">Test Cases:</h3>
+      <div className="bg-white p-4 rounded-md shadow">
+        <h3 className="font-bold text-lg mb-2 text-orange-600">Test Cases:</h3>
         <div className="space-y-2">
           {testCases.map((testCase, index) => (
-            <details key={index} className="border border-gray-300 rounded-md">
-              <summary className="cursor-pointer p-2 bg-gray-200 hover:bg-gray-300 text-gray-700">
-                {testCase.type}
+            <details key={index} className="border border-gray-200 rounded-md">
+              <summary className="cursor-pointer p-2 bg-gray-50 hover:bg-gray-100">
+                {testCase.type} Public Key
               </summary>
-              <div className="p-2 text-sm bg-white text-gray-700">
+              <div className="p-2 text-sm">
                 <p><span className="font-semibold">Input:</span> <span className="break-all">{testCase.input}</span></p>
                 <p><span className="font-semibold">Expected:</span> <span className="break-all">{testCase.output}</span></p>
               </div>

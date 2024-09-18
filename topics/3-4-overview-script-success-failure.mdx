@@ -15,20 +15,10 @@ A valid script execution follows these rules:
 2. It continues until one of two things happens, either the script reaches its end naturally or an operation within the script signals a failure.
 3. If the script completes without any early failure, the success or failure of the script depends solely on the top item of the stack.
 
-<div className="dark:hidden">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/valid-invalid-script.svg"
-    width="100%"
-    height="auto"
-  />
-</div>
-<div className="hidden dark:block">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/dark-valid-invalid-script.svg"
-    width="100%"
-    height="auto"
-  />
-</div>
+<img
+    src="/bitcoin-topics/static/images/topics/overview/valid_invalid_script.png"
+    alt="P2PK transaction illustration"
+/>
 
 In essence, a script is considered successful if it runs to completion and leaves a single "true" or any non-zero value on top of the stack.
 

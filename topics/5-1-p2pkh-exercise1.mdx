@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1: Medium"
+title: "Exercise 1"
 date: 2024-10-08T10:00:00Z
 lastmod: "2024-10-08"
 draft: false
@@ -9,301 +9,106 @@ order: 1
 parent: 5-p2pkh
 ---
 
+## P2PKH ScriptPubKey Construction Exercise
+
 In this exercise, you'll construct P2PKH (Pay-to-Public-Key-Hash) ScriptPubKeys for given public keys within a partially constructed transaction.
+
+### Given Transaction
 
 Here's a breakdown of the partially constructed transaction:
 
-| Field                    | Value                                                            |
-| ------------------------ | ---------------------------------------------------------------- |
-| Version                  | 01000000                                                         |
-| Input Count              | 01                                                               |
-| Input TXID               | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
-| Input VOUT               | 01000000                                                         |
-| ScriptSig Size           | N/A                                                              |
-| ScriptSig                | N/A                                                              |
-| Sequence                 | ffffffff                                                         |
-| Output Count             | 02                                                               |
-| Output1 Amount           | 8023430000000000                                                 |
-| Output1 ScriptPubKey Size| 19                                                               |
-| Output1 ScriptPubKey     | N/A                                                              |
-| Output2 Amount           | 00e1f50500000000                                                 |
-| Output2 ScriptPubKey Size| 19                                                               |
-| Output2 ScriptPubKey     | N/A                                                              |
-| Locktime                 | 00000000                                                         |
+| Field                     | Value                                                            |
+| ------------------------- | ---------------------------------------------------------------- |
+| Version                   | 01000000                                                         |
+| Input Count               | 01                                                               |
+| Input TXID                | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
+| Input VOUT                | 01000000                                                         |
+| ScriptSig Size            | N/A                                                              |
+| ScriptSig Signature       | N/A                                                              |
+| ScriptSig PubKey          | N/A                                                              |
+| Sequence                  | ffffffff                                                         |
+| Output Count              | 02                                                               |
+| Output1 Amount            | 8023430000000000                                                 |
+| Output1 ScriptPubKey Size | 19                                                               |
+| Output1 ScriptPubKey      | N/A                                                              |
+| Output2 Amount            | 00e1f50500000000                                                 |
+| Output2 ScriptPubKey Size | 19                                                               |
+| Output2 ScriptPubKey      | N/A                                                              |
+| Locktime                  | 00000000                                                         |
 
 The hexadecimal representation of this transaction is:
 
 <CodeSnippet
     code="
-  01000000
-  01
-  97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338
-  01000000
-  [scriptSig]
+  010000000197211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd11333801000000
+  [signature]
   ffffffff
-  02
-  8023430000000000
-  19
+  028023430000000000
   [scriptPubKey1]
   00e1f50500000000
-  19
   [scriptPubKey2]
   00000000
   "
     language="text"
-    highlightLines={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]}
+    highlightLines={[2, 3, 4, 5, 6, 7, 8, 9]}
     showLineNumbers={true}
 />
 
 For easier copying, here's the same transaction in a single line:
 
 <CodeSnippet
-    code="010000000197211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd11333801000000-[scriptSig]-ffffffff028023430000000000-[scriptPubKey1]-00e1f50500000000-[scriptPubKey2]-00000000"
+    code="010000000197211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd11333801000000-[signature]-ffffffff028023430000000000-[scriptPubKey1]-00e1f50500000000-[scriptPubKey2]-00000000"
     language="text"
     showLineNumbers={true}
 />
 
 ### Exercise
 
-Now that you understand the concept of P2PKH ScriptPubKey, let's implement it.  
+Your task is to prepare the scriptPubKey components for each output with the P2PKH type, which locks the funds to the following public keys:
 
-Your task is to complete the `construct_p2pkh_scriptpubkey` function which locks the funds to the following public keys:
-1. `037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb`
-2. `02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5`
-
-#### Instructions:
-1. Implement the `construct_p2pkh_scriptpubkey` function.
-2. The function should take a public key as input and return the complete P2PKH ScriptPubKey.
-3. Remember to hash the public key and include the necessary opcodes.
-4. The provided unit test will check if your implementation is correct for both public keys.
-
-Choose your preferred language below to start coding:
-
-<ExerciseSelector
-  sandpackConfig={{
-    files: {
-      "/P2PKHScriptPubKey.js": {
-        code: `import CryptoJS from 'crypto-js';
-
-export function constructP2PKHScriptPubKey(publicKey) {
-  // TODO: Implement this function
-  // Hint: Use CryptoJS.SHA256 and CryptoJS.RIPEMD160 for hashing
-}`,
-        active: true
-      },
-      "/App.js": {
-        code: `import React from 'react';
-import P2PKHGame from './P2PKHGame';
-
-export default function App() {
-  return (
-    <div style={{ backgroundColor: '#1e1e1e', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-      <P2PKHGame />
-    </div>
-  );
-}`
-      },
-      "/P2PKHGame.js": {
-        code: `import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { constructP2PKHScriptPubKey } from './P2PKHScriptPubKey';
-import { LockClosedIcon } from '@heroicons/react/solid';
-
-const P2PKHGame = () => {
-  const [result, setResult] = useState('');
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [constructedScriptPubKeys, setConstructedScriptPubKeys] = useState(['', '']);
-
-  const publicKeys = [
-    '037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb',
-    '02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5'
-  ];
-  const expectedScriptPubKeys = [
-    '76a91426ae24c8c84af2272dafeca63d554c3c4d561ddd88ac',
-    '76a914e3f624c6cd05acb89000446bd522df426e37d75988ac'
-  ];
-
-  const runTest = () => {
-    try {
-      const results = publicKeys.map(constructP2PKHScriptPubKey);
-      setConstructedScriptPubKeys(results);
-      if (results.every((result, index) => result === expectedScriptPubKeys[index])) {
-        setResult("Correct! You've successfully constructed both P2PKH ScriptPubKeys!");
-        setIsCorrect(true);
-      } else {
-        setResult('Incorrect. Try again to construct the correct ScriptPubKeys.');
-        setIsCorrect(false);
-      }
-    } catch (error) {
-      setResult(\`Error: \${error.message}\`);
-      setIsCorrect(false);
-    }
-  };
-
-  return (
-    <div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2PKH ScriptPubKey Challenge</h2>
-      <div style={{ marginBottom: '1rem' }}>
-        {publicKeys.map((key, index) => (
-          <p key={index} style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
-            Public Key {index + 1}: {key}
-          </p>
-        ))}
-      </div>
-      <motion.div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '1rem',
-        }}
-        animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
-      </motion.div>
-      <button
-        onClick={runTest}
-        style={{
-          width: '100%',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#f1760f',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '0.25rem',
-          cursor: 'pointer',
-          transition: 'background-color 0.2s',
-        }}
-        onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
-        onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'}
-      >
-        Test Your Code
-      </button>
-      <AnimatePresence>
-        {result && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            style={{
-              marginTop: '1rem',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
-              {result}
-            </p>
-            {constructedScriptPubKeys.map((scriptPubKey, index) => (
-              <p key={index} style={{ 
-                fontFamily: 'monospace', 
-                fontSize: '0.875rem', 
-                wordBreak: 'break-all', 
-                marginTop: '0.5rem', 
-                color: '#d4d4d4',
-                backgroundColor: '#3c3c3c',
-                padding: '0.5rem',
-                borderRadius: '0.25rem'
-              }}>
-                ScriptPubKey {index + 1}: {scriptPubKey}
-              </p>
-            ))}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-export default P2PKHGame;`
-      },
-    },
-    options: {
-      showLineNumbers: true,
-      showInlineErrors: true,
-      editorHeight: 400
-    },
-    customSetup: {
-      dependencies: {
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0",
-        "framer-motion": "^6.0.0",
-        "@heroicons/react": "^1.0.6",
-        "crypto-js": "^4.1.1"
-      }
-    }
-  }}
-  trinketUrl="https://trinket.io/embed/python3/d556a72a5265"
+<CodeSnippet
+    code="Public Key 1: 037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb
+Public Key 2: 02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5"
+    language="text"
+    showLineNumbers={true}
 />
 
-For this exercise, we've provided the `crypto-js` library to help with the hashing operations. You should use this library to implement the P2PKH ScriptPubKey function.
+### Hint
 
 You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
 
 <Hint
     title="Step-by-Step Hints"
     hints={[
-        "Start by converting the public key from hex to bytes.",
-        "Use CryptoJS.SHA256 to hash the public key, then use CryptoJS.RIPEMD160 on the result.",
-        "The P2PKH script starts with OP_DUP (0x76) and OP_HASH160 (0xa9).",
-        "Push the 20-byte public key hash onto the stack (0x14 followed by the hash).",
-        "End the script with OP_EQUALVERIFY (0x88) and OP_CHECKSIG (0xac)."
+        "Remember that a P2PKH ScriptPubKey consists of: OP_DUP OP_HASH160 <PubKeyHash> OP_EQUALVERIFY OP_CHECKSIG",
+        "You need to hash the public keys using RIPEMD160(SHA256(public_key))",
+        "Look up the hex values for the required opcodes in the Bitcoin Script wiki",
+        "Combine the opcodes and the public key hashes to form the complete ScriptPubKeys"
     ]}
 />
 
-
-### Inspiration
-
-After completing the exercise, you can check out this testnet transaction to see real P2PKH ScriptPubKeys in action:
-[https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526](https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526)
-
-
 <ExpandableAlert
-  title="Solution code"
+  title="Solution"
   type="solution"
   expandable={true}
   initialLines={0}
 >
-  <details>
-    <summary>JavaScript Solution</summary>
-    ```javascript
-    import CryptoJS from 'crypto-js';
 
-    export function constructP2PKHScriptPubKey(publicKey) {
-        // Convert public key from hex to WordArray
-        const pubKeyWordArray = CryptoJS.enc.Hex.parse(publicKey);
-        
-        // Hash the public key
-        const sha256Hash = CryptoJS.SHA256(pubKeyWordArray);
-        const ripemd160Hash = CryptoJS.RIPEMD160(sha256Hash);
-        
-        // Convert hash to hex
-        const pubKeyHash = ripemd160Hash.toString(CryptoJS.enc.Hex);
-        
-        // Construct the script
-        const script = '76a914' + pubKeyHash + '88ac';
-        
-        return script;
-    }
-    ```
-  </details>
+The correct P2PKH ScriptPubKeys for the given public keys are:
 
-  <details>
-    <summary>Python Solution</summary>
-    ```Python
-    import hashlib
+```
+Output1 ScriptPubKey: 76a91426ae24c8c84af2272dafeca63d554c3c4d561ddd88ac
+Output2 ScriptPubKey: 76a914e3f624c6cd05acb89000446bd522df426e37d75988ac
+```
 
-    def construct_p2pkh_scriptpubkey(public_key: str) -> str:
-        # Convert public key from hex to bytes
-        pubkey_bytes = bytes.fromhex(public_key)
-        
-        # Hash the public key
-        sha256_hash = hashlib.sha256(pubkey_bytes).digest()
-        ripemd160_hash = hashlib.new('ripemd160', sha256_hash).digest()
-        
-        # Construct the script
-        script = b'\x76\xa9\x14' + ripemd160_hash + b'\x88\xac'
-        
-        return script.hex()
-    ```
-  </details>
+Breakdown:
+
+-   `76`: OP_DUP
+-   `a9`: OP_HASH160
+-   `14`: Push 20 bytes to the stack
+-   `26ae24c8c84af2272dafeca63d554c3c4d561ddd` : Output1 Public Key Hash
+-   `e3f624c6cd05acb89000446bd522df426e37d759` : Output2 Public Key Hash
+-   `88`: OP_EQUALVERIFY
+-   `ac`: OP_CHECKSIG
+
 </ExpandableAlert>
-

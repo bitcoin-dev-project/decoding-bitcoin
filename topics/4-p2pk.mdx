@@ -14,7 +14,7 @@ children:
     - 4-3-p2pk-exercise3
 ---
 
-The first payment on the Bitcoin network was a P2PK transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi Nakamoto sent 10 BTC to Hal Finney
+The first bitcoin transaction was a P2PK transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi Nakamoto sent 10 BTC to Hal Finney
 
 We will explore this transaction in detail to understand how P2PK works, from its creation to its validation. (Understanding P2PK serves as an ideal foundation for more complex scripts)
 
@@ -38,21 +38,11 @@ The ability to lock and unlock coins is the mechanism by which we transfer bitco
 **Locking** is giving bitcoins to someone.  
 **Unlocking** is spending bitcoins that you have received.
 
-
-<div className="dark:hidden">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/unlock-script.svg"
-    width="80%"
-    height="auto"
-  />
-</div>
-<div className="hidden dark:block">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/dark-unlock-script.svg"
-    width="80%"
-    height="auto"
-  />
-</div>
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/lock_unlock.svg"
+    width="600"
+    height="600"
+/>
 
 #### 1- Locking (ScriptPubKey):
 
