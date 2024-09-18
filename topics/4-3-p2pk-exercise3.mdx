@@ -21,23 +21,12 @@ In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-K
 4. Verify that the last byte is OP_CHECKSIG (0xAC).
 5. Construct and return the ASM string: `<public key in hex> OP_CHECKSIG`
 
-<SandpackComponent
-        template="react"
-        options={{
-          externalResources: ["https://cdn.tailwindcss.com"],
-          showLineNumbers: true,
-          showInlineErrors: true,
-          editorHeight: 600
-        }}
-        customSetup={{
-          dependencies: {
-            "react": "^18.0.0",
-            "react-dom": "^18.0.0",
-          },
-        }}
-        files={{
-          "/decoder.js": {
-            code: `
+
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      '/decoder.js': {
+        code: `
 // Simplified OPS object for this exercise
 const OPS = {
   OP_CHECKSIG: 172,  // 0xac in decimal
@@ -58,10 +47,10 @@ export function decodeP2PKScriptPubKey(hexScript) {
     // Your code here
 }
 ;`,
-            active: true
-          },
-          "/App.js": {
-            code: `
+        active: true
+      },
+      '/App.js': {
+        code: `
 // App.js
 import React, { useState } from "react"
 import { decodeP2PKScriptPubKey } from "./decoder"
@@ -103,10 +92,8 @@ type: 'Compressed'
 ];
 
 return (
-
-<div className="max-w-3xl mx-auto p-6 bg-black">
-<h1 className="text-3xl font-bold mb-6 text-center text-orange-600">P2PK ScriptPubKey Decoder</h1>
-
+<div className="max-w-3xl mx-auto rounded-md m-4 mr-3 ml-3 p-4 bg-[#1e1e1e]">
+  <h1 className="text-3xl font-bold mb-6 text-center text-[#f1760f]">P2PK ScriptPubKey Decoder</h1>
       <div className="mb-6">
         <div className="flex">
           <input
@@ -114,40 +101,37 @@ return (
             value={inputScript}
             onChange={(e) => setInputScript(e.target.value)}
             placeholder="Enter P2PK ScriptPubKey (hex)"
-            className="flex-grow p-3 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="flex-grow p-3 border border-[#4c4d52] rounded-l-md bg-[#3c3c3c] text-[#d4d4d4] focus:outline-none focus:ring-2 focus:ring-[#f1760f]"
           />
           <button
             onClick={handleDecode}
-            className="bg-orange-500 text-white p-3 rounded-r-md hover:bg-orange-600 transition duration-300"
+            className="bg-[#f1760f] text-[#d4d4d4] p-3 rounded-r-md hover:bg-[#e56c0d] transition duration-300"
           >
             Decode
           </button>
         </div>
       </div>
-
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md">
+        <div className="bg-[#3c3c3c] border-l-4 border-[#d32f2f] text-[#d32f2f] p-4 mb-6 rounded-md">
           <p className="font-bold">Error:</p>
           <p>{error}</p>
         </div>
       )}
-
       {asmResult && (
-        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-md">
+        <div className="bg-[#3c3c3c] border-l-4 border-[#689f38] text-[#689f38] p-4 mb-6 rounded-md">
           <p className="font-bold">Result:</p>
           <p className="break-all">{asmResult}</p>
         </div>
       )}
-
-      <div className="bg-white p-4 rounded-md shadow">
-        <h3 className="font-bold text-lg mb-2 text-orange-600">Test Cases:</h3>
+      <div className="bg-[#252526] p-4 rounded-md shadow">
+        <h3 className="font-bold text-lg mb-2 text-[#f1760f]">Test Cases:</h3>
         <div className="space-y-2">
           {testCases.map((testCase, index) => (
-            <details key={index} className="border border-gray-200 rounded-md">
-              <summary className="cursor-pointer p-2 bg-gray-50 hover:bg-gray-100">
+            <details key={index} className="border border-[#4c4d52] rounded-md">
+              <summary className="cursor-pointer p-2 bg-[#3c3c3c] hover:bg-[#4c4d52] text-[#d4d4d4]">
                 {testCase.type} Public Key
               </summary>
-              <div className="p-2 text-sm">
+              <div className="p-2 text-sm bg-[#252526] text-[#d4d4d4]">
                 <p><span className="font-semibold">Input:</span> <span className="break-all">{testCase.input}</span></p>
                 <p><span className="font-semibold">Expected:</span> <span className="break-all">{testCase.output}</span></p>
               </div>
@@ -156,13 +140,26 @@ return (
         </div>
       </div>
     </div>
-
 );
-}`,
-hidden: false
-}
-}}
+}`
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 600
+    },
+    customSetup: {
+      dependencies: {
+        react: '^18.0.0',
+        'react-dom': '^18.0.0'
+      }
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/3e1e806e10ba"
 />
+
 
 <Hint
     title="Step-by-Step Hints"
@@ -179,41 +176,74 @@ hidden: false
   type="solution"
   expandable={true}
   initialLines={0}
-
 >
+  <details>
+    <summary>JavaScript Solution</summary>
+    ```javascript
+    const OPS = {
+        OP_CHECKSIG: 172,
+    };
 
-```
-const OPS = {
-    OP_CHECKSIG: 172,
-};
+    const REVERSE_OPS = {
+        172: 'OP_CHECKSIG',
+    };
+    export function decodeP2PKScriptPubKey(hexScript) {
+        const scriptBuffer = Buffer.from(hexScript, 'hex');
 
-const REVERSE_OPS = {
-    172: 'OP_CHECKSIG',
-};
-export function decodeP2PKScriptPubKey(hexScript) {
-    const scriptBuffer = Buffer.from(hexScript, 'hex');
+        // P2PK script should be: <public key> OP_CHECKSIG
+        // The first byte is the length of the public key
+        const pubKeyLength = scriptBuffer[0];
 
-    // P2PK script should be: <public key> OP_CHECKSIG
-    // The first byte is the length of the public key
-    const pubKeyLength = scriptBuffer[0];
+        // Extract the public key
+        const pubKey = scriptBuffer.slice(1, 1 + pubKeyLength);
 
-    // Extract the public key
-    const pubKey = scriptBuffer.slice(1, 1 + pubKeyLength);
+        // Verify the last byte is OP_CHECKSIG
+        if (scriptBuffer[scriptBuffer.length - 1] !== OPS.OP_CHECKSIG) {
+            throw new Error('Invalid P2PK script: missing OP_CHECKSIG');
+        }
 
-    // Verify the last byte is OP_CHECKSIG
-    if (scriptBuffer[scriptBuffer.length - 1] !== OPS.OP_CHECKSIG) {
-        throw new Error('Invalid P2PK script: missing OP_CHECKSIG');
+        // Verify the script length
+        if (scriptBuffer.length !== pubKeyLength + 2) {
+            throw new Error('Invalid P2PK script: incorrect length');
+        }
+
+        // Return the ASM format
+        return `${pubKey.toString('hex')} ${REVERSE_OPS[OPS.OP_CHECKSIG]}`;
+    }
+    ```
+  </details>
+
+  <details>
+    <summary>Python Solution</summary>
+    ```python
+    OPS = {
+        'OP_CHECKSIG': 0xac
     }
 
-    // Verify the script length
-    if (scriptBuffer.length !== pubKeyLength + 2) {
-        throw new Error('Invalid P2PK script: incorrect length');
+    REVERSE_OPS = {
+        0xac: 'OP_CHECKSIG'
     }
 
-    // Return the ASM format
-    return `${pubKey.toString('hex')} ${REVERSE_OPS[OPS.OP_CHECKSIG]}`;
-}
+    def decode_p2pk_scriptpubkey(hex_script):
+        script_bytes = bytes.fromhex(hex_script)
 
-```
+        # P2PK script should be: <public key> OP_CHECKSIG
+        # The first byte is the length of the public key
+        pub_key_length = script_bytes[0]
 
+        # Extract the public key
+        pub_key = script_bytes[1:1 + pub_key_length]
+
+        # Verify the last byte is OP_CHECKSIG
+        if script_bytes[-1] != OPS['OP_CHECKSIG']:
+            raise ValueError('Invalid P2PK script: missing OP_CHECKSIG')
+
+        # Verify the script length
+        if len(script_bytes) != pub_key_length + 2:
+            raise ValueError('Invalid P2PK script: incorrect length')
+
+        # Return the ASM format
+        return f"{pub_key.hex()} {REVERSE_OPS[OPS['OP_CHECKSIG']]}"
+    ```
+  </details>
 </ExpandableAlert>

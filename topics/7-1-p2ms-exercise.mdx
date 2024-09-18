@@ -1,5 +1,5 @@
 ---
-title: "Exercise"
+title: "Exercise: Hard"
 date: 2024-01-25T15:32:14Z
 lastmod: "2024-07-26"
 draft: false
@@ -54,44 +54,43 @@ setResult(null);
 };
 
 return (
-
-<div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
-<h1 className="text-2xl font-bold mb-4">P2MS ScriptPubKey Decompiler</h1>
-<div className="mb-4">
-<label htmlFor="hexInput" className="block text-sm font-medium text-gray-700">
-ScriptPubKey (Hex):
-</label>
-<input
-type="text"
-id="hexInput"
-className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm"
-value={hexInput}
-onChange={(e) => setHexInput(e.target.value)}
-placeholder="Enter the hex-encoded ScriptPubKey"
-/>
-</div>
-<button
-        onClick={handleDecompile}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
-      >
-Decompile
-</button>
-{error && <p className="text-red-500 mt-4">{error}</p>}
-{result && (
-<div className="mt-4 bg-gray-100 p-4 rounded-md">
-<h2 className="text-xl font-semibold">Decompiled Result:</h2>
-<p className="mt-2"><strong>Required Signatures:</strong> {result.requiredSignatures}</p>
-<div className="mt-2">
-<strong>Public Keys:</strong>
-<ul className="list-disc list-inside">
-{result.publicKeys.map((key, index) => (
-<li key={index}>{key}</li>
-))}
-</ul>
-</div>
-</div>
-)}
-</div>
+  <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+    <h1 className="text-2xl font-bold mb-4 text-gray-800">P2MS ScriptPubKey Decompiler</h1>
+    <div className="mb-4">
+      <label htmlFor="hexInput" className="block text-sm font-medium text-gray-700">
+        ScriptPubKey (Hex):
+      </label>
+      <input
+        type="text"
+        id="hexInput"
+        className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+        value={hexInput}
+        onChange={(e) => setHexInput(e.target.value)}
+        placeholder="Enter the hex-encoded ScriptPubKey"
+      />
+    </div>
+    <button
+      onClick={handleDecompile}
+      className="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition"
+    >
+      Decompile
+    </button>
+    {error && <p className="text-red-600 mt-4">{error}</p>}
+    {result && (
+      <div className="mt-4 bg-gray-100 p-4 rounded-md">
+        <h2 className="text-xl font-semibold text-gray-800">Decompiled Result:</h2>
+        <p className="mt-2 text-gray-700"><strong>Required Signatures:</strong> {result.requiredSignatures}</p>
+        <div className="mt-2">
+          <strong className="text-gray-700">Public Keys:</strong>
+          <ul className="list-disc list-inside text-gray-700">
+            {result.publicKeys.map((key, index) => (
+              <li key={index}>{key}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    )}
+  </div>
 );
 }
 `,
@@ -140,6 +139,7 @@ active: true,
 },
 }}
 />
+
 
 <Hint
     title="Step-by-Step Hints"

@@ -17,17 +17,29 @@ They are well-tested and secure and nodes can quickly verify and relay them.
 
 Below is a time line showing different output scripts types before and After Segwit:
 
-<img
-    src="/bitcoin-topics/static/images/topics/overview/standard-script.png"
-    alt="Standartd scripts"
-/>
+<div className="dark:hidden">
+  <SvgDisplay
+    src="/bitcoin-topics/static/images/topics/overview/segwit-timeline.svg"
+    width="100%"
+    height="auto"
+  />
+</div>
+<div className="hidden dark:block">
+  <SvgDisplay
+    src="/bitcoin-topics/static/images/topics/overview/dark-segwit-timeline.svg"
+    width="100%"
+    height="auto"
+  />
+</div>
+
+
 
 <ExpandableAlert
     title="bitcoin Transaction Relay Policy"
     type="info"
     expandable={false}
 >
-    bitcoin Core will only relay transactions by default that pass the
+    Bitcoin Core will only relay transactions by default that pass the
     [IsStandardTx()](https://github.com/bitcoin/bitcoin/blob/de1d1895346ed27f471386011d7ff64508f8b39c/src/policy/policy.cpp#L94)
     check. However, miners are still free to include (valid!) non-standard
     transactions in their blocks.
@@ -43,10 +55,21 @@ Any script that deviates from these templates is considered non-standard and it 
 
 They are valid but are not relayed by most nodes for safety reasons
 
-<img
-    src="/bitcoin-topics/static/images/topics/overview/isStandardCheck.png"
-    alt="isStandard check"
-/>
+
+<div className="dark:hidden">
+  <SvgDisplay
+    src="/bitcoin-topics/static/images/topics/overview/isStandard-check.svg"
+    width="100%"
+    height="auto"
+  />
+</div>
+<div className="hidden dark:block">
+  <SvgDisplay
+    src="/bitcoin-topics/static/images/topics/overview/dark-isStandard-check.png"
+    width="100%"
+    height="auto"
+  />
+</div>
 
 <ExpandableAlert
     title="Want Your Non-Standard Transaction Relayed and Mined?"
