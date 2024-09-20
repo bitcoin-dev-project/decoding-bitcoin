@@ -1,7 +1,7 @@
 ---
-title: "Exercise"
-date: 2024-01-25T15:32:14Z
-lastmod: "2024-07-26"
+title: "Exercise 1: Medium"
+date: 2024-10-22T10:00:00Z
+lastmod: "2024-10-22"
 draft: false
 category: Scripts
 layout: TopicBanner
@@ -9,147 +9,203 @@ order: 1
 parent: 7-p2ms
 ---
 
-In this exercise, you will be working with a Bitcoin P2MS (Pay-to-Multisig) ScriptPubKey.
+In this exercise, you'll construct a P2MS (Pay-to-Multisig) ScriptPubKey within a P2SH (Pay-to-Script-Hash) for given public keys within a partially constructed transaction.
 
-Your task is to complete the `decompileP2MSScriptPubKey` function, which decompiles a hex-encoded ScriptPubKey and extracts the number of required signatures and the associated public keys.
+Here's a breakdown of the partially constructed transaction:
 
-Follow the hints provided if you get stuck, and test your code by entering a ScriptPubKey hex string in the input field below.
+| Field                    | Value                                                            |
+| ------------------------ | ---------------------------------------------------------------- |
+| Version                  | 01000000                                                         |
+| Input Count              | 01                                                               |
+| Input TXID               | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
+| Input VOUT               | 01000000                                                         |
+| ScriptSig Size           | N/A                                                              |
+| ScriptSig                | N/A                                                              |
+| Sequence                 | ffffffff                                                         |
+| Output Count             | 02                                                               |
+| Output1 Amount           | 8023430000000000                                                 |
+| Output1 ScriptPubKey Size| 17                                                               |
+| Output1 ScriptPubKey     | N/A                                                              |
+| Output2 Amount           | 00e1f50500000000                                                 |
+| Output2 ScriptPubKey Size| 17                                                               |
+| Output2 ScriptPubKey     | a91482b736e28a94f42164db1fe448086f74725ae46487                   |
+| Locktime                 | 00000000                                                         |
 
-Once you've completed the function, you can compare your solution with the provided answer.
+The hexadecimal representation of this transaction is:
 
-<SandpackComponent
-      template="react"
-      options={{
-        externalResources: ["https://cdn.tailwindcss.com"],
-        showLineNumbers: true,
-        showInlineErrors: true,
-        editorHeight: 800,
-      }}
-      customSetup={{
-        dependencies: {
-          react: "^18.0.0",
-          "react-dom": "^18.0.0",
-        },
-      }}
-      files={{
-        "/App.js": {
-          code: `
-import React, { useState } from 'react';
-import { decompileP2MSScriptPubKey } from './decompileP2MSScriptPubKey';
-
-export default function P2MSDecompile() {
-  const [hexInput, setHexInput] = useState('');
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
-
-const handleDecompile = () => {
-try {
-const parsedResult = decompileP2MSScriptPubKey(hexInput);
-setResult(parsedResult);
-setError(null);
-} catch (e) {
-setError(e.message);
-setResult(null);
-}
-};
-
-return (
-
-<div className="p-6 max-w-lg mx-auto bg-white shadow-md rounded-lg">
-<h1 className="text-2xl font-bold mb-4">P2MS ScriptPubKey Decompiler</h1>
-<div className="mb-4">
-<label htmlFor="hexInput" className="block text-sm font-medium text-gray-700">
-ScriptPubKey (Hex):
-</label>
-<input
-type="text"
-id="hexInput"
-className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm"
-value={hexInput}
-onChange={(e) => setHexInput(e.target.value)}
-placeholder="Enter the hex-encoded ScriptPubKey"
+<CodeSnippet
+    code="010000000197211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd11333801000000-[signature]-ffffffff028023430000000000-[scriptPubKey1]-00e1f5050000000017a91482b736e28a94f42164db1fe448086f74725ae4648700000000"
+    language="text"
+    showLineNumbers={true}
 />
-</div>
-<button
-        onClick={handleDecompile}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition"
-      >
-Decompile
-</button>
-{error && <p className="text-red-500 mt-4">{error}</p>}
-{result && (
-<div className="mt-4 bg-gray-100 p-4 rounded-md">
-<h2 className="text-xl font-semibold">Decompiled Result:</h2>
-<p className="mt-2"><strong>Required Signatures:</strong> {result.requiredSignatures}</p>
-<div className="mt-2">
-<strong>Public Keys:</strong>
-<ul className="list-disc list-inside">
-{result.publicKeys.map((key, index) => (
-<li key={index}>{key}</li>
-))}
-</ul>
-</div>
-</div>
-)}
-</div>
-);
-}
-`,
-        },
-        "/decompileP2MSScriptPubKey.js": {
-          code: `
-// Complete the function to decompile a P2MS ScriptPubKey
-export function decompileP2MSScriptPubKey(scriptPubKeyHex) {
-const scriptPubKey = Buffer.from(scriptPubKeyHex, 'hex');
-const script = [];
-let i = 0;
 
-while (i < scriptPubKey.length) {
-const byte = scriptPubKey[i];
+### Exercise
 
-    // TODO: If the byte represents an opcode, handle the data extraction
-    if (byte >= 0x01 && byte <= 0x4b) {
-      const dataLength = byte;
-      const data = scriptPubKey.slice(i + 1, i + 1 + dataLength);
-      script.push(data);
-      i += 1 + dataLength;
-    } else {
-      script.push(byte);
-      i += 1;
+Your task is to complete the `constructP2MSP2SHScriptPubKey` function which creates a P2SH ScriptPubKey for a 2-of-2 multisig redeem script using the following public keys:
+
+1. `02632178d046673c9729d828cfee388e121f497707f810c131e0d3fc0fe0bd66d6`
+2. `03a0951ec7d3a9da9de171617026442fcd30f34d66100fab539853b43f508787d4`
+
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/P2MSScriptPubKey.js": {
+        code: `import CryptoJS from 'crypto-js';
+
+export function constructP2MSP2SHScriptPubKey(pubkey1, pubkey2) {
+  // TODO: Implement this function
+  // Hint: Create a 2-of-2 multisig redeem script, then wrap it in P2SH
+  // Use CryptoJS.SHA256 and CryptoJS.RIPEMD160 for hashing
+}`,
+        active: true
+      },
+      "/App.js": {
+        code: `import React from 'react';
+import P2MSGame from './P2MSGame';
+
+export default function App() {
+  return (
+    <div style={{ backgroundColor: '#1e1e1e', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <P2MSGame />
+    </div>
+  );
+}`,
+      },
+      "/P2MSGame.js": {
+        code: `import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { constructP2MSP2SHScriptPubKey } from './P2MSScriptPubKey';
+import { LockClosedIcon } from '@heroicons/react/solid';
+
+const P2MSGame = () => {
+  const [result, setResult] = useState('');
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('');
+
+  const pubkey1 = "02632178d046673c9729d828cfee388e121f497707f810c131e0d3fc0fe0bd66d6";
+  const pubkey2 = "03a0951ec7d3a9da9de171617026442fcd30f34d66100fab539853b43f508787d4";
+  const expectedScriptPubKey = "a9148ce5408cfeaddb7ccb2545ded41ef4781094548487";
+
+  const runTest = () => {
+    try {
+      const result = constructP2MSP2SHScriptPubKey(pubkey1, pubkey2);
+      setConstructedScriptPubKey(result);
+      if (result === expectedScriptPubKey) {
+        setResult("Correct! You've successfully constructed the P2MS-in-P2SH ScriptPubKey!");
+        setIsCorrect(true);
+      } else {
+        setResult('Incorrect. Try again to construct the correct ScriptPubKey.');
+        setIsCorrect(false);
+      }
+    } catch (error) {
+      setResult(\`Error: \${error.message}\`);
+      setIsCorrect(false);
     }
+  };
 
-}
-
-// TODO: Validate if it's a P2MS script and extract the number of required signatures and public keys
-
-const opCheckMultiSig = 0xae;
-if (script[script.length - 1] !== opCheckMultiSig) {
-throw new Error('Invalid P2MS ScriptPubKey');
-}
-
-const m = script[0] - 0x50; // Number of required signatures (subtract 0x50 from the opcode value)
-const publicKeys = script.slice(1, -2).map((key) => key.toString('hex'));
-
-return {
-requiredSignatures: m,
-publicKeys: publicKeys,
+  return (
+    <div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2MS-in-P2SH ScriptPubKey Challenge</h2>
+      <div style={{ marginBottom: '1rem' }}>
+        <p style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
+          Public Key 1: {pubkey1}
+        </p>
+        <p style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
+          Public Key 2: {pubkey2}
+        </p>
+      </div>
+      <motion.div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '1rem',
+        }}
+        animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
+      </motion.div>
+      <button
+        onClick={runTest}
+        style={{
+          width: '100%',
+          padding: '0.5rem 1rem',
+          backgroundColor: '#f1760f',
+          color: '#ffffff',
+          border: 'none',
+          borderRadius: '0.25rem',
+          cursor: 'pointer',
+          transition: 'background-color 0.2s',
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'}
+      >
+        Test Your Code
+      </button>
+      <AnimatePresence>
+        {result && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            style={{
+              marginTop: '1rem',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
+              {result}
+            </p>
+            <p style={{ 
+              fontFamily: 'monospace', 
+              fontSize: '0.875rem', 
+              wordBreak: 'break-all', 
+              marginTop: '0.5rem', 
+              color: '#d4d4d4',
+              backgroundColor: '#3c3c3c',
+              padding: '0.5rem',
+              borderRadius: '0.25rem'
+            }}>
+              ScriptPubKey: {constructedScriptPubKey}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
 };
-}
-`,
-active: true,
-},
-}}
+
+export default P2MSGame;`,
+      },
+    },
+    options: {
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 400
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "framer-motion": "^6.0.0",
+        "@heroicons/react": "^1.0.6",
+        "crypto-js": "^4.1.1"
+      }
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/3173d2a2096a"
 />
+
+You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
 
 <Hint
     title="Step-by-Step Hints"
     hints={[
-        "Start by iterating over each byte in the `scriptPubKeyHex` string. You’ll need to determine whether the byte represents an opcode or data.",
-        "For opcodes between 0x01 and 0x4b, you should treat the byte as the length of the data that follows.",
-        "Extract the data by slicing the scriptPubKey buffer and increment the index `i` appropriately.",
-        "Check if the last byte in the script is the `OP_CHECKMULTISIG` opcode (0xae). If it's not, throw an error.",
-        "Subtract 0x50 from the first byte to get the number of required signatures.",
-        "The remaining data elements between the first and last opcodes are the public keys. Convert them to hex strings."
+        "Start by creating the multisig redeem script: OP_2 <pubkey1> <pubkey2> OP_2 OP_CHECKMULTISIG",
+        "Convert the redeem script to bytes",
+        "Hash the redeem script using SHA256 and then RIPEMD160",
+        "Create the P2SH script: OP_HASH160 <20-byte-hash> OP_EQUAL",
+        "Return the final script as a hexadecimal string"
     ]}
 />
 
@@ -159,47 +215,66 @@ active: true,
   expandable={true}
   initialLines={0}
 >
+  <details>
+    <summary>JavaScript Solution</summary>
+    ```javascript
+    import CryptoJS from 'crypto-js';
 
-```
-
-export function decompileP2MSScriptPubKey(scriptPubKeyHex) {
-  const scriptPubKey = Buffer.from(scriptPubKeyHex, 'hex');
-  const script = [];
-  let i = 0;
-
-  while (i < scriptPubKey.length) {
-    const byte = scriptPubKey[i];
-
-    // If the byte represents an opcode that pushes data onto the stack
-    if (byte >= 0x01 && byte <= 0x4b) {
-      const dataLength = byte;
-      const data = scriptPubKey.slice(i + 1, i + 1 + dataLength);
-      script.push(data);
-      i += 1 + dataLength;
-    } else {
-      script.push(byte);
-      i += 1;
+    export function constructP2MSP2SHScriptPubKey(pubkey1, pubkey2) {
+        // Create the 2-of-2 multisig redeem script
+        const redeemScript = `5221${pubkey1}21${pubkey2}52ae`;
+        console.log("Redeem Script:", redeemScript);
+        
+        // Convert redeem script to WordArray
+        const scriptWordArray = CryptoJS.enc.Hex.parse(redeemScript);
+        
+        // Hash the redeem script
+        const sha256Hash = CryptoJS.SHA256(scriptWordArray);
+        console.log("SHA256 Hash:", sha256Hash.toString(CryptoJS.enc.Hex));
+        
+        const ripemd160Hash = CryptoJS.RIPEMD160(sha256Hash);
+        console.log("RIPEMD160 Hash:", ripemd160Hash.toString(CryptoJS.enc.Hex));
+        
+        // Convert hash to hex
+        const scriptHash = ripemd160Hash.toString(CryptoJS.enc.Hex);
+        
+        // Construct the P2SH script
+        const p2shScript = 'a914' + scriptHash + '87';
+        
+        return p2shScript;
     }
-  }
+    ```
+  </details>
 
-  // Validate if it's a P2MS script by checking the last opcode
-  const opCheckMultiSig = 0xae;
-  if (script[script.length - 1] !== opCheckMultiSig) {
-    throw new Error('Invalid P2MS ScriptPubKey');
-  }
+  <details>
+    <summary>Python Solution</summary>
+    ```python
+    import hashlib
 
-  // The first element in the script is the number of required signatures
-  const m = script[0] - 0x50; // Subtract 0x50 from the opcode value to get the integer
-
-  // Extract the public keys
-  const publicKeys = script.slice(1, -2).map((key) => key.toString('hex'));
-
-  return {
-    requiredSignatures: m,
-    publicKeys: publicKeys,
-  };
-}
-
-```
-
+    def construct_p2ms_p2sh_scriptpubkey(pubkey1: str, pubkey2: str) -> str:
+        # 1. Create the 2-of-2 multisig redeem script
+        redeem_script = f"5221{pubkey1}21{pubkey2}52ae"
+        
+        # 2. Convert the redeem script to bytes
+        script_bytes = bytes.fromhex(redeem_script)
+        
+        # 3. Hash the redeem script using SHA256 and then RIPEMD160
+        sha256_hash = hashlib.sha256(script_bytes).digest()
+        ripemd160_hash = hashlib.new('ripemd160', sha256_hash).digest()
+        
+        # 4. Create the P2SH script
+        p2sh_script = b'\xa9\x14' + ripemd160_hash + b'\x87'
+        
+        # 5. Return the final script as a hexadecimal string
+        return p2sh_script.hex()
+    ```
+  </details>
 </ExpandableAlert>
+
+### Inspiration
+
+After completing the exercise, you can check out these testnet transactions to see real P2MS-in-P2SH ScriptPubKeys in action:
+- [Transaction 1](https://mempool.space/testnet/tx/2af5a9498a8f2a24a1d097e8a1d2edc11201aa66b75375a67b44921171d77b32)
+- [Transaction 2](https://mempool.space/testnet/tx/2c85e0328d1715be72f5ff87329c1feeac9e4721c2f67b744f15401b35c9b4a0)
+
+These transactions demonstrate how P2MS-in-P2SH ScriptPubKeys are used in actual Bitcoin transactions on the testnet.

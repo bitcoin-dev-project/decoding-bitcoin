@@ -258,34 +258,33 @@ const passCount = results.filter(r => r.success).length;
 const failCount = results.length - passCount;
 
 return (
-
-<div className='min-h-screen p-6 bg-gray-900'>
-<div className='max-w-3xl mx-auto'>
-<div className='flex justify-between items-center mb-6'>
-<span className='text-2xl font-bold text-white'>
-OP_PUSHDATA Test Results
-</span>
-<button 
-            onClick={runTests} 
-            className='bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded flex items-center'
+    <div className="min-h-screen p-6 bg-[#1e1e1e]">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex justify-between items-center mb-6">
+          <span className="text-2xl font-bold text-[#d4d4d4]">
+            OP_PUSHDATA Test Results
+          </span>
+          <button
+            onClick={runTests}
+            className="bg-[#f1760f] hover:bg-[#e56c0d] text-[#d4d4d4] font-bold py-2 px-4 rounded flex items-center"
           >
-<RefreshCw className='mr-2' size={20} />
-Run
-</button>
-</div>
+            <RefreshCw className="mr-2" size={20} />
+            Run
+          </button>
+        </div>
 
         {isLoading ? (
-          <div className='flex justify-center items-center h-64'>
-            <div className='animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-400'></div>
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#f1760f]"></div>
           </div>
         ) : (
           <>
-            <div className='mb-6 p-4 bg-gray-800 border border-gray-700 rounded-lg'>
-              <h2 className='font-bold text-white'>Test Summary</h2>
-              <p className='text-gray-300 mt-2'>
+            <div className="mb-6 p-4 bg-[#252526] border border-[#4c4d52] rounded-lg">
+              <h2 className="font-bold text-[#d4d4d4]">Test Summary</h2>
+              <p className="text-[#d4d4d4] mt-2">
                 Total Tests: {results.length} |
-                <span className='text-green-500 ml-2'>Passed: {passCount}</span> |
-                <span className='text-red-500 ml-2'>Failed: {failCount}</span>
+                <span className="text-[#689f38] ml-2">Passed: {passCount}</span> |
+                <span className="text-[#d32f2f] ml-2">Failed: {failCount}</span>
               </p>
             </div>
             {results.map((result, index) => (

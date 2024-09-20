@@ -1,7 +1,7 @@
 ---
-title: "Exercise: P2SH address"
-date: 2024-01-25T15:32:14Z
-lastmod: "2024-07-26"
+title: "Exercise 1: Medium"
+date: 2024-10-15T10:00:00Z
+lastmod: "2024-10-15"
 draft: false
 category: Scripts
 layout: TopicBanner
@@ -9,247 +9,273 @@ order: 1
 parent: 6-p2sh
 ---
 
-# Creating a P2SH Address in bitcoin
+In this exercise, you'll construct a P2SH (Pay-to-Script-Hash) ScriptPubKey for a given redeem script within a partially constructed transaction.
 
-In this exercise, you'll implement the core functionality to create a Pay-to-Script-Hash (P2SH) address in bitcoin.
+Here's a breakdown of the partially constructed transaction:
 
-<SandpackComponent
-  files={{
-    "/App.js": {
-      code: `import React from 'react';
-import { generateP2SHAddress, hexToASM } from './bitcoinUtils';
+| Field                    | Value                                                            |
+| ------------------------ | ---------------------------------------------------------------- |
+| Version                  | 02000000                                                         |
+| Input Count              | 02                                                               |
+| Input 1 TXID             | 589d75a45b732e3a92da560086568310e33efe5cfb26bcb2685d7ee712af7a3e |
+| Input 1 VOUT             | 00000000                                                         |
+| Input 1 ScriptSig Size   | 6a                                                               |
+| Input 1 ScriptSig        | [scriptsig 1]                                                    |
+| Input 1 Sequence         | fdffffff                                                         |
+| Input 2 TXID             | 2f8ec63af69ea6d35acb217562bef0467b0354a2dad430a71051041e5cfd0499 |
+| Input 2 VOUT             | 01000000                                                         |
+| Input 2 ScriptSig Size   | 6b                                                               |
+| Input 2 ScriptSig        | [scriptsig 2]                                                    |
+| Input 2 Sequence         | fdffffff                                                         |
+| Output Count             | 02                                                               |
+| Output 1 Amount          | 888a0100000000000                                                |
+| Output 1 ScriptPubKey Size| 17                                                              |
+| Output 1 ScriptPubKey    | [scriptpubkey]                                                   |
+| Output 2 Amount          | 74658b0000000000                                                 |
+| Output 2 ScriptPubKey    | 1976a91468cfed146aced22f422a68015ff8ca180761912a88ac             |
+| Locktime                 | eff91700                                                         |
 
-function App() {
-const [redeemScript, setRedeemScript] = React.useState('');
-const [p2shAddress, setP2shAddress] = React.useState('');
-const [asmScript, setAsmScript] = React.useState('');
+The hexadecimal representation of this transaction is:
 
-const handleGenerate = () => {
-try {
-const address = generateP2SHAddress(redeemScript);
-setP2shAddress(address);
-setAsmScript(hexToASM(redeemScript));
-} catch (error) {
-setP2shAddress('Error: ' + error.message);
-setAsmScript('');
-}
-};
-
-return (
-
-<div className="max-w-md mx-auto mt-10 p-6 bg-gray-100 rounded-lg shadow-lg">
-    <h1 className="text-2xl font-bold mb-4">P2SH Address Generator</h1>
-    <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-            Redeem Script (hex):
-        </label>
-        <input
-            type="text"
-            value={redeemScript}
-            onChange={(e) => setRedeemScript(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-        />
-    </div>
-    <button
-        onClick={handleGenerate}
-        className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-        Generate P2SH Address
-    </button>
-    {p2shAddress && (
-        <div className="mt-4">
-            <h2 className="text-lg font-semibold">Generated P2SH Address:</h2>
-            <p className="mt-2 p-2 bg-white rounded border border-gray-300">
-                {p2shAddress}
-            </p>
-        </div>
-    )}
-    {asmScript && (
-        <div className="mt-4">
-            <h2 className="text-lg font-semibold">ASM Representation:</h2>
-            <p className="mt-2 p-2 bg-white rounded border border-gray-300 whitespace-pre-wrap">
-                {asmScript}
-            </p>
-        </div>
-    )}
-</div>
-); }
-
-export default App;`,
-      hidden: true
-    },
-    "/bitcoinUtils.js": {
-      code: `import { sha256 } from 'js-sha256';
-import { encode } from 'bs58';
-
-export function generateP2SHAddress(redeemScript) {
-  // TODO: Implement P2SH address generation
-  // 1. Validate the redeem script (hex format)
-  // 2. Hash the redeem script using SHA256 and RIPEMD160
-  // 3. Add version byte (0x05 for P2SH)
-  // 4. Calculate checksum (first 4 bytes of double SHA256)
-  // 5. Combine version byte, hashed script, and checksum
-  // 6. Encode the result in Base58
-  // 7. Return the P2SH address
-
-// Placeholder implementation
-return 'Implement P2SH address generation here';
-}
-
-export function hexToASM(hex) {
-  // TODO: Implement conversion from hex to ASM
-  // 1. Define known opcodes
-  // 2. Parse the hex script byte by byte
-  // 3. Convert known opcodes to their string representations
-  // 4. For push data operations, extract the correct number of bytes
-  // 5. Join the parsed elements with spaces
-
-// Placeholder implementation
-return 'Implement hex to ASM conversion here';
-}
-
-// Helper function: perform RIPEMD160 on the input
-function ripemd160(input) {
-// Note: In a real implementation, you'd use a proper RIPEMD160 function
-// For this exercise, we'll use a placeholder
-return sha256(input).slice(0, 40); // Simulating RIPEMD160 with truncated SHA256
-}
-
-// Helper function: convert hex string to byte array
-function hexToBytes(hex) {
-const bytes = [];
-for (let i = 0; i < hex.length; i += 2) {
-bytes.push(parseInt(hex.substr(i, 2), 16));
-}
-return new Uint8Array(bytes);
-}`,
-},
-"/package.json": {
-code: JSON.stringify({
-dependencies: {
-"react": "^18.0.0",
-"react-dom": "^18.0.0",
-"js-sha256": "^0.9.0",
-"bs58": "^5.0.0"
-}
-}, null, 2),
-hidden: true
-},
-}}
-customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0",
-      "js-sha256": "^0.9.0",
-      "bs58": "^5.0.0"
-    }
-  }}
+<CodeSnippet
+    code="0200000002589d75a45b732e3a92da560086568310e33efe5cfb26bcb2685d7ee712af7a3e000000006a-[scriptsig 1]-fdffffff2f8ec63af69ea6d35acb217562bef0467b0354a2dad430a71051041e5cfd0499010000006b-[scriptsig 2]-fdffffff02888a01000000000017-[scriptpubkey]-74658b00000000001976a91468cfed146aced22f422a68015ff8ca180761912a88aceff91700"
+    language="text"
+    showLineNumbers={true}
 />
 
-## Exercise Instructions
+### Exercise
 
-Your task is to implement the `generateP2SHAddress` and `hexToASM` functions in the `bitcoinUtils.js` file.
+Your task is to complete the `constructP2SHScriptPubKey` function which creates a P2SH ScriptPubKey for the following redeem script:
 
-1. Implement `generateP2SHAddress` as described in the previous instructions.
-2. Implement `hexToASM` to convert the hex redeem script to its ASM representation:
-    - Parse the hex script byte by byte.
-    - Convert known opcodes to their string representations (e.g., '51' to 'OP_1').
-    - For push data operations, extract the correct number of bytes as a hex string.
-    - Join the parsed elements with spaces.
+<CodeSnippet
+    code="    2 3 ADD 5 EQUAL"
+    language="text"
+    showLineNumbers={false}
+/>
 
-Test your implementation with this redeem script: `5221031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe1321031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe1352ae`
+#### Instructions:
+1. Implement the `constructP2SHScriptPubKey` function.
+2. The function should take the redeem script as input and return the complete P2SH ScriptPubKey.
+3. Remember to hash the redeem script and include the necessary opcodes.
+4. The provided unit test will check if your implementation is correct.
 
-Expected results:
+Choose your preferred language below to start coding:
 
--   P2SH Address: `3PRx8wvqghQB1S8xGpFBmcVjN5fxGvpjLE`
--   ASM: `OP_2 031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe13 031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe13 OP_2 OP_CHECKMULTISIG`
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/P2SHScriptPubKey.js": {
+        code: `import CryptoJS from 'crypto-js';
 
-This script represents a 2-of-2 multisig P2SH address.
+export function constructP2SHScriptPubKey(redeemScript) {
+  // TODO: Implement this function
+  // Hint: Use CryptoJS.SHA256 and CryptoJS.RIPEMD160 for hashing
+}`,
+        active: true
+      },
+      "/App.js": {
+        code: `import React from 'react';
+import P2SHGame from './P2SHGame';
+
+export default function App() {
+  return (
+    <div style={{ backgroundColor: '#1e1e1e', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <P2SHGame />
+    </div>
+  );
+}`
+      },
+      "/P2SHGame.js": {
+        code: `import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { constructP2SHScriptPubKey } from './P2SHScriptPubKey';
+import { LockClosedIcon } from '@heroicons/react/solid';
+
+const P2SHGame = () => {
+  const [result, setResult] = useState('');
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('');
+
+  const redeemScript = "52 53 93 55 87";  // 2 3 ADD 5 EQUAL in hex
+  const expectedScriptPubKey = "a9144254e2a76ec94641c2d3e4b5528bbb30a350838c87";
+
+  const runTest = () => {
+    try {
+      const result = constructP2SHScriptPubKey(redeemScript);
+      setConstructedScriptPubKey(result);
+      if (result === expectedScriptPubKey) {
+        setResult("Correct! You've successfully constructed the P2SH ScriptPubKey!");
+        setIsCorrect(true);
+      } else {
+        setResult('Incorrect. Try again to construct the correct ScriptPubKey.');
+        setIsCorrect(false);
+      }
+    } catch (error) {
+      setResult(\`Error: \${error.message}\`);
+      setIsCorrect(false);
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2SH ScriptPubKey Challenge</h2>
+      <div style={{ marginBottom: '1rem' }}>
+        <p style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
+          Redeem Script: {redeemScript}
+        </p>
+      </div>
+      <motion.div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '1rem',
+        }}
+        animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
+      </motion.div>
+      <button
+        onClick={runTest}
+        style={{
+          width: '100%',
+          padding: '0.5rem 1rem',
+          backgroundColor: '#f1760f',
+          color: '#ffffff',
+          border: 'none',
+          borderRadius: '0.25rem',
+          cursor: 'pointer',
+          transition: 'background-color 0.2s',
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'}
+      >
+        Test Your Code
+      </button>
+      <AnimatePresence>
+        {result && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            style={{
+              marginTop: '1rem',
+              textAlign: 'center',
+            }}
+          >
+            <p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
+              {result}
+            </p>
+            <p style={{ 
+              fontFamily: 'monospace', 
+              fontSize: '0.875rem', 
+              wordBreak: 'break-all', 
+              marginTop: '0.5rem', 
+              color: '#d4d4d4',
+              backgroundColor: '#3c3c3c',
+              padding: '0.5rem',
+              borderRadius: '0.25rem'
+            }}>
+              ScriptPubKey: {constructedScriptPubKey}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default P2SHGame;`
+      },
+    },
+    options: {
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 400
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "framer-motion": "^6.0.0",
+        "@heroicons/react": "^1.0.6",
+        "crypto-js": "^4.1.1"
+      }
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/ef3bfc92e6fb"
+/>
+
+For this exercise, we've provided the `crypto-js` library to help with the hashing operations. You should use this library to implement the P2SH ScriptPubKey function.
+
+You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
+
+<Hint
+    title="Step-by-Step Hints"
+    hints={[
+        "Start by encoding the redeem script as bytes.",
+        "Use CryptoJS.SHA256 to hash the redeem script, then use CryptoJS.RIPEMD160 on the result.",
+        "The P2SH script starts with OP_HASH160 (0xa9).",
+        "Push the 20-byte script hash onto the stack (0x14 followed by the hash).",
+        "End the script with OP_EQUAL (0x87)."
+    ]}
+/>
 
 <ExpandableAlert
   title="Solution code"
   type="solution"
   expandable={true}
   initialLines={0}
-
 >
+  <details>
+    <summary>JavaScript Solution</summary>
+    ```javascript
+    import CryptoJS from 'crypto-js';
 
-```
-import { sha256 } from 'js-sha256';
-import { encode } from 'bs58';
-
-export function generateP2SHAddress(redeemScript) {
-  // 1. Validate the redeem script (hex format)
-  if (!/^[0-9a-fA-F]+$/.test(redeemScript)) {
-    throw new Error('Invalid redeem script: must be a hex string');
-  }
-
-  // 2. Hash the redeem script using SHA256 and RIPEMD160
-  const scriptHash = ripemd160(sha256(hexToBytes(redeemScript)));
-
-  // 3. Add version byte (0x05 for P2SH)
-  const versionScriptHash = '05' + scriptHash;
-
-  // 4. Calculate checksum (first 4 bytes of double SHA256)
-  const checksum = sha256(sha256(hexToBytes(versionScriptHash))).slice(0, 8);
-
-  // 5. Combine version byte, hashed script, and checksum
-  const binaryAddress = hexToBytes(versionScriptHash + checksum);
-
-  // 6. Encode the result in Base58
-  const p2shAddress = encode(binaryAddress);
-
-  // 7. Return the P2SH address
-  return p2shAddress;
-}
-
-export function hexToASM(hex) {
-  const opcodes = {
-    '00': 'OP_0',
-    '51': 'OP_1',
-    '52': 'OP_2',
-    '53': 'OP_3',
-    '54': 'OP_4',
-    '55': 'OP_5',
-    'ac': 'OP_CHECKSIG',
-    'ae': 'OP_CHECKMULTISIG',
-    // Add more opcodes as needed
-  };
-
-  let asm = [];
-  for (let i = 0; i < hex.length; i += 2) {
-    const byte = hex.substr(i, 2);
-    if (opcodes[byte]) {
-      asm.push(opcodes[byte]);
-    } else {
-      const length = parseInt(byte, 16);
-      if (length > 0 && i + 2 + length * 2 <= hex.length) {
-        const data = hex.substr(i + 2, length * 2);
-        asm.push(data);
-        i += length * 2;
-      } else {
-        asm.push(byte); // Push unknown byte as is
-      }
+    export function constructP2SHScriptPubKey(redeemScript) {
+        // Convert redeem script from hex to WordArray
+        const scriptWordArray = CryptoJS.enc.Hex.parse(redeemScript.replace(/\s/g, ''));
+        
+        // Hash the redeem script
+        const sha256Hash = CryptoJS.SHA256(scriptWordArray);
+        const ripemd160Hash = CryptoJS.RIPEMD160(sha256Hash);
+        
+        // Convert hash to hex
+        const scriptHash = ripemd160Hash.toString(CryptoJS.enc.Hex);
+        
+        // Construct the P2SH script
+        const p2shScript = 'a914' + scriptHash + '87';
+        
+        return p2shScript;
     }
-  }
-  return asm.join(' ');
-}
+    ```
+  </details>
 
-// Helper function: perform RIPEMD160 on the input
-function ripemd160(input) {
-  // Note: In a real implementation, you'd use a proper RIPEMD160 function
-  // For this exercise, we'll use a placeholder
-  return sha256(input).slice(0, 40);  // Simulating RIPEMD160 with truncated SHA256
-}
+  <details>
+    <summary>Python Solution</summary>
+    ```python
+    import hashlib
 
-// Helper function: convert hex string to byte array
-function hexToBytes(hex) {
-  const bytes = [];
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes.push(parseInt(hex.substr(i, 2), 16));
-  }
-  return new Uint8Array(bytes);
-}
-```
-
+    def construct_p2sh_scriptpubkey(redeem_script: str) -> str:
+        # Encode the redeem script as bytes
+        script_bytes = bytes.fromhex(redeem_script.replace(" ", ""))
+        
+        # Hash the redeem script
+        sha256_hash = hashlib.sha256(script_bytes).digest()
+        ripemd160_hash = hashlib.new('ripemd160', sha256_hash).digest()
+        
+        # Construct the P2SH script
+        p2sh_script = b'\xa9\x14' + ripemd160_hash + b'\x87'
+        
+        return p2sh_script.hex()
+    ```
+  </details>
 </ExpandableAlert>
+
+### Inspiration
+
+After completing the exercise, you can check out these testnet transactions to see real P2SH ScriptPubKeys in action:
+- [Transaction 1](https://mempool.space/testnet/tx/463782617f0e6a69102530caa9ba2fe48f996128378af99ee437a22660afc5a7)
+- [Transaction 2](https://mempool.space/testnet/tx/4bb9f0a567e83f8ef3b5a18d9b2b19e1139f302471ad03246be50598151d019a)
+
+These transactions demonstrate how P2SH ScriptPubKeys are used in actual Bitcoin transactions on the testnet.
