@@ -51,44 +51,51 @@ setAsmScript('');
 };
 
 return (
-  <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-    <h1 className="text-2xl font-bold mb-4 text-gray-800">P2SH Address Generator</h1>
+
+{" "}
+<div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <h1 className="text-2xl font-bold mb-4 text-gray-800">
+        P2SH Address Generator
+    </h1>
     <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700">
-        Redeem Script (hex):
-      </label>
-      <input
-        type="text"
-        value={redeemScript}
-        onChange={(e) => setRedeemScript(e.target.value)}
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50"
-      />
+        <label className="block text-sm font-medium text-gray-700">
+            Redeem Script (hex):
+        </label>
+        <input
+            type="text"
+            value={redeemScript}
+            onChange={(e) => setRedeemScript(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50"
+        />
     </div>
     <button
-      onClick={handleGenerate}
-      className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
+        onClick={handleGenerate}
+        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
     >
-      Generate P2SH Address
+        Generate P2SH Address
     </button>
     {p2shAddress && (
-      <div className="mt-4">
-        <h2 className="text-lg font-semibold text-gray-800">Generated P2SH Address:</h2>
-        <p className="mt-2 p-2 bg-gray-100 rounded border border-gray-300 text-gray-700">
-          {p2shAddress}
-        </p>
-      </div>
+        <div className="mt-4">
+            <h2 className="text-lg font-semibold text-gray-800">
+                Generated P2SH Address:
+            </h2>
+            <p className="mt-2 p-2 bg-gray-100 rounded border border-gray-300 text-gray-700">
+                {p2shAddress}
+            </p>
+        </div>
     )}
     {asmScript && (
-      <div className="mt-4">
-        <h2 className="text-lg font-semibold text-gray-800">ASM Representation:</h2>
-        <p className="mt-2 p-2 bg-gray-100 rounded border border-gray-300 text-gray-700 whitespace-pre-wrap">
-          {asmScript}
-        </p>
-      </div>
+        <div className="mt-4">
+            <h2 className="text-lg font-semibold text-gray-800">
+                ASM Representation:
+            </h2>
+            <p className="mt-2 p-2 bg-gray-100 rounded border border-gray-300 text-gray-700 whitespace-pre-wrap">
+                {asmScript}
+            </p>
+        </div>
     )}
-  </div>
-);
-}
+</div>
+); }
 
 export default App;`,
       hidden: true
@@ -138,19 +145,19 @@ bytes.push(parseInt(hex.substr(i, 2), 16));
 }
 return new Uint8Array(bytes);
 }`,
-    },
-    "/package.json": {
-      code: JSON.stringify({
-        dependencies: {
-          "react": "^18.0.0",
-          "react-dom": "^18.0.0",
-          "js-sha256": "^0.9.0",
-          "bs58": "^5.0.0"
-        }
-      }, null, 2),
-      hidden: true
-    },
-  }}
+},
+"/package.json": {
+code: JSON.stringify({
+dependencies: {
+"react": "^18.0.0",
+"react-dom": "^18.0.0",
+"js-sha256": "^0.9.0",
+"bs58": "^5.0.0"
+}
+}, null, 2),
+hidden: true
+},
+}}
 />
 
 ## Exercise Instructions

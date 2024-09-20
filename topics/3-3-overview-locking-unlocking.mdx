@@ -16,18 +16,18 @@ Locking and Unlocking scripts are used to define the conditions under which a tr
 A locking script, also known as a ScriptPubKey, is placed on every output you create in a transaction. It specifies the conditions that must be met for the output to be spent.
 
 <div className="dark:hidden">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/lock-script.svg"
-    width="90%"
-    height="auto"
-  />
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/lock-script.svg"
+        width="90%"
+        height="auto"
+    />
 </div>
 <div className="hidden dark:block">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/dark-lock-script.svg"
-    width="90%"
-    height="auto"
-  />
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/dark-lock-script.svg"
+        width="90%"
+        height="auto"
+    />
 </div>
 
 **Example:** This script requires that the unlocking script provides a value that, when added to 2, equals 4.
@@ -37,18 +37,18 @@ A locking script, also known as a ScriptPubKey, is placed on every output you cr
 An unlocking script, also known as a ScriptSig or Witness, is provided for every input you want to spend in a transaction. It contains the data needed to satisfy the conditions set by the locking script.
 
 <div className="dark:hidden">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/unlock-script.svg"
-    width="90%"
-    height="auto"
-  />
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/unlock-script.svg"
+        width="90%"
+        height="auto"
+    />
 </div>
 <div className="hidden dark:block">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/dark-unlock-script.svg"
-    width="90%"
-    height="auto"
-  />
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/dark-unlock-script.svg"
+        width="90%"
+        height="auto"
+    />
 </div>
 
 This script provides the value 2, which satisfies the condition set by the locking script we saw before
@@ -70,18 +70,18 @@ The unlocking script is executed first, followed by the locking script.
 If the unlocking script successfully satisfies the conditions set by the locking script, the transaction is considered **valid** and is added to the blockchain. Otherwise, it is **rejected**.
 
 <div className="dark:hidden">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/lock-unlock.svg"
-    width="100%"
-    height="auto"
-  />
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/lock-unlock.svg"
+        width="100%"
+        height="auto"
+    />
 </div>
 <div className="hidden dark:block">
-  <SvgDisplay
-    src="/bitcoin-topics/static/images/topics/overview/dark-lock-unlock.svg"
-    width="100%"
-    height="auto"
-  />
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/dark-lock-unlock.svg"
+        width="100%"
+        height="auto"
+    />
 </div>
 
 Use the Bitcoin Stack simulator below to execute the combined script (unlocking + locking script) we provided before

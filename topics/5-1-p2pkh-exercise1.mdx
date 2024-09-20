@@ -13,23 +13,23 @@ In this exercise, you'll construct P2PKH (Pay-to-Public-Key-Hash) ScriptPubKeys 
 
 Here's a breakdown of the partially constructed transaction:
 
-| Field                    | Value                                                            |
-| ------------------------ | ---------------------------------------------------------------- |
-| Version                  | 01000000                                                         |
-| Input Count              | 01                                                               |
-| Input TXID               | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
-| Input VOUT               | 01000000                                                         |
-| ScriptSig Size           | N/A                                                              |
-| ScriptSig                | N/A                                                              |
-| Sequence                 | ffffffff                                                         |
-| Output Count             | 02                                                               |
-| Output1 Amount           | 8023430000000000                                                 |
-| Output1 ScriptPubKey Size| 19                                                               |
-| Output1 ScriptPubKey     | N/A                                                              |
-| Output2 Amount           | 00e1f50500000000                                                 |
-| Output2 ScriptPubKey Size| 19                                                               |
-| Output2 ScriptPubKey     | N/A                                                              |
-| Locktime                 | 00000000                                                         |
+| Field                     | Value                                                            |
+| ------------------------- | ---------------------------------------------------------------- |
+| Version                   | 01000000                                                         |
+| Input Count               | 01                                                               |
+| Input TXID                | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
+| Input VOUT                | 01000000                                                         |
+| ScriptSig Size            | N/A                                                              |
+| ScriptSig                 | N/A                                                              |
+| Sequence                  | ffffffff                                                         |
+| Output Count              | 02                                                               |
+| Output1 Amount            | 8023430000000000                                                 |
+| Output1 ScriptPubKey Size | 19                                                               |
+| Output1 ScriptPubKey      | N/A                                                              |
+| Output2 Amount            | 00e1f50500000000                                                 |
+| Output2 ScriptPubKey Size | 19                                                               |
+| Output2 ScriptPubKey      | N/A                                                              |
+| Locktime                  | 00000000                                                         |
 
 The hexadecimal representation of this transaction is:
 
@@ -65,13 +65,15 @@ For easier copying, here's the same transaction in a single line:
 
 ### Exercise
 
-Now that you understand the concept of P2PKH ScriptPubKey, let's implement it.  
+Now that you understand the concept of P2PKH ScriptPubKey, let's implement it.
 
 Your task is to complete the `construct_p2pkh_scriptpubkey` function which locks the funds to the following public keys:
+
 1. `037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb`
 2. `02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5`
 
 #### Instructions:
+
 1. Implement the `construct_p2pkh_scriptpubkey` function.
 2. The function should take a public key as input and return the complete P2PKH ScriptPubKey.
 3. Remember to hash the public key and include the necessary opcodes.
@@ -110,108 +112,145 @@ import { constructP2PKHScriptPubKey } from './P2PKHScriptPubKey';
 import { LockClosedIcon } from '@heroicons/react/solid';
 
 const P2PKHGame = () => {
-  const [result, setResult] = useState('');
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [constructedScriptPubKeys, setConstructedScriptPubKeys] = useState(['', '']);
+const [result, setResult] = useState('');
+const [isCorrect, setIsCorrect] = useState(false);
+const [constructedScriptPubKeys, setConstructedScriptPubKeys] = useState(['', '']);
 
-  const publicKeys = [
-    '037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb',
-    '02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5'
-  ];
-  const expectedScriptPubKeys = [
-    '76a91426ae24c8c84af2272dafeca63d554c3c4d561ddd88ac',
-    '76a914e3f624c6cd05acb89000446bd522df426e37d75988ac'
-  ];
+const publicKeys = [
+'037d91c138583e25b0dbacb2643e5f14a96df6af798b3dcc08d7f7f3b41db614fb',
+'02f82f8cd17a73ea73538ba86d129254c9ef640babc51b316e089595bb884dbef5'
+];
+const expectedScriptPubKeys = [
+'76a91426ae24c8c84af2272dafeca63d554c3c4d561ddd88ac',
+'76a914e3f624c6cd05acb89000446bd522df426e37d75988ac'
+];
 
-  const runTest = () => {
-    try {
-      const results = publicKeys.map(constructP2PKHScriptPubKey);
-      setConstructedScriptPubKeys(results);
-      if (results.every((result, index) => result === expectedScriptPubKeys[index])) {
-        setResult("Correct! You've successfully constructed both P2PKH ScriptPubKeys!");
-        setIsCorrect(true);
-      } else {
-        setResult('Incorrect. Try again to construct the correct ScriptPubKeys.');
-        setIsCorrect(false);
-      }
-    } catch (error) {
-      setResult(\`Error: \${error.message}\`);
-      setIsCorrect(false);
-    }
-  };
+const runTest = () => {
+try {
+const results = publicKeys.map(constructP2PKHScriptPubKey);
+setConstructedScriptPubKeys(results);
+if (results.every((result, index) => result === expectedScriptPubKeys[index])) {
+setResult("Correct! You've successfully constructed both P2PKH ScriptPubKeys!");
+setIsCorrect(true);
+} else {
+setResult('Incorrect. Try again to construct the correct ScriptPubKeys.');
+setIsCorrect(false);
+}
+} catch (error) {
+setResult(\`Error: \${error.message}\`);
+setIsCorrect(false);
+}
+};
 
-  return (
-    <div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2PKH ScriptPubKey Challenge</h2>
-      <div style={{ marginBottom: '1rem' }}>
-        {publicKeys.map((key, index) => (
-          <p key={index} style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
-            Public Key {index + 1}: {key}
-          </p>
-        ))}
-      </div>
-      <motion.div
+return (
+
+<div
+    style={{
+        maxWidth: "28rem",
+        width: "100%",
+        backgroundColor: "#252526",
+        padding: "1.5rem",
+        borderRadius: "0.5rem",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+    }}
+>
+    <h2
         style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '1rem',
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+            color: "#d4d4d4",
+            textAlign: "center"
+        }}
+    >
+        P2PKH ScriptPubKey Challenge
+    </h2>
+    <div style={{ marginBottom: "1rem" }}>
+        {publicKeys.map((key, index) => (
+            <p
+                key={index}
+                style={{
+                    fontFamily: "monospace",
+                    fontSize: "0.875rem",
+                    wordBreak: "break-all",
+                    marginTop: "0.5rem",
+                    color: "#d4d4d4"
+                }}
+            >
+                Public Key {index + 1}: {key}
+            </p>
+        ))}
+    </div>
+    <motion.div
+        style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "1rem"
         }}
         animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
         transition={{ duration: 0.5 }}
-      >
-        <LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
-      </motion.div>
-      <button
+    >
+        <LockClosedIcon
+            style={{
+                width: "3rem",
+                height: "3rem",
+                color: isCorrect ? "#689f38" : "#f1760f"
+            }}
+        />
+    </motion.div>
+    <button
         onClick={runTest}
         style={{
-          width: '100%',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#f1760f',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '0.25rem',
-          cursor: 'pointer',
-          transition: 'background-color 0.2s',
+            width: "100%",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#f1760f",
+            color: "#ffffff",
+            border: "none",
+            borderRadius: "0.25rem",
+            cursor: "pointer",
+            transition: "background-color 0.2s"
         }}
-        onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
-        onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'}
-      >
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#e56c0d")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#f1760f")}
+    >
         Test Your Code
-      </button>
-      <AnimatePresence>
+    </button>
+    <AnimatePresence>
         {result && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            style={{
-              marginTop: '1rem',
-              textAlign: 'center',
-            }}
-          >
-            <p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
-              {result}
-            </p>
-            {constructedScriptPubKeys.map((scriptPubKey, index) => (
-              <p key={index} style={{ 
-                fontFamily: 'monospace', 
-                fontSize: '0.875rem', 
-                wordBreak: 'break-all', 
-                marginTop: '0.5rem', 
-                color: '#d4d4d4',
-                backgroundColor: '#3c3c3c',
-                padding: '0.5rem',
-                borderRadius: '0.25rem'
-              }}>
-                ScriptPubKey {index + 1}: {scriptPubKey}
-              </p>
-            ))}
-          </motion.div>
+            <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                style={{
+                    marginTop: "1rem",
+                    textAlign: "center"
+                }}
+            >
+                <p style={{ color: isCorrect ? "#689f38" : "#d32f2f" }}>
+                    {result}
+                </p>
+                {constructedScriptPubKeys.map((scriptPubKey, index) => (
+                    <p
+                        key={index}
+                        style={{
+                            fontFamily: "monospace",
+                            fontSize: "0.875rem",
+                            wordBreak: "break-all",
+                            marginTop: "0.5rem",
+                            color: "#d4d4d4",
+                            backgroundColor: "#3c3c3c",
+                            padding: "0.5rem",
+                            borderRadius: "0.25rem"
+                        }}
+                    >
+                        ScriptPubKey {index + 1}: {scriptPubKey}
+                    </p>
+                ))}
+            </motion.div>
         )}
-      </AnimatePresence>
-    </div>
-  );
-};
+    </AnimatePresence>
+</div>
+); };
 
 export default P2PKHGame;`
       },
@@ -249,12 +288,10 @@ You can look up the hex characters for each op_code in the [Bitcoin Script wiki 
     ]}
 />
 
-
 ### Inspiration
 
 After completing the exercise, you can check out this testnet transaction to see real P2PKH ScriptPubKeys in action:
 [https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526](https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526)
-
 
 <ExpandableAlert
   title="Solution code"
@@ -270,20 +307,21 @@ After completing the exercise, you can check out this testnet transaction to see
     export function constructP2PKHScriptPubKey(publicKey) {
         // Convert public key from hex to WordArray
         const pubKeyWordArray = CryptoJS.enc.Hex.parse(publicKey);
-        
+
         // Hash the public key
         const sha256Hash = CryptoJS.SHA256(pubKeyWordArray);
         const ripemd160Hash = CryptoJS.RIPEMD160(sha256Hash);
-        
+
         // Convert hash to hex
         const pubKeyHash = ripemd160Hash.toString(CryptoJS.enc.Hex);
-        
+
         // Construct the script
         const script = '76a914' + pubKeyHash + '88ac';
-        
+
         return script;
     }
     ```
+
   </details>
 
   <details>
@@ -294,16 +332,16 @@ After completing the exercise, you can check out this testnet transaction to see
     def construct_p2pkh_scriptpubkey(public_key: str) -> str:
         # Convert public key from hex to bytes
         pubkey_bytes = bytes.fromhex(public_key)
-        
+
         # Hash the public key
         sha256_hash = hashlib.sha256(pubkey_bytes).digest()
         ripemd160_hash = hashlib.new('ripemd160', sha256_hash).digest()
-        
+
         # Construct the script
         script = b'\x76\xa9\x14' + ripemd160_hash + b'\x88\xac'
-        
+
         return script.hex()
     ```
+
   </details>
 </ExpandableAlert>
-

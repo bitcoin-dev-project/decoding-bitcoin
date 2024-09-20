@@ -13,27 +13,27 @@ In this exercise, you'll construct a P2SH (Pay-to-Script-Hash) ScriptPubKey for 
 
 Here's a breakdown of the partially constructed transaction:
 
-| Field                    | Value                                                            |
-| ------------------------ | ---------------------------------------------------------------- |
-| Version                  | 02000000                                                         |
-| Input Count              | 02                                                               |
-| Input 1 TXID             | 589d75a45b732e3a92da560086568310e33efe5cfb26bcb2685d7ee712af7a3e |
-| Input 1 VOUT             | 00000000                                                         |
-| Input 1 ScriptSig Size   | 6a                                                               |
-| Input 1 ScriptSig        | [scriptsig 1]                                                    |
-| Input 1 Sequence         | fdffffff                                                         |
-| Input 2 TXID             | 2f8ec63af69ea6d35acb217562bef0467b0354a2dad430a71051041e5cfd0499 |
-| Input 2 VOUT             | 01000000                                                         |
-| Input 2 ScriptSig Size   | 6b                                                               |
-| Input 2 ScriptSig        | [scriptsig 2]                                                    |
-| Input 2 Sequence         | fdffffff                                                         |
-| Output Count             | 02                                                               |
-| Output 1 Amount          | 888a0100000000000                                                |
-| Output 1 ScriptPubKey Size| 17                                                              |
-| Output 1 ScriptPubKey    | [scriptpubkey]                                                   |
-| Output 2 Amount          | 74658b0000000000                                                 |
-| Output 2 ScriptPubKey    | 1976a91468cfed146aced22f422a68015ff8ca180761912a88ac             |
-| Locktime                 | eff91700                                                         |
+| Field                      | Value                                                            |
+| -------------------------- | ---------------------------------------------------------------- |
+| Version                    | 02000000                                                         |
+| Input Count                | 02                                                               |
+| Input 1 TXID               | 589d75a45b732e3a92da560086568310e33efe5cfb26bcb2685d7ee712af7a3e |
+| Input 1 VOUT               | 00000000                                                         |
+| Input 1 ScriptSig Size     | 6a                                                               |
+| Input 1 ScriptSig          | [scriptsig 1]                                                    |
+| Input 1 Sequence           | fdffffff                                                         |
+| Input 2 TXID               | 2f8ec63af69ea6d35acb217562bef0467b0354a2dad430a71051041e5cfd0499 |
+| Input 2 VOUT               | 01000000                                                         |
+| Input 2 ScriptSig Size     | 6b                                                               |
+| Input 2 ScriptSig          | [scriptsig 2]                                                    |
+| Input 2 Sequence           | fdffffff                                                         |
+| Output Count               | 02                                                               |
+| Output 1 Amount            | 888a0100000000000                                                |
+| Output 1 ScriptPubKey Size | 17                                                               |
+| Output 1 ScriptPubKey      | [scriptpubkey]                                                   |
+| Output 2 Amount            | 74658b0000000000                                                 |
+| Output 2 ScriptPubKey      | 1976a91468cfed146aced22f422a68015ff8ca180761912a88ac             |
+| Locktime                   | eff91700                                                         |
 
 The hexadecimal representation of this transaction is:
 
@@ -54,6 +54,7 @@ Your task is to complete the `constructP2SHScriptPubKey` function which creates 
 />
 
 #### Instructions:
+
 1. Implement the `constructP2SHScriptPubKey` function.
 2. The function should take the redeem script as input and return the complete P2SH ScriptPubKey.
 3. Remember to hash the redeem script and include the necessary opcodes.
@@ -92,52 +93,51 @@ import { constructP2SHScriptPubKey } from './P2SHScriptPubKey';
 import { LockClosedIcon } from '@heroicons/react/solid';
 
 const P2SHGame = () => {
-  const [result, setResult] = useState('');
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('');
+const [result, setResult] = useState('');
+const [isCorrect, setIsCorrect] = useState(false);
+const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('');
 
-  const redeemScript = "52 53 93 55 87";  // 2 3 ADD 5 EQUAL in hex
-  const expectedScriptPubKey = "a9144254e2a76ec94641c2d3e4b5528bbb30a350838c87";
+const redeemScript = "52 53 93 55 87"; // 2 3 ADD 5 EQUAL in hex
+const expectedScriptPubKey = "a9144254e2a76ec94641c2d3e4b5528bbb30a350838c87";
 
-  const runTest = () => {
-    try {
-      const result = constructP2SHScriptPubKey(redeemScript);
-      setConstructedScriptPubKey(result);
-      if (result === expectedScriptPubKey) {
-        setResult("Correct! You've successfully constructed the P2SH ScriptPubKey!");
-        setIsCorrect(true);
-      } else {
-        setResult('Incorrect. Try again to construct the correct ScriptPubKey.');
-        setIsCorrect(false);
-      }
-    } catch (error) {
-      setResult(\`Error: \${error.message}\`);
-      setIsCorrect(false);
-    }
-  };
+const runTest = () => {
+try {
+const result = constructP2SHScriptPubKey(redeemScript);
+setConstructedScriptPubKey(result);
+if (result === expectedScriptPubKey) {
+setResult("Correct! You've successfully constructed the P2SH ScriptPubKey!");
+setIsCorrect(true);
+} else {
+setResult('Incorrect. Try again to construct the correct ScriptPubKey.');
+setIsCorrect(false);
+}
+} catch (error) {
+setResult(\`Error: \${error.message}\`);
+setIsCorrect(false);
+}
+};
 
-  return (
-    <div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2SH ScriptPubKey Challenge</h2>
-      <div style={{ marginBottom: '1rem' }}>
-        <p style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
-          Redeem Script: {redeemScript}
-        </p>
-      </div>
-      <motion.div
-        style={{
+return (
+<div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+<h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2SH ScriptPubKey Challenge</h2>
+<div style={{ marginBottom: '1rem' }}>
+<p style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
+Redeem Script: {redeemScript}
+</p>
+</div>
+<motion.div
+style={{
           display: 'flex',
           justifyContent: 'center',
           marginBottom: '1rem',
         }}
-        animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
-      </motion.div>
-      <button
-        onClick={runTest}
-        style={{
+animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
+transition={{ duration: 0.5 }} >
+<LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
+</motion.div>
+<button
+onClick={runTest}
+style={{
           width: '100%',
           padding: '0.5rem 1rem',
           backgroundColor: '#f1760f',
@@ -147,42 +147,40 @@ const P2SHGame = () => {
           cursor: 'pointer',
           transition: 'background-color 0.2s',
         }}
-        onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
-        onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'}
-      >
-        Test Your Code
-      </button>
-      <AnimatePresence>
-        {result && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            style={{
+onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
+onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'} >
+Test Your Code
+</button>
+<AnimatePresence>
+{result && (
+<motion.div
+initial={{ opacity: 0, y: -10 }}
+animate={{ opacity: 1, y: 0 }}
+exit={{ opacity: 0, y: 10 }}
+style={{
               marginTop: '1rem',
               textAlign: 'center',
-            }}
-          >
-            <p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
-              {result}
-            </p>
-            <p style={{ 
-              fontFamily: 'monospace', 
-              fontSize: '0.875rem', 
-              wordBreak: 'break-all', 
-              marginTop: '0.5rem', 
+            }} >
+<p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
+{result}
+</p>
+<p style={{
+              fontFamily: 'monospace',
+              fontSize: '0.875rem',
+              wordBreak: 'break-all',
+              marginTop: '0.5rem',
               color: '#d4d4d4',
               backgroundColor: '#3c3c3c',
               padding: '0.5rem',
               borderRadius: '0.25rem'
             }}>
-              ScriptPubKey: {constructedScriptPubKey}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+ScriptPubKey: {constructedScriptPubKey}
+</p>
+</motion.div>
+)}
+</AnimatePresence>
+</div>
+);
 };
 
 export default P2SHGame;`
@@ -235,20 +233,21 @@ You can look up the hex characters for each op_code in the [Bitcoin Script wiki 
     export function constructP2SHScriptPubKey(redeemScript) {
         // Convert redeem script from hex to WordArray
         const scriptWordArray = CryptoJS.enc.Hex.parse(redeemScript.replace(/\s/g, ''));
-        
+
         // Hash the redeem script
         const sha256Hash = CryptoJS.SHA256(scriptWordArray);
         const ripemd160Hash = CryptoJS.RIPEMD160(sha256Hash);
-        
+
         // Convert hash to hex
         const scriptHash = ripemd160Hash.toString(CryptoJS.enc.Hex);
-        
+
         // Construct the P2SH script
         const p2shScript = 'a914' + scriptHash + '87';
-        
+
         return p2shScript;
     }
     ```
+
   </details>
 
   <details>
@@ -259,23 +258,25 @@ You can look up the hex characters for each op_code in the [Bitcoin Script wiki 
     def construct_p2sh_scriptpubkey(redeem_script: str) -> str:
         # Encode the redeem script as bytes
         script_bytes = bytes.fromhex(redeem_script.replace(" ", ""))
-        
+
         # Hash the redeem script
         sha256_hash = hashlib.sha256(script_bytes).digest()
         ripemd160_hash = hashlib.new('ripemd160', sha256_hash).digest()
-        
+
         # Construct the P2SH script
         p2sh_script = b'\xa9\x14' + ripemd160_hash + b'\x87'
-        
+
         return p2sh_script.hex()
     ```
+
   </details>
 </ExpandableAlert>
 
 ### Inspiration
 
 After completing the exercise, you can check out these testnet transactions to see real P2SH ScriptPubKeys in action:
-- [Transaction 1](https://mempool.space/testnet/tx/463782617f0e6a69102530caa9ba2fe48f996128378af99ee437a22660afc5a7)
-- [Transaction 2](https://mempool.space/testnet/tx/4bb9f0a567e83f8ef3b5a18d9b2b19e1139f302471ad03246be50598151d019a)
+
+-   [Transaction 1](https://mempool.space/testnet/tx/463782617f0e6a69102530caa9ba2fe48f996128378af99ee437a22660afc5a7)
+-   [Transaction 2](https://mempool.space/testnet/tx/4bb9f0a567e83f8ef3b5a18d9b2b19e1139f302471ad03246be50598151d019a)
 
 These transactions demonstrate how P2SH ScriptPubKeys are used in actual Bitcoin transactions on the testnet.

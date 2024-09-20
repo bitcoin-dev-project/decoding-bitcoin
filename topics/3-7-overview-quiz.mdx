@@ -258,20 +258,21 @@ const passCount = results.filter(r => r.success).length;
 const failCount = results.length - passCount;
 
 return (
-    <div className="min-h-screen p-6 bg-[#1e1e1e]">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
-          <span className="text-2xl font-bold text-[#d4d4d4]">
-            OP_PUSHDATA Test Results
-          </span>
-          <button
+
+<div className="min-h-screen p-6 bg-[#1e1e1e]">
+<div className="max-w-3xl mx-auto">
+<div className="flex justify-between items-center mb-6">
+<span className="text-2xl font-bold text-[#d4d4d4]">
+OP_PUSHDATA Test Results
+</span>
+<button
             onClick={runTests}
             className="bg-[#f1760f] hover:bg-[#e56c0d] text-[#d4d4d4] font-bold py-2 px-4 rounded flex items-center"
           >
-            <RefreshCw className="mr-2" size={20} />
-            Run
-          </button>
-        </div>
+<RefreshCw className="mr-2" size={20} />
+Run
+</button>
+</div>
 
         {isLoading ? (
           <div className="flex justify-center items-center h-64">

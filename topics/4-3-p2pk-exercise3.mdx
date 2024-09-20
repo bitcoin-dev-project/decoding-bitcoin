@@ -21,7 +21,6 @@ In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-K
 4. Verify that the last byte is OP_CHECKSIG (0xAC).
 5. Construct and return the ASM string: `<public key in hex> OP_CHECKSIG`
 
-
 <ExerciseSelector
   sandpackConfig={{
     files: {
@@ -92,6 +91,7 @@ type: 'Compressed'
 ];
 
 return (
+
 <div className="max-w-3xl mx-auto rounded-md m-4 mr-3 ml-3 p-4 bg-[#1e1e1e]">
   <h1 className="text-3xl font-bold mb-6 text-center text-[#f1760f]">P2PK ScriptPubKey Decoder</h1>
       <div className="mb-6">
@@ -160,7 +160,6 @@ return (
   trinketUrl="https://trinket.io/embed/python3/3e1e806e10ba"
 />
 
-
 <Hint
     title="Step-by-Step Hints"
     hints={[
@@ -211,6 +210,7 @@ return (
         return `${pubKey.toString('hex')} ${REVERSE_OPS[OPS.OP_CHECKSIG]}`;
     }
     ```
+
   </details>
 
   <details>
@@ -245,5 +245,6 @@ return (
         # Return the ASM format
         return f"{pub_key.hex()} {REVERSE_OPS[OPS['OP_CHECKSIG']]}"
     ```
+
   </details>
 </ExpandableAlert>
