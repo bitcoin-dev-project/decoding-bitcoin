@@ -9,24 +9,73 @@ order: 3
 parent: 4-p2pk
 ---
 
-In this exercise, you'll construct a P2PK (Pay-to-Public-Key) ScriptPubKey for a given public key within a partially constructed transaction.
+In this exercise, you'll construct a P2PK (Pay-to-Public-Key) ScriptPubKey
+for a given public key within a partially constructed transaction.
 
 Here's a breakdown of the partially constructed transaction:
 
-| Field                    | Value                                                            |
-| ------------------------ | ---------------------------------------------------------------- |
-| Version                  | 01000000                                                         |
-| Input Count              | 01                                                               |
-| Input TXID               | 0000000000000000000000000000000000000000000000000000000000000000 |
-| Input VOUT               | ffffffff                                                         |
-| ScriptSig Size           | N/A                                                              |
-| ScriptSig                | N/A                                                              |
-| Sequence                 | ffffffff                                                         |
-| Output Count             | 01                                                               |
-| Output Amount            | 00f2052a01000000                                                 |
-| Output ScriptPubKey Size | 23                                                               |
-| Output ScriptPubKey      | N/A                                                              |
-| Locktime                 | 00000000                                                         |
+<div className="overflow-x-auto">
+    <table className="min-w-full">
+        <thead>
+            <tr>
+                <th className="px-4 py-2">Field</th>
+                <th className="px-4 py-2">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td className="border px-4 py-2">Version</td>
+                <td className="border px-4 py-2 break-all">01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input Count</td>
+                <td className="border px-4 py-2 break-all">01</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input TXID</td>
+                <td className="border px-4 py-2 break-all">
+                    0000000000000000000000000000000000000000000000000000000000000000
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input VOUT</td>
+                <td className="border px-4 py-2 break-all">ffffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">ScriptSig Size</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">ScriptSig</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Sequence</td>
+                <td className="border px-4 py-2 break-all">ffffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output Count</td>
+                <td className="border px-4 py-2 break-all">01</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output Amount</td>
+                <td className="border px-4 py-2 break-all">00f2052a01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output ScriptPubKey Size</td>
+                <td className="border px-4 py-2 break-all">23</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output ScriptPubKey</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Locktime</td>
+                <td className="border px-4 py-2 break-all">00000000</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 The hexadecimal representation of this transaction is:
 
@@ -95,35 +144,39 @@ export default function App() {
 }`
       },
       "/P2PKGame.js": {
-        code: `import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { constructP2PKScriptPubKey } from './P2PKScriptPubKey';
-import { LockClosedIcon } from '@heroicons/react/solid';
+        code: `import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { constructP2PKScriptPubKey } from './P2PKScriptPubKey'
+import { LockClosedIcon } from '@heroicons/react/solid'
 
 const P2PKGame = () => {
-const [result, setResult] = useState('');
-const [isCorrect, setIsCorrect] = useState(false);
-const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('');
+const [result, setResult] = useState('')
+const [isCorrect, setIsCorrect] = useState(false)
+const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('')
 
-const publicKey = '02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4';
-const expectedScriptPubKey = '2102802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4ac';
+    const publicKey =
+    	'02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4'
+    const expectedScriptPubKey =
+    	'2102802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4ac'
 
-const runTest = () => {
-try {
-const result = constructP2PKScriptPubKey(publicKey);
-setConstructedScriptPubKey(result);
-if (result === expectedScriptPubKey) {
-setResult("Correct! You've successfully constructed the P2PK ScriptPubKey!");
-setIsCorrect(true);
-} else {
-setResult('Incorrect. Try again to construct the correct ScriptPubKey.');
-setIsCorrect(false);
-}
-} catch (error) {
-setResult(\`Error: \${error.message}\`);
-setIsCorrect(false);
-}
-};
+    const runTest = () => {
+    	try {
+    		const result = constructP2PKScriptPubKey(publicKey)
+    		setConstructedScriptPubKey(result)
+    		if (result === expectedScriptPubKey) {
+    			setResult(
+    				"Correct! You've successfully constructed the P2PK ScriptPubKey!"
+    			)
+    			setIsCorrect(true)
+    		} else {
+    			setResult('Incorrect. Try again to construct the correct ScriptPubKey.')
+    			setIsCorrect(false)
+    		}
+    	} catch (error) {
+    		setResult('Error: ' + error.message)
+    		setIsCorrect(false)
+    	}
+    }
 
 return (
 
@@ -237,7 +290,7 @@ export default P2PKGame;`
     options: {
       showLineNumbers: true,
       showInlineErrors: true,
-      editorHeight: 400
+      editorHeight: 500
     },
     customSetup: {
       dependencies: {

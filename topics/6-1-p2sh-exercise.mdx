@@ -13,27 +13,102 @@ In this exercise, you'll construct a P2SH (Pay-to-Script-Hash) ScriptPubKey for 
 
 Here's a breakdown of the partially constructed transaction:
 
-| Field                      | Value                                                            |
-| -------------------------- | ---------------------------------------------------------------- |
-| Version                    | 02000000                                                         |
-| Input Count                | 02                                                               |
-| Input 1 TXID               | 589d75a45b732e3a92da560086568310e33efe5cfb26bcb2685d7ee712af7a3e |
-| Input 1 VOUT               | 00000000                                                         |
-| Input 1 ScriptSig Size     | 6a                                                               |
-| Input 1 ScriptSig          | [scriptsig 1]                                                    |
-| Input 1 Sequence           | fdffffff                                                         |
-| Input 2 TXID               | 2f8ec63af69ea6d35acb217562bef0467b0354a2dad430a71051041e5cfd0499 |
-| Input 2 VOUT               | 01000000                                                         |
-| Input 2 ScriptSig Size     | 6b                                                               |
-| Input 2 ScriptSig          | [scriptsig 2]                                                    |
-| Input 2 Sequence           | fdffffff                                                         |
-| Output Count               | 02                                                               |
-| Output 1 Amount            | 888a0100000000000                                                |
-| Output 1 ScriptPubKey Size | 17                                                               |
-| Output 1 ScriptPubKey      | [scriptpubkey]                                                   |
-| Output 2 Amount            | 74658b0000000000                                                 |
-| Output 2 ScriptPubKey      | 1976a91468cfed146aced22f422a68015ff8ca180761912a88ac             |
-| Locktime                   | eff91700                                                         |
+<div className="overflow-x-auto">
+    <table className="min-w-full">
+        <thead>
+            <tr>
+                <th className="px-4 py-2">Field</th>
+                <th className="px-4 py-2">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td className="border px-4 py-2">Version</td>
+                <td className="border px-4 py-2 break-all">02000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input Count</td>
+                <td className="border px-4 py-2 break-all">02</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 1 TXID</td>
+                <td className="border px-4 py-2 break-all">
+                    589d75a45b732e3a92da560086568310e33efe5cfb26bcb2685d7ee712af7a3e
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 1 VOUT</td>
+                <td className="border px-4 py-2 break-all">00000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 1 ScriptSig Size</td>
+                <td className="border px-4 py-2 break-all">6a</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 1 ScriptSig</td>
+                <td className="border px-4 py-2 break-all">[scriptsig 1]</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 1 Sequence</td>
+                <td className="border px-4 py-2 break-all">fdffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 2 TXID</td>
+                <td className="border px-4 py-2 break-all">
+                    2f8ec63af69ea6d35acb217562bef0467b0354a2dad430a71051041e5cfd0499
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 2 VOUT</td>
+                <td className="border px-4 py-2 break-all">01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 2 ScriptSig Size</td>
+                <td className="border px-4 py-2 break-all">6b</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 2 ScriptSig</td>
+                <td className="border px-4 py-2 break-all">[scriptsig 2]</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input 2 Sequence</td>
+                <td className="border px-4 py-2 break-all">fdffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output Count</td>
+                <td className="border px-4 py-2 break-all">02</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output 1 Amount</td>
+                <td className="border px-4 py-2 break-all">
+                    888a0100000000000
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output 1 ScriptPubKey Size</td>
+                <td className="border px-4 py-2 break-all">17</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output 1 ScriptPubKey</td>
+                <td className="border px-4 py-2 break-all">[scriptpubkey]</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output 2 Amount</td>
+                <td className="border px-4 py-2 break-all">74658b0000000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output 2 ScriptPubKey</td>
+                <td className="border px-4 py-2 break-all">
+                    1976a91468cfed146aced22f422a68015ff8ca180761912a88ac
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Locktime</td>
+                <td className="border px-4 py-2 break-all">eff91700</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 The hexadecimal representation of this transaction is:
 
@@ -118,70 +193,108 @@ setIsCorrect(false);
 };
 
 return (
-<div style={{ maxWidth: '28rem', width: '100%', backgroundColor: '#252526', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-<h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem', color: '#d4d4d4', textAlign: 'center' }}>P2SH ScriptPubKey Challenge</h2>
-<div style={{ marginBottom: '1rem' }}>
-<p style={{ fontFamily: 'monospace', fontSize: '0.875rem', wordBreak: 'break-all', marginTop: '0.5rem', color: '#d4d4d4' }}>
-Redeem Script: {redeemScript}
-</p>
-</div>
-<motion.div
-style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '1rem',
+
+<div
+    style={{
+        maxWidth: "28rem",
+        width: "100%",
+        backgroundColor: "#252526",
+        padding: "1.5rem",
+        borderRadius: "0.5rem",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+    }}
+>
+    <h2
+        style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+            color: "#d4d4d4",
+            textAlign: "center"
         }}
-animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
-transition={{ duration: 0.5 }} >
-<LockClosedIcon style={{ width: '3rem', height: '3rem', color: isCorrect ? '#689f38' : '#f1760f' }} />
-</motion.div>
-<button
-onClick={runTest}
-style={{
-          width: '100%',
-          padding: '0.5rem 1rem',
-          backgroundColor: '#f1760f',
-          color: '#ffffff',
-          border: 'none',
-          borderRadius: '0.25rem',
-          cursor: 'pointer',
-          transition: 'background-color 0.2s',
+    >
+        P2SH ScriptPubKey Challenge
+    </h2>
+    <div style={{ marginBottom: "1rem" }}>
+        <p
+            style={{
+                fontFamily: "monospace",
+                fontSize: "0.875rem",
+                wordBreak: "break-all",
+                marginTop: "0.5rem",
+                color: "#d4d4d4"
+            }}
+        >
+            Redeem Script: {redeemScript}
+        </p>
+    </div>
+    <motion.div
+        style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "1rem"
         }}
-onMouseOver={(e) => e.target.style.backgroundColor = '#e56c0d'}
-onMouseOut={(e) => e.target.style.backgroundColor = '#f1760f'} >
-Test Your Code
-</button>
-<AnimatePresence>
-{result && (
-<motion.div
-initial={{ opacity: 0, y: -10 }}
-animate={{ opacity: 1, y: 0 }}
-exit={{ opacity: 0, y: 10 }}
-style={{
-              marginTop: '1rem',
-              textAlign: 'center',
-            }} >
-<p style={{ color: isCorrect ? '#689f38' : '#d32f2f' }}>
-{result}
-</p>
-<p style={{
-              fontFamily: 'monospace',
-              fontSize: '0.875rem',
-              wordBreak: 'break-all',
-              marginTop: '0.5rem',
-              color: '#d4d4d4',
-              backgroundColor: '#3c3c3c',
-              padding: '0.5rem',
-              borderRadius: '0.25rem'
-            }}>
-ScriptPubKey: {constructedScriptPubKey}
-</p>
-</motion.div>
-)}
-</AnimatePresence>
+        animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
+        transition={{ duration: 0.5 }}
+    >
+        <LockClosedIcon
+            style={{
+                width: "3rem",
+                height: "3rem",
+                color: isCorrect ? "#689f38" : "#f1760f"
+            }}
+        />
+    </motion.div>
+    <button
+        onClick={runTest}
+        style={{
+            width: "100%",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#f1760f",
+            color: "#ffffff",
+            border: "none",
+            borderRadius: "0.25rem",
+            cursor: "pointer",
+            transition: "background-color 0.2s"
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#e56c0d")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#f1760f")}
+    >
+        Test Your Code
+    </button>
+    <AnimatePresence>
+        {result && (
+            <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                style={{
+                    marginTop: "1rem",
+                    textAlign: "center"
+                }}
+            >
+                <p style={{ color: isCorrect ? "#689f38" : "#d32f2f" }}>
+                    {result}
+                </p>
+                <p
+                    style={{
+                        fontFamily: "monospace",
+                        fontSize: "0.875rem",
+                        wordBreak: "break-all",
+                        marginTop: "0.5rem",
+                        color: "#d4d4d4",
+                        backgroundColor: "#3c3c3c",
+                        padding: "0.5rem",
+                        borderRadius: "0.25rem"
+                    }}
+                >
+                    ScriptPubKey: {constructedScriptPubKey}
+                </p>
+            </motion.div>
+        )}
+    </AnimatePresence>
 </div>
-);
-};
+); };
 
 export default P2SHGame;`
       },
@@ -189,7 +302,7 @@ export default P2SHGame;`
     options: {
       showLineNumbers: true,
       showInlineErrors: true,
-      editorHeight: 400
+      editorHeight: 500
     },
     customSetup: {
       dependencies: {
@@ -276,7 +389,19 @@ You can look up the hex characters for each op_code in the [Bitcoin Script wiki 
 
 After completing the exercise, you can check out these testnet transactions to see real P2SH ScriptPubKeys in action:
 
--   [Transaction 1](https://mempool.space/testnet/tx/463782617f0e6a69102530caa9ba2fe48f996128378af99ee437a22660afc5a7)
--   [Transaction 2](https://mempool.space/testnet/tx/4bb9f0a567e83f8ef3b5a18d9b2b19e1139f302471ad03246be50598151d019a)
+-   <a
+        href="https://mempool.space/testnet/tx/463782617f0e6a69102530caa9ba2fe48f996128378af99ee437a22660afc5a7"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Transaction 1
+    </a>
+-   <a
+        href="https://mempool.space/testnet/tx/4bb9f0a567e83f8ef3b5a18d9b2b19e1139f302471ad03246be50598151d019a"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Transaction 2
+    </a>
 
 These transactions demonstrate how P2SH ScriptPubKeys are used in actual Bitcoin transactions on the testnet.

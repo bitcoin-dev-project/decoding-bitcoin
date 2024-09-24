@@ -48,18 +48,6 @@ After completing this exercise, try to answer the following questions:
 <Quiz
     questions={[
         {
-            question:
-                "What is the purpose of OP_PUSHBYTES_65 in a P2PK script?",
-            options: [
-                "To push the public key onto the stack",
-                "To verify the signature",
-                "To hash the public key"
-            ],
-            correctAnswer: "To push the public key onto the stack",
-            explanation:
-                "OP_PUSHBYTES_65 instructs the script to push the next 65 bytes (the public key) onto the stack."
-        },
-        {
             question: "Why is the public key 65 bytes long in this script?",
             options: [
                 "It's a compressed public key",
@@ -69,6 +57,19 @@ After completing this exercise, try to answer the following questions:
             correctAnswer: "It's an uncompressed public key",
             explanation:
                 "Uncompressed public keys in Bitcoin are 65 bytes long, starting with 0x04 followed by the x and y coordinates (32 bytes each)."
+        },
+        {
+            question:
+                "In a P2PK script, if the public key is invalid (e.g., not on the secp256k1 curve), at what point would the script fail?",
+            options: [
+                "During script creation",
+                "When the transaction is broadcast to the network",
+                "When the transaction is mined into a block",
+                "When someone tries to spend the output"
+            ],
+            correctAnswer: "When someone tries to spend the output",
+            explanation:
+                "Bitcoin's script validation is lazy. An invalid public key in a P2PK script won't cause issues during creation, broadcast, or mining. The script only fails when someone attempts to spend the output, as that's when OP_CHECKSIG tries to use the invalid public key to verify the signature, causing the script to fail and the spend attempt to be rejected."
         }
     ]}
 />
@@ -78,5 +79,3 @@ By completing this exercise, you'll gain a better understanding of how P2PK scri
 This will be helpful as we explore more complex script types in future lessons.
 
 ---
-
-<MailingListSignup />

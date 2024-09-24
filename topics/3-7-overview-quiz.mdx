@@ -17,11 +17,17 @@ Challenge your understanding of Bitcoin opcodes.
     questions={[
         {
             question:
-                "Which opcode is used to duplicate the top item on the stack?",
-            options: ["OP_DUP", "OP_SWAP", "OP_DROP", "OP_OVER"],
-            correctAnswer: "OP_DUP",
+                "What is the main difference between OP_CHECKMULTISIG and OP_CHECKMULTISIGVERIFY?",
+            options: [
+                "OP_CHECKMULTISIGVERIFY supports more signatures",
+                "OP_CHECKMULTISIG works with P2SH, while OP_CHECKMULTISIGVERIFY doesn't",
+                "OP_CHECKMULTISIGVERIFY fails the script if the check fails, while OP_CHECKMULTISIG pushes a boolean result",
+                "OP_CHECKMULTISIG is for legacy addresses, OP_CHECKMULTISIGVERIFY is for segwit"
+            ],
+            correctAnswer:
+                "OP_CHECKMULTISIGVERIFY fails the script if the check fails, while OP_CHECKMULTISIG pushes a boolean result",
             explanation:
-                "OP_DUP duplicates the top item on the stack, making it useful for scripts that need to use the same data twice."
+                "OP_CHECKMULTISIGVERIFY is equivalent to OP_CHECKMULTISIG followed by OP_VERIFY. It will cause the script to fail immediately if the multisig check fails, whereas OP_CHECKMULTISIG pushes true or false to the stack, allowing for more flexible script constructions."
         },
         {
             question: "What is the primary purpose of OP_CHECKSIG?",
@@ -130,280 +136,6 @@ Let’s see how well you understand the core concepts of locking and unlocking s
     <div class="flex-grow h-0.5 bg-gradient-to-r from-gray-400 via-orange-300 to-transparent"></div>
 </div>
 
-## Ex 3: Data
-
-Implement the `OP_PUSHDATA2` logic in the `parseOpPushData` function.
-
-1. Open `parseOpPushData.js`
-2. Find the `TODO` comment for `OP_PUSHDATA2`
-3. Implement logic to handle opcode 0x4d
-4. Read 2 bytes for data length, then slice the data
-5. Return formatted string like other `OP_PUSHDATA` operations
-
-<SandpackComponent
-  template="react"
-  options={{
-    externalResources: ["https://cdn.tailwindcss.com"],
-    showLineNumbers: true,
-    showInlineErrors: true,
-    editorHeight: 800
-  }}
-  customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-    "react-dom": "^18.0.0",
-    "framer-motion": "^6.0.0",
-    "lucide-react": "latest"
-    },
-  }}
-  files={{
-    "/App.js": {
-      code: `
-import React, { useState, useEffect, useCallback } from 'react';
-import { parseOpPushData } from './parseOpPushData';
-import { testCases } from './testCases';
-import { ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
-
-const TestResult = ({ result, index }) => {
-const [isExpanded, setIsExpanded] = useState(false);
-
-return (
-
-<div className="mb-4 bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-700">
-    <div
-        className="p-4 cursor-pointer flex items-center justify-between"
-        onClick={() => setIsExpanded(!isExpanded)}
-    >
-        <div className="flex items-center">
-            <span
-                className={
-                    "text-lg font-semibold " +
-                    (result.success ? "text-green-500" : "text-red-500")
-                }
-            >
-                Test Case {index + 1}: {result.success ? "Pass" : "Fail"}
-            </span>
-        </div>
-        <div className="flex items-center">
-            <span className="text-sm text-gray-400 mr-2">{result.opcode}</span>
-            {isExpanded ? (
-                <ChevronUp className="text-gray-400" size={20} />
-            ) : (
-                <ChevronDown className="text-gray-400" size={20} />
-            )}
-        </div>
-    </div>
-    {isExpanded && (
-        <div className="p-4 bg-gray-700">
-            <div className="space-y-2 text-sm">
-                <p className="text-gray-300">
-                    Input:{" "}
-                    <span className="font-mono text-orange-400">
-                        {result.input}
-                    </span>
-                </p>
-                <p className="text-gray-300">
-                    Expected:{" "}
-                    <span className="font-mono text-orange-400">
-                        {result.expected}
-                    </span>
-                </p>
-                <p className="text-gray-300">
-                    Result:{" "}
-                    <span className="font-mono text-orange-400">
-                        {result.result}
-                    </span>
-                </p>
-            </div>
-        </div>
-    )}
-</div>
-); };
-
-export default function App() {
-  const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-const runTests = useCallback(async () => {
-setIsLoading(true);
-const newResults = await Promise.all(testCases.map(async ({ input, expected, opcode }) => {
-try {
-const result = await parseOpPushData(input);
-return {
-input,
-expected,
-result,
-success: result === expected,
-opcode,
-};
-} catch (error) {
-return {
-input,
-expected,
-result: 'Error: ' + error.message,
-success: false,
-opcode,
-};
-}
-}));
-setResults(newResults);
-setIsLoading(false);
-}, []);
-
-useEffect(() => {
-runTests();
-}, [runTests]);
-
-const passCount = results.filter(r => r.success).length;
-const failCount = results.length - passCount;
-
-return (
-
-<div className="min-h-screen p-6 bg-[#1e1e1e]">
-<div className="max-w-3xl mx-auto">
-<div className="flex justify-between items-center mb-6">
-<span className="text-2xl font-bold text-[#d4d4d4]">
-OP_PUSHDATA Test Results
-</span>
-<button
-            onClick={runTests}
-            className="bg-[#f1760f] hover:bg-[#e56c0d] text-[#d4d4d4] font-bold py-2 px-4 rounded flex items-center"
-          >
-<RefreshCw className="mr-2" size={20} />
-Run
-</button>
-</div>
-
-        {isLoading ? (
-          <div className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#f1760f]"></div>
-          </div>
-        ) : (
-          <>
-            <div className="mb-6 p-4 bg-[#252526] border border-[#4c4d52] rounded-lg">
-              <h2 className="font-bold text-[#d4d4d4]">Test Summary</h2>
-              <p className="text-[#d4d4d4] mt-2">
-                Total Tests: {results.length} |
-                <span className="text-[#689f38] ml-2">Passed: {passCount}</span> |
-                <span className="text-[#d32f2f] ml-2">Failed: {failCount}</span>
-              </p>
-            </div>
-            {results.map((result, index) => (
-              <TestResult key={index} result={result} index={index} />
-            ))}
-          </>
-        )}
-      </div>
-    </div>
-
-);
-}
-`    },
-    "/parseOpPushData.js": {
-      code:`
-// **_ TODO: Implement OP_PUSHDATA2 logic here _**
-// HIGHLIGHT: This is the section where you need to complete the code.
-// You should read the next 2 bytes to get the length of the data to push onto the stack.
-// Then slice the bytes buffer to get the actual data based on this length.
-
-export const parseOpPushData = (hex) => {
-  const bytes = Buffer.from(hex, 'hex');
-  let offset = 0;
-
-const firstByte = bytes[offset++];
-
-if (firstByte <= 0x4b) {
-// Direct push of 1-75 bytes
-const data = bytes.slice(offset, offset + firstByte).toString('hex');
-return "OP_PUSHDATA " + firstByte.toString(16).padStart(2, '0') + ' "' + data + '"';
-} else if (firstByte === 0x4c) {
-// OP_PUSHDATA1
-const length = bytes[offset++];
-const data = bytes.slice(offset, offset + length).toString('hex');
-return "OP_PUSHDATA1 " + length.toString(16).padStart(2, '0') + ' "' + data + '"';
-} else if (firstByte === 0x4d) {
-// OP_PUSHDATA2
-// TODO: Implement OP_PUSHDATA2 logic here
-// HINT: You'll need to read 2 bytes to determine the length of the data.
-// Then slice the bytes buffer to get the actual data based on this length.
-throw new Error('OP_PUSHDATA2 not implemented');
-} else if (firstByte === 0x4e) {
-// OP_PUSHDATA4
-const length = bytes.readUInt32LE(offset);
-offset += 4;
-const data = bytes.slice(offset, offset + length).toString('hex');
-return "OP_PUSHDATA4 " + length.toString(16).padStart(8, '0') + ' "' + data + '"';
-} else {
-throw new Error('Invalid OP_PUSHDATA opcode');
-}
-};
-
-const readVarInt = () => {
-const firstByte = bytes[offset++];
-if (firstByte < 0xfd) {
-return firstByte;
-} else if (firstByte === 0xfd) {
-return bytes.readUInt16LE(offset);
-} else if (firstByte === 0xfe) {
-return bytes.readUInt32LE(offset);
-} else {
-return bytes.readBigUInt64LE(offset);
-}
-};
-
-`,
-      active: true,
-    },
-    "/testCases.js": {
-      code: `
-export const testCases = [
-{ input: '4c0548656c6c6f', expected: 'OP_PUSHDATA1 05 "48656c6c6f"' },
-//{ input: '03576f77', expected: 'OP_PUSHDATA 03 "576f77"' },
-{ input: '4d0800004f70656e53656564', expected: 'OP_PUSHDATA2 0008 "4f70656e53656564"' },
-{ input: '4e0c00000042697453747265616d', expected: 'OP_PUSHDATA4 0000000c "42697453747265616d"' },
-];
-`
-}
-}}
-/>
-
-<Hint
-    title="Hints"
-    hints={[
-        "Use bytes.readUInt16LE(offset) for length",
-        "Update offset after reading length",
-        "Slice data: bytes.slice(offset, offset + length)"
-    ]}
-/>
-
-<ExpandableAlert
-  title="Solution"
-  type="solution"
-  expandable={true}
-  initialLines={0}
->
-
-```javascript
-else if (firstByte === 0x4d) {
-  const length = bytes.readUInt16LE(offset);
-  offset += 2;
-  const data = bytes.slice(offset, offset + length).toString('hex');
-  return "OP_PUSHDATA2 " + length.toString(16).padStart(4, '0') + ' "' + data + '"';
-}
-```
-
-</ExpandableAlert>
-
-Implement the solution and run the tests to verify your code.
-
-<div class="relative my-10 flex items-center">
-    <div class="flex-grow h-0.5 bg-gradient-to-r from-transparent via-orange-300 to-gray-400"></div>
-    <div class="mx-4 flex items-center">
-        <div class="w-3 h-3 bg-gray-300 rounded-full"></div>
-    </div>
-    <div class="flex-grow h-0.5 bg-gradient-to-r from-gray-400 via-orange-300 to-transparent"></div>
-</div>
-
 ## Ex 4: Script Success and Failure
 
 This quiz will test your understanding of what makes a Bitcoin script valid or invalid, focusing on the conditions that lead to script success or failure.
@@ -493,6 +225,20 @@ Test your knowledge of standard and non-standard scripts, understanding the crit
 <Quiz
     questions={[
         {
+            question:
+                "Which of the following best describes the relationship between 'standard' scripts and Bitcoin Core's IsStandard() function?",
+            options: [
+                "IsStandard() determines which scripts are valid in the Bitcoin protocol",
+                "IsStandard() is used to create new types of standard scripts",
+                "IsStandard() affects transaction relay policies but not consensus rules",
+                "IsStandard() is used to validate transactions during mining"
+            ],
+            correctAnswer:
+                "IsStandard() affects transaction relay policies but not consensus rules",
+            explanation:
+                "The IsStandard() function in Bitcoin Core determines which transactions are relayed by nodes, but it doesn't affect the consensus rules. Non-standard transactions can still be valid and included in blocks if miners choose to do so."
+        },
+        {
             question: "What defines a script as 'standard' in Bitcoin?",
             options: [
                 "A script that is newly introduced and experimental",
@@ -559,6 +305,26 @@ Test your knowledge of standard and non-standard scripts, understanding the crit
             explanation:
                 "Non-standard scripts deviate from commonly used templates, which is why they are not relayed by most nodes to maintain safety on the network."
         }
+    ]}
+/>
+
+<Quiz
+    questions={[
+        {
+            question:
+                "What is the main difference between OP_CHECKMULTISIG and OP_CHECKMULTISIGVERIFY?",
+            options: [
+                "OP_CHECKMULTISIGVERIFY supports more signatures",
+                "OP_CHECKMULTISIG works with P2SH, while OP_CHECKMULTISIGVERIFY doesn't",
+                "OP_CHECKMULTISIGVERIFY fails the script if the check fails, while OP_CHECKMULTISIG pushes a boolean result",
+                "OP_CHECKMULTISIG is for legacy addresses, OP_CHECKMULTISIGVERIFY is for segwit"
+            ],
+            correctAnswer:
+                "OP_CHECKMULTISIGVERIFY fails the script if the check fails, while OP_CHECKMULTISIG pushes a boolean result",
+            explanation:
+                "OP_CHECKMULTISIGVERIFY is equivalent to OP_CHECKMULTISIG followed by OP_VERIFY. It will cause the script to fail immediately if the multisig check fails, whereas OP_CHECKMULTISIG pushes true or false to the stack, allowing for more flexible script constructions."
+        }
+        // ... (keep the other two questions as they were)
     ]}
 />
 

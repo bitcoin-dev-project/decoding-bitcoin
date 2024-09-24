@@ -19,7 +19,7 @@ In this exercise, you'll implement the core functionality to create a Pay-to-Scr
     externalResources: ["https://cdn.tailwindcss.com"],
     showLineNumbers: true,
     showInlineErrors: true,
-    editorHeight: 800
+    editorHeight: 500
   }}
   customSetup={{
     dependencies: {
@@ -30,123 +30,128 @@ In this exercise, you'll implement the core functionality to create a Pay-to-Scr
     }
   }}
   files={{
-    "/App.js": {
-      code: `import React from 'react';
-import { generateP2SHAddress, hexToASM } from './bitcoinUtils';
-
-function App() {
-const [redeemScript, setRedeemScript] = React.useState('');
-const [p2shAddress, setP2shAddress] = React.useState('');
-const [asmScript, setAsmScript] = React.useState('');
-
-const handleGenerate = () => {
-try {
-const address = generateP2SHAddress(redeemScript);
-setP2shAddress(address);
-setAsmScript(hexToASM(redeemScript));
-} catch (error) {
-setP2shAddress('Error: ' + error.message);
-setAsmScript('');
-}
-};
-
-return (
-
-{" "}
-<div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-    <h1 className="text-2xl font-bold mb-4 text-gray-800">
-        P2SH Address Generator
-    </h1>
-    <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">
-            Redeem Script (hex):
-        </label>
-        <input
-            type="text"
-            value={redeemScript}
-            onChange={(e) => setRedeemScript(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-500 focus:ring-opacity-50"
-        />
-    </div>
-    <button
-        onClick={handleGenerate}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded"
-    >
-        Generate P2SH Address
-    </button>
-    {p2shAddress && (
-        <div className="mt-4">
-            <h2 className="text-lg font-semibold text-gray-800">
-                Generated P2SH Address:
-            </h2>
-            <p className="mt-2 p-2 bg-gray-100 rounded border border-gray-300 text-gray-700">
-                {p2shAddress}
-            </p>
-        </div>
-    )}
-    {asmScript && (
-        <div className="mt-4">
-            <h2 className="text-lg font-semibold text-gray-800">
-                ASM Representation:
-            </h2>
-            <p className="mt-2 p-2 bg-gray-100 rounded border border-gray-300 text-gray-700 whitespace-pre-wrap">
-                {asmScript}
-            </p>
-        </div>
-    )}
-</div>
-); }
-
-export default App;`,
-      hidden: true
-    },
     "/bitcoinUtils.js": {
-      code: `import { sha256 } from 'js-sha256';
-import { encode } from 'bs58';
+      code: `import { sha256 } from 'js-sha256'
+import { encode } from 'bs58'
 
-export function generateP2SHAddress(redeemScript) {
-  // TODO: Implement P2SH address generation
-  // 1. Validate the redeem script (hex format)
-  // 2. Hash the redeem script using SHA256 and RIPEMD160
-  // 3. Add version byte (0x05 for P2SH)
-  // 4. Calculate checksum (first 4 bytes of double SHA256)
-  // 5. Combine version byte, hashed script, and checksum
-  // 6. Encode the result in Base58
-  // 7. Return the P2SH address
+export function generateP2SHAddress(redeemScript: string): string {
+	// TODO: Implement P2SH address generation
+	// 1. Validate the redeem script (hex format)
+	// 2. Hash the redeem script using SHA256 and RIPEMD160
+	// 3. Add version byte (0x05 for P2SH)
+	// 4. Calculate checksum (first 4 bytes of double SHA256)
+	// 5. Combine version byte, hashed script, and checksum
+	// 6. Encode the result in Base58
+	// 7. Return the P2SH address
 
-// Placeholder implementation
-return 'Implement P2SH address generation here';
+    // Placeholder implementation
+    return 'Implement P2SH address generation here'
+
 }
 
-export function hexToASM(hex) {
-  // TODO: Implement conversion from hex to ASM
-  // 1. Define known opcodes
-  // 2. Parse the hex script byte by byte
-  // 3. Convert known opcodes to their string representations
-  // 4. For push data operations, extract the correct number of bytes
-  // 5. Join the parsed elements with spaces
+export function hexToASM(hex: string): string {
+	// TODO: Implement conversion from hex to ASM
+	// 1. Define known opcodes
+	// 2. Parse the hex script byte by byte
+	// 3. Convert known opcodes to their string representations
+	// 4. For push data operations, extract the correct number of bytes
+	// 5. Join the parsed elements with spaces
 
-// Placeholder implementation
-return 'Implement hex to ASM conversion here';
+    // Placeholder implementation
+    return 'Implement hex to ASM conversion here'
+
 }
 
 // Helper function: perform RIPEMD160 on the input
-function ripemd160(input) {
+function ripemd160(input: string): string {
 // Note: In a real implementation, you'd use a proper RIPEMD160 function
 // For this exercise, we'll use a placeholder
-return sha256(input).slice(0, 40); // Simulating RIPEMD160 with truncated SHA256
+return sha256(input).slice(0, 40) // Simulating RIPEMD160 with truncated SHA256
 }
 
 // Helper function: convert hex string to byte array
-function hexToBytes(hex) {
-const bytes = [];
+function hexToBytes(hex: string): Uint8Array {
+const bytes = []
 for (let i = 0; i < hex.length; i += 2) {
-bytes.push(parseInt(hex.substr(i, 2), 16));
+bytes.push(parseInt(hex.substr(i, 2), 16))
 }
-return new Uint8Array(bytes);
-}`,
-},
-"/package.json": {
+return new Uint8Array(bytes)
+}
+`,
+            active: true
+          },
+    "/App.js": {
+      code: `import React from 'react'
+import { generateP2SHAddress, hexToASM } from './bitcoinUtils'
+
+function App() {
+const [redeemScript, setRedeemScript] = React.useState('')
+const [p2shAddress, setP2shAddress] = React.useState('')
+const [asmScript, setAsmScript] = React.useState('')
+
+    const handleGenerate = () => {
+    	try {
+    		const address = generateP2SHAddress(redeemScript)
+    		setP2shAddress(address)
+    		setAsmScript(hexToASM(redeemScript))
+    	} catch (error) {
+    		setP2shAddress('Error: ' + error.message)
+    		setAsmScript('')
+    	}
+    }
+
+    return (
+    	<div className="flex items-center justify-center min-h-screen bg-[#1e1e1e]">
+    		<div className="max-w-md w-full mx-auto p-6 bg-[#1e1e1e] rounded-lg shadow-md">
+    			<h1 className="text-2xl font-bold mb-4 text-center text-[#f1760f]">
+    				P2SH Address Generator
+    			</h1>
+    			<div className="mb-4">
+    				<label className="block text-sm font-medium text-[#d4d4d4] mb-1">
+    					Redeem Script (hex):
+    				</label>
+    				<input
+    					type="text"
+    					value={redeemScript}
+    					onChange={(e) => setRedeemScript(e.target.value)}
+    					className="mt-1 block w-full px-3 py-2 text-sm rounded-md border border-[#4c4d52] bg-[#3c3c3c] text-[#d4d4d4] shadow-sm focus:border-[#f1760f] focus:ring focus:ring-[#f1760f] focus:ring-opacity-50"
+    					placeholder="Enter redeem script in hex format"
+    				/>
+    			</div>
+    			<button
+    				onClick={handleGenerate}
+    				className="w-full bg-[#f1760f] hover:bg-[#e56c0d] text-[#d4d4d4] font-bold py-2 px-4 rounded transition duration-300"
+    			>
+    				Generate P2SH Address
+    			</button>
+    			{p2shAddress && (
+    				<div className="mt-4">
+    					<h2 className="text-lg font-semibold text-[#f1760f]">
+    						Generated P2SH Address:
+    					</h2>
+    					<p className="mt-2 p-2 bg-[#252526] rounded border border-[#4c4d52] text-[#d4d4d4]">
+    						{p2shAddress}
+    					</p>
+    				</div>
+    			)}
+    			{asmScript && (
+    				<div className="mt-4">
+    					<h2 className="text-lg font-semibold text-[#f1760f]">
+    						ASM Representation:
+    					</h2>
+    					<p className="mt-2 p-2 bg-[#252526] rounded border border-[#4c4d52] text-[#d4d4d4] whitespace-pre-wrap">
+    						{asmScript}
+    					</p>
+    				</div>
+    			)}
+    		</div>
+    	</div>
+
+); }
+
+export default App;`
+    },
+          "/package.json": {
 code: JSON.stringify({
 dependencies: {
 "react": "^18.0.0",

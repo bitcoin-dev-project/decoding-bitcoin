@@ -28,7 +28,7 @@ Complete the `OP_CHECKSIG` function in `challenges/OpcodeFunctions.js`:
   options={{
     showLineNumbers: true,
     showInlineErrors: true,
-    editorHeight: 600
+    editorHeight: 500
   }}
   customSetup={{
     dependencies: {
@@ -52,12 +52,25 @@ import * as bitcoin from 'bitcoinjs-lib';
 const ec = new EC('secp256k1');
 
 export function OP_CHECKSIG(stack, getMessageHash) {
-    // TODO: Implement OP_CHECKSIG
-    // 1. Check if there are at least two items on the stack
-    // 2. Pop the public key and signature from the stack
-    // 3. Get the message hash from the user
-    // 4. Verify the signature
-    // 5. Push the result (true/false) onto the stack
+    if (stack.length < 2) {
+        throw new Error("Insufficient items for OP_CHECKSIG")
+    }
+
+    const pubKeyBuffer = stack.pop()
+    const signatureBuffer = stack.pop()
+
+    try {
+        const pubKey = ec.keyFromPublic(pubKeyBuffer)
+        const signature = signatureBuffer.slice(0, -1) // Remove the hash type
+        const messageHash = getMessageHash()
+        const isValid = pubKey.verify(messageHash, signature)
+
+        stack.push(isValid ? Buffer.from([0x01]) : Buffer.from([0x00]))
+    } catch (error) {
+        console.error("Error in OP_CHECKSIG:", error)
+        stack.push(Buffer.from([0x00]))
+    }
+
 }
 
 export const OP_CODE_FUNCTIONS = {
@@ -178,42 +191,44 @@ const [messageHash, setMessageHash] = useState('0x' + '00'.repeat(32));
                 <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
                     Bitcoin OP_CHECKSIG Simulator
                 </div>
-                <div className="flex space-x-2 mb-4">
-                    <div className="relative flex-grow">
-                        <input
-                            type="text"
-                            value={input}
-                            onChange={handleInputChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-                            placeholder="0x (enter hex value)"
-                            onFocus={(e) => e.target.setSelectionRange(2, 2)}
-                        />
-                        <button
-                            onClick={() => setShowHexInfo(!showHexInfo)}
-                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                        >
-                            <Info size={20} />
-                        </button>
-                    </div>
-                    <motion.button
-                        onClick={push}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
-                    >
-                        <ArrowDownCircle className="inline-block w-5 h-5 mr-1" />
-                        Push
-                    </motion.button>
-                    <motion.button
-                        onClick={pop}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
-                    >
-                        <ArrowUpCircle className="inline-block w-5 h-5 mr-1" />
-                        Pop
-                    </motion.button>
-                </div>
+                <div className="flex flex-col space-y-2 mb-4">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    value={input}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="0x (enter hex value)"
+                                    onFocus={(e) => e.target.setSelectionRange(2, 2)}
+                                />
+                                <button
+                                    onClick={() => setShowHexInfo(!showHexInfo)}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                                >
+                                    <Info size={16} className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="flex space-x-2">
+                                <motion.button
+                                    onClick={push}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                                >
+                                    <ArrowDownCircle className="inline-block w-5 h-5 mr-1" />
+                                    Push
+                                </motion.button>
+                                <motion.button
+                                    onClick={pop}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+                                >
+                                    <ArrowUpCircle className="inline-block w-5 h-5 mr-1" />
+                                    Pop
+                                </motion.button>
+                            </div>
+                        </div>
                 {showHexInfo && (
                     <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">
                         <p className="text-sm">
@@ -223,12 +238,12 @@ const [messageHash, setMessageHash] = useState('0x' + '00'.repeat(32));
                         </p>
                     </div>
                 )}
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 mb-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4">
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => executeOpcode('OP_CHECKSIG')}
-                        className="px-2 py-1 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm"
+                        className="px-2 py-1 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm w-full whitespace-nowrap overflow-hidden text-ellipsis"
                     >
                         OP_CHECKSIG
                     </motion.button>

@@ -13,23 +13,80 @@ In this exercise, you'll construct P2PKH (Pay-to-Public-Key-Hash) ScriptPubKeys 
 
 Here's a breakdown of the partially constructed transaction:
 
-| Field                     | Value                                                            |
-| ------------------------- | ---------------------------------------------------------------- |
-| Version                   | 01000000                                                         |
-| Input Count               | 01                                                               |
-| Input TXID                | 97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338 |
-| Input VOUT                | 01000000                                                         |
-| ScriptSig Size            | N/A                                                              |
-| ScriptSig                 | N/A                                                              |
-| Sequence                  | ffffffff                                                         |
-| Output Count              | 02                                                               |
-| Output1 Amount            | 8023430000000000                                                 |
-| Output1 ScriptPubKey Size | 19                                                               |
-| Output1 ScriptPubKey      | N/A                                                              |
-| Output2 Amount            | 00e1f50500000000                                                 |
-| Output2 ScriptPubKey Size | 19                                                               |
-| Output2 ScriptPubKey      | N/A                                                              |
-| Locktime                  | 00000000                                                         |
+<div className="overflow-x-auto">
+    <table className="min-w-full">
+        <thead>
+            <tr>
+                <th className="px-4 py-2">Field</th>
+                <th className="px-4 py-2">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td className="border px-4 py-2">Version</td>
+                <td className="border px-4 py-2 break-all">01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input Count</td>
+                <td className="border px-4 py-2 break-all">01</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input TXID</td>
+                <td className="border px-4 py-2 break-all">
+                    97211e92d9590b4111a60f24f2c97eba2884bb813515a3167c634a9dcd113338
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input VOUT</td>
+                <td className="border px-4 py-2 break-all">01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">ScriptSig Size</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">ScriptSig</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Sequence</td>
+                <td className="border px-4 py-2 break-all">ffffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output Count</td>
+                <td className="border px-4 py-2 break-all">02</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output1 Amount</td>
+                <td className="border px-4 py-2 break-all">8023430000000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output1 ScriptPubKey Size</td>
+                <td className="border px-4 py-2 break-all">19</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output1 ScriptPubKey</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output2 Amount</td>
+                <td className="border px-4 py-2 break-all">00e1f50500000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output2 ScriptPubKey Size</td>
+                <td className="border px-4 py-2 break-all">19</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output2 ScriptPubKey</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Locktime</td>
+                <td className="border px-4 py-2 break-all">00000000</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 The hexadecimal representation of this transaction is:
 
@@ -258,7 +315,7 @@ export default P2PKHGame;`
     options: {
       showLineNumbers: true,
       showInlineErrors: true,
-      editorHeight: 400
+      editorHeight: 500
     },
     customSetup: {
       dependencies: {
@@ -291,7 +348,14 @@ You can look up the hex characters for each op_code in the [Bitcoin Script wiki 
 ### Inspiration
 
 After completing the exercise, you can check out this testnet transaction to see real P2PKH ScriptPubKeys in action:
-[https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526](https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526)
+
+-   <a
+        href="https://mempool.space/testnet/tx/e3984a7fd80d4dc98befed882a950d5486500007f3ab7b19f83091c22e609526"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        Transaction on mempool.space
+    </a>
 
 <ExpandableAlert
   title="Solution code"

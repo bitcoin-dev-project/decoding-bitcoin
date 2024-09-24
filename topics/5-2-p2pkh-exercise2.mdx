@@ -26,7 +26,7 @@ In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-K
           externalResources: ["https://cdn.tailwindcss.com"],
           showLineNumbers: true,
           showInlineErrors: true,
-          editorHeight: 600
+          editorHeight: 500
         }}
         customSetup={{
           dependencies: {
@@ -109,59 +109,61 @@ type: 'Another P2PKH example'
 
 return (
 
-<div className="max-w-3xl mx-auto rounded-md m-4 mr-3 ml-3 p-4 bg-white shadow-md">
-<h1 className="text-3xl font-bold mb-6 text-center text-gray-800">P2PKH ScriptPubKey Decoder</h1>
+<div className="flex items-center justify-center min-h-screen bg-[#1e1e1e]">
+  <div className="max-w-3xl w-full mx-auto rounded-md m-4 p-6 bg-[#1e1e1e] shadow-md">
+    <h1 className="text-3xl font-bold mb-6 text-center text-[#f1760f]">P2PKH ScriptPubKey Decoder</h1>
 
-      <div className="mb-6">
-        <div className="flex">
-          <input
-            type="text"
-            value={inputScript}
-            onChange={(e) => setInputScript(e.target.value)}
-            placeholder="Enter P2PKH ScriptPubKey (hex)"
-            className="flex-grow p-3 border border-gray-300 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-          />
-          <button
-            onClick={handleDecode}
-            className="bg-orange-500 text-white p-3 rounded-r-md hover:bg-orange-600 transition duration-300"
-          >
-            Decode
-          </button>
-        </div>
-      </div>
-
-      {error && (
-        <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded-md">
-          <p className="font-bold">Error:</p>
-          <p>{error}</p>
-        </div>
-      )}
-
-      {asmResult && (
-        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-md">
-          <p className="font-bold">Result:</p>
-          <p className="break-all">{asmResult}</p>
-        </div>
-      )}
-
-      <div className="bg-gray-100 p-4 rounded-md shadow">
-        <h3 className="font-bold text-lg mb-2 text-gray-800">Test Cases:</h3>
-        <div className="space-y-2">
-          {testCases.map((testCase, index) => (
-            <details key={index} className="border border-gray-300 rounded-md">
-              <summary className="cursor-pointer p-2 bg-gray-200 hover:bg-gray-300 text-gray-700">
-                {testCase.type}
-              </summary>
-              <div className="p-2 text-sm bg-white text-gray-700">
-                <p><span className="font-semibold">Input:</span> <span className="break-all">{testCase.input}</span></p>
-                <p><span className="font-semibold">Expected:</span> <span className="break-all">{testCase.output}</span></p>
-              </div>
-            </details>
-          ))}
-        </div>
+    <div className="mb-6">
+      <div className="flex">
+        <input
+          type="text"
+          value={inputScript}
+          onChange={(e) => setInputScript(e.target.value)}
+          placeholder="Enter P2PKH ScriptPubKey (hex)"
+          className="flex-grow p-3 border border-[#4c4d52] rounded-l-md bg-[#3c3c3c] text-[#d4d4d4] focus:outline-none focus:ring-2 focus:ring-[#f1760f]"
+        />
+        <button
+          onClick={handleDecode}
+          className="bg-[#f1760f] text-[#d4d4d4] p-3 rounded-r-md hover:bg-[#e56c0d] transition duration-300"
+        >
+          Decode
+        </button>
       </div>
     </div>
 
+    {error && (
+      <div className="bg-[#3c3c3c] border-l-4 border-[#d32f2f] text-[#d32f2f] p-4 mb-6 rounded-md">
+        <p className="font-bold">Error:</p>
+        <p>{error}</p>
+      </div>
+    )}
+
+    {asmResult && (
+      <div className="bg-[#3c3c3c] border-l-4 border-[#689f38] text-[#689f38] p-4 mb-6 rounded-md">
+        <p className="font-bold">Result:</p>
+        <p className="break-all">{asmResult}</p>
+      </div>
+    )}
+
+    <div className="bg-[#252526] p-4 rounded-md shadow">
+      <h3 className="font-bold text-lg mb-2 text-[#f1760f]">Test Cases:</h3>
+      <div className="space-y-2">
+        {testCases.map((testCase, index) => (
+          <details key={index} className="border border-[#4c4d52] rounded-md">
+            <summary className="cursor-pointer p-2 bg-[#3c3c3c] hover:bg-[#4c4d52] text-[#d4d4d4]">
+              {testCase.type}
+            </summary>
+            <div className="p-2 text-sm bg-[#252526] text-[#d4d4d4]">
+              <p><span className="font-semibold">Input:</span> <span className="break-all">{testCase.input}</span></p>
+              <p><span className="font-semibold">Expected:</span> <span className="break-all">{testCase.output}</span></p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+
+  </div>
+</div>
 );
 }`,
 hidden: false
