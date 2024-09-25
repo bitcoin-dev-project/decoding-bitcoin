@@ -37,34 +37,21 @@ Complete the `decodeNum` function in `challenges/BitcoinDecoder.js`:
 
 ## Implementation
 
-<SandpackComponent
-  template="react"
-  options={{
-    showLineNumbers: true,
-    showInlineErrors: true,
-    editorHeight: 500
-  }}
-  customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0",
-      "lucide-react": "^0.390.0",
-      "framer-motion": "^11.3.21"
-    },
-  }}
-  files={{
-    "/challenges/BitcoinDecoder.js": {
-      code: `
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/challenges/BitcoinDecoder.js": {
+        code: `
 export function decodeNum(buffer) {
     // TODO: Implement the decoding logic here
     // Remember to handle both positive and negative numbers
     // Return the decoded integer value
 }
 `,
-      active: true
-    },
-    "/BitcoinDecoderSimulator.js": {
-      code: `
+        active: true
+      },
+      "/BitcoinDecoderSimulator.js": {
+        code: `
 import React, { useState } from "react";
 import { ArrowDownCircle, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -191,10 +178,10 @@ const [showHexInfo, setShowHexInfo] = useState(false);
 
 export default BitcoinDecoderSimulator
 ;`,
-      hidden: false
-    },
-    "/App.js": {
-      code: `
+        hidden: false
+      },
+      "/App.js": {
+        code: `
 import React from "react"
 import BitcoinDecoderSimulator from "./BitcoinDecoderSimulator"
 
@@ -211,9 +198,25 @@ return (
 
 export default App;
 `,
-      hidden: false
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21"
+      },
     }
   }}
+  trinketUrl="https://trinket.io/embed/python3/be49ab05f3a3"
 />
 
 <Hint

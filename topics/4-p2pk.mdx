@@ -72,7 +72,7 @@ the ScriptPubKey**.
     code={` 
   <Public key Finney> OP_CHECKSIG
   `}
-    language="javascript"
+    language="text"
 />
 
 Click on **Output 1** of the transaction below to view the scriptPubKey that Satoshi used to lock 10 BTC to Finney's public key and see this in action.
@@ -120,7 +120,7 @@ To spend bitcoin that Satoshi sent, Finney must provide a valid signature corres
     code={` 
   <Signature Finney>
   `}
-    language="javascript"
+    language="text"
 />
 
 Click on **Input 1** of this transaction to view the scriptSig created by Hal Finney.
@@ -147,7 +147,7 @@ When validating a transaction, the ScriptSig and ScriptPubKey are combined. This
     code={` 
     <signature Finney> <public key Finney> OP_CHECKSIG
   `}
-    language="javascript"
+    language="text"
 />
 
 The combined script will validate if the signature is valid, but fail if the signature is invalid.

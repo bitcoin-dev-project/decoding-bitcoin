@@ -55,7 +55,7 @@ Alice and Bob want to create a 2-of-2 multisig address. Their redeem script look
 2
 OP_CHECKMULTISIG
   `}
-    language="javascript"
+    language="text"
     showLineNumbers={true}
 />
 
@@ -70,7 +70,7 @@ The scriptPubKey for the P2SH looks like this:
     code={` 
 OP_HASH160 <20-byte hash of redeem script> OP_EQUAL
   `}
-    language="javascript"
+    language="text"
     showLineNumbers={true}
 />
 
@@ -85,7 +85,7 @@ This will produce a 20-byte hash:
     code={` 
 <20-byte hash of redeem script>
 `}
-    language="javascript"
+    language="text"
     showLineNumbers={true}
 />
 
@@ -108,7 +108,7 @@ When either Alice or Bob wants to spend the funds, they must provide the redeem 
     code={` 
 <Alice signature> <Bob signature> <redeem script>
   `}
-    language="javascript"
+    language="text"
     showLineNumbers={true}
 />
 

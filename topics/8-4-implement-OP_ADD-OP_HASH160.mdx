@@ -21,25 +21,11 @@ Complete the `OP_ADD` and `OP_HASH160` functions in `challenges/OpcodeFunctions.
 
 ## Implementation
 
-<SandpackComponent
-  template="react"
-  options={{
-    showLineNumbers: true,
-    showInlineErrors: true,
-    editorHeight: 500
-  }}
-  customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0",
-      "lucide-react": "^0.390.0",
-      "framer-motion": "^11.3.21",
-      "crypto-js": "^4.1.1"
-    },
-  }}
-  files={{
-    "/challenges/OpcodeFunctions.js": {
-      code: `
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/challenges/OpcodeFunctions.js": {
+        code: `
 import CryptoJS from 'crypto-js';
 
 export function encodeNum(num) {
@@ -96,31 +82,22 @@ export function decodeNum(buffer) {
 }
 
 export const OP_ADD = (stack) => {
-    if (stack.length < 2) throw new Error("Insufficient operands for OP_ADD")
-    const b = decodeNum(stack.pop())
-    const a = decodeNum(stack.pop())
-    stack.push(encodeNum(a + b))
+    // TODO: Implement OP_ADD
 }
 
 export const OP_HASH160 = (stack) => {
-    if (stack.length < 1)
-        throw new Error("Insufficient operands for OP_HASH160")
-    const data = stack.pop()
-    const sha256 = CryptoJS.SHA256(CryptoJS.enc.Hex.parse(data.toString("hex")))
-    const ripemd160 = CryptoJS.RIPEMD160(sha256)
-    stack.push(Buffer.from(ripemd160.toString(), "hex"))
+    // TODO: Implement OP_HASH160
 }
 
 export const OP_CODE_FUNCTIONS = {
     OP_ADD,
     OP_HASH160
     // Add more opcodes here
-}
-;`,
-      hidden: false
-    },
-    "/OpcodeSimulator.js": {
-      code: `
+}`,
+        active: true
+      },
+      "/OpcodeSimulator.js": {
+        code: `
 import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react"
@@ -172,8 +149,6 @@ const [scriptAsm, setScriptAsm] = useState('');
             setLastOperation(opcodeName + " (failed)");
         }
     };
-
-
 
     const getItemColor = (item) => {
         if (item.toString().startsWith("Error:")) {
@@ -332,12 +307,11 @@ const [scriptAsm, setScriptAsm] = useState('');
 
 };
 
-export default OpcodeSimulator
-;`,
-      hidden: false
-    },
-    "/App.js": {
-      code: `
+export default OpcodeSimulator`,
+        hidden: false
+      },
+      "/App.js": {
+        code: `
 import React from "react"
 import OpcodeSimulator from "./OpcodeSimulator"
 
@@ -352,10 +326,28 @@ return (
 
 export default App;
 `,
-      hidden: false
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21",
+        "crypto-js": "^4.1.1"
+      },
     }
   }}
+  trinketUrl="https://trinket.io/embed/python3/12cf9af5968a"
 />
+
 ## Hints
 
 <Hint

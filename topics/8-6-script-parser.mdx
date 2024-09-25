@@ -22,24 +22,11 @@ Complete the `parseScript` function in `challenges/ScriptParser.js`:
 
 ## Implementation
 
-<SandpackComponent
-  template="react"
-  options={{
-    showLineNumbers: true,
-    showInlineErrors: true,
-    editorHeight: 500
-  }}
-  customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0",
-      "lucide-react": "^0.390.0",
-      "framer-motion": "^11.3.21",
-    },
-  }}
-  files={{
-    "/challenges/ScriptParser.js": {
-      code: `
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      '/challenges/ScriptParser.js': {
+        code: `
 import { OpCode } from './OpCodes';
 
 export function parseScript(scriptHex) {
@@ -59,10 +46,10 @@ while (offset < script.length) {
 return parsedScript;
 }
 `,
-      hidden: false
-    },
-    "/challenges/OpCodes.js": {
-      code: `
+        active: true
+      },
+      '/challenges/OpCodes.js': {
+        code: `
 export const OpCode = {
 // Data push opcodes
 OP_0: 0x00,
@@ -162,10 +149,10 @@ export const OP_CODE_NAMES = Object.fromEntries(
     Object.entries(OpCode).map(([name, code]) => [code, name])
 )
 ;`,
-      hidden: false
-    },
-    "/ScriptParserSimulator.js": {
-      code: `
+        hidden: false
+      },
+      '/ScriptParserSimulator.js': {
+        code: `
 import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { parseScript } from "./challenges/ScriptParser"
@@ -174,114 +161,124 @@ const ScriptParserSimulator = () => {
 const [scriptHex, setScriptHex] = useState('');
 const [parsedScript, setParsedScript] = useState([]);
 
-    const handleScriptHexChange = (e) => {
-        const value = e.target.value;
-        if (/^[0-9A-Fa-f]*$/.test(value)) {
-            setScriptHex(value);
-        }
-    };
+const handleScriptHexChange = (e) => {
+const value = e.target.value;
+if (/^[0-9A-Fa-f]\*$/.test(value)) {
+setScriptHex(value);
+}
+};
 
-    const parseScriptHex = () => {
-        try {
-            const result = parseScript(scriptHex);
-            setParsedScript(result);
-        } catch (error) {
-            console.error("Error parsing script:", error);
-            setParsedScript([{ type: 'error', value: error.message }]);
-        }
-    };
+const parseScriptHex = () => {
+try {
+const result = parseScript(scriptHex);
+setParsedScript(result);
+} catch (error) {
+console.error("Error parsing script:", error);
+setParsedScript([{ type: 'error', value: error.message }]);
+}
+};
 
-    return (
-        <div className="w-full max-w-3xl mx-auto py-1">
-            <motion.div
-                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
-                <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
-                    Bitcoin Script Parser
-                </div>
-                <div className="mb-4">
-                    <input
-                        type="text"
-                        value={scriptHex}
-                        onChange={handleScriptHexChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        placeholder="Enter script hex"
-                    />
-                </div>
-                <motion.button
-                    onClick={parseScriptHex}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
-                >
-                    Parse Script
-                </motion.button>
-                <div className="mt-4 border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
-                    <div className="font-semibold mb-2 text-gray-800 dark:text-white">
-                        Parsed Script:
-                    </div>
-                    <AnimatePresence>
-                        {parsedScript.length === 0 ? (
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                exit={{ opacity: 0 }}
-                                className="text-gray-500 dark:text-gray-400 text-center py-2"
-                            >
-                                No script parsed yet
-                            </motion.p>
-                        ) : (
-                            <div className="space-y-2">
-                                {parsedScript.map((item, index) => (
-                                    <motion.div
-                                        key={index}
-                                        initial={{ opacity: 0, y: -20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: 20 }}
-                                        transition={{ duration: 0.2 }}
-                                        className={\`p-2 rounded-md \${item.type === 'opcode' ? 'bg-purple-500' : item.type === 'data' ? 'bg-green-500' : 'bg-red-500'} text-white\`}
-                                    >
-                                        <div className="font-mono">
-                                            {item.type}: {item.value}
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        )}
-                    </AnimatePresence>
-                </div>
-            </motion.div>
-        </div>
-    );
-
+return (
+<div className="w-full max-w-3xl mx-auto py-1">
+<motion.div
+className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
+initial={{ opacity: 0, y: 20 }}
+animate={{ opacity: 1, y: 0 }}
+transition={{ duration: 0.5 }} >
+<div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+Bitcoin Script Parser
+</div>
+<div className="mb-4">
+<input
+            type="text"
+            value={scriptHex}
+            onChange={handleScriptHexChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Enter script hex"
+          />
+</div>
+<motion.button
+onClick={parseScriptHex}
+whileHover={{ scale: 1.05 }}
+whileTap={{ scale: 0.95 }}
+className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50" >
+Parse Script
+</motion.button>
+<div className="mt-4 border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+<div className="font-semibold mb-2 text-gray-800 dark:text-white">
+Parsed Script:
+</div>
+<AnimatePresence>
+{parsedScript.length === 0 ? (
+<motion.p
+initial={{ opacity: 0 }}
+animate={{ opacity: 1 }}
+exit={{ opacity: 0 }}
+className="text-gray-500 dark:text-gray-400 text-center py-2" >
+No script parsed yet
+</motion.p>
+) : (
+<div className="space-y-2">
+{parsedScript.map((item, index) => (
+<motion.div
+key={index}
+initial={{ opacity: 0, y: -20 }}
+animate={{ opacity: 1, y: 0 }}
+exit={{ opacity: 0, y: 20 }}
+transition={{ duration: 0.2 }}
+className={\`p-2 rounded-md \${item.type === 'opcode' ? 'bg-purple-500' : item.type === 'data' ? 'bg-green-500' : 'bg-red-500'} text-white\`} >
+<div className="font-mono">
+{item.type}: {item.value}
+</div>
+</motion.div>
+))}
+</div>
+)}
+</AnimatePresence>
+</div>
+</motion.div>
+</div>
+);
 };
 
 export default ScriptParserSimulator
 ;`,
-      hidden: false
-    },
-    "/App.js": {
-      code: `
+        hidden: false
+      },
+      '/App.js': {
+        code: `
 import React from "react"
 import ScriptParserSimulator from "./ScriptParserSimulator"
 
 const App = () => {
 return (
-
 <div className="p-4">
-    <h1 className="text-2xl font-bold mb-4">Bitcoin Script Parser Challenge</h1>
-    <ScriptParserSimulator />
+<h1 className="text-2xl font-bold mb-4">Bitcoin Script Parser Challenge</h1>
+<ScriptParserSimulator />
 </div>
-); };
+);
+};
 
 export default App;
 `,
-      hidden: false
+        hidden: false
+      }
+    },
+    options: {
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21",
+      },
     }
   }}
+  trinketUrl="https://trinket.io/embed/python3/d749a38ca9ee"
 />
 
 ## Hints

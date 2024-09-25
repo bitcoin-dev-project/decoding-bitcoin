@@ -23,24 +23,11 @@ Both methods should return a new Stack instance.
 
 ## Implementation
 
-<SandpackComponent
-  template="react"
-  options={{
-    showLineNumbers: true,
-    showInlineErrors: true,
-    editorHeight: 500
-  }}
-  customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0",
-      "lucide-react": "^0.390.0",
-      "framer-motion": "^11.3.21"
-    },
-  }}
-  files={{
-    "/challenges/Stack.js": {
-      code: `
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      '/challenges/Stack.js': {
+        code: `
 export class Stack {
     constructor(items = []) {
         this.items = items;
@@ -60,10 +47,10 @@ export class Stack {
 
 }
 `,
-      active: true
-    },
-    "/StackSimulator.js": {
-      code: `
+        active: true
+      },
+      '/StackSimulator.js': {
+        code: `
 import React, { useState } from "react";
 import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -247,10 +234,10 @@ const [showHexInfo, setShowHexInfo] = useState(false);
 
 export default StackSimulator
 ;`,
-      hidden: false
-    },
-    "/App.js": {
-      code: `
+        hidden: false
+      },
+      '/App.js': {
+        code: `
 import React from "react"
 import StackSimulator from "./StackSimulator"
 
@@ -265,9 +252,25 @@ return (
 
 export default App;
 `,
-      hidden: false
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21"
+      },
     }
   }}
+  trinketUrl="https://trinket.io/embed/python3/a65e45077fa4"
 />
 
 ## Hints

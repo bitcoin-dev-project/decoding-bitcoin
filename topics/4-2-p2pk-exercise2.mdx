@@ -301,7 +301,7 @@ export default P2PKGame;`
       }
     }
   }}
-  trinketUrl="https://trinket.io/embed/python3/7cc7881c2d17"
+  trinketUrl="https://trinket.io/embed/python3/2c87f0971ba0"
 />
 
 You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
@@ -324,12 +324,19 @@ You can look up the hex characters for each op_code in the [Bitcoin Script wiki 
   <details>
     <summary>Python Solution</summary>
     ```python
-    def construct_p2pk_scriptpubkey(public_key: str) -> str:
-        key_length = format(len(public_key) // 2, '02x')
-        op_checksig = 'ac'
-        scriptpubkey = key_length + public_key + op_checksig
-        return scriptpubkey
+    def construct_p2pk_scriptpubkey(public_key_hex):
+        # Convert hex public key to bytes
+        public_key_bytes = bytes.fromhex(public_key_hex)
+        
+        # Get the length of the public key
+        pub_key_length = len(public_key_bytes)
+
+        # Create the P2PK script
+        script_pub_key = bytes([pub_key_length]) + public_key_bytes + bytes([0xac])  # 0xac is OP_CHECKSIG
+
+        return script_pub_key.hex()
     ```
+
   </details>
 
   <details>

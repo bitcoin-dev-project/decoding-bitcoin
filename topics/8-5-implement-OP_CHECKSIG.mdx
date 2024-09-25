@@ -23,28 +23,11 @@ Complete the `OP_CHECKSIG` function in `challenges/OpcodeFunctions.js`:
 
 ## Implementation
 
-<SandpackComponent
-  template="react"
-  options={{
-    showLineNumbers: true,
-    showInlineErrors: true,
-    editorHeight: 500
-  }}
-  customSetup={{
-    dependencies: {
-      "react": "^18.0.0",
-      "react-dom": "^18.0.0",
-      "lucide-react": "^0.390.0",
-      "framer-motion": "^11.3.21",
-      "crypto-js": "^4.1.1",
-      "elliptic": "^6.5.4",
-      "bitcoinjs-lib": "^6.1.0",
-      "bs58": "^5.0.0"
-    },
-  }}
-  files={{
-    "/challenges/OpcodeFunctions.js": {
-      code: `
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/challenges/OpcodeFunctions.js": {
+        code: `
 import CryptoJS from 'crypto-js';
 import { ec as EC } from 'elliptic';
 import * as bitcoin from 'bitcoinjs-lib';
@@ -76,12 +59,11 @@ export function OP_CHECKSIG(stack, getMessageHash) {
 export const OP_CODE_FUNCTIONS = {
     OP_CHECKSIG
     // Add more opcodes here
-}
-;`,
-      hidden: false
-    },
-    "/OpcodeSimulator.js": {
-      code: `
+}`,
+        active: true
+      },
+      "/OpcodeSimulator.js": {
+        code: `
 import React, { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react"
@@ -324,12 +306,11 @@ Execute OP_CHECKSIG
 );
 };
 
-export default OpcodeSimulator
-;`,
-      hidden: false
-    },
-    "/App.js": {
-      code: `
+export default OpcodeSimulator`,
+        hidden: false
+      },
+      "/App.js": {
+        code: `
 import React from "react"
 import OpcodeSimulator from "./OpcodeSimulator"
 
@@ -344,9 +325,29 @@ return (
 
 export default App;
 `,
-      hidden: false
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21",
+        "crypto-js": "^4.1.1",
+        "elliptic": "^6.5.4",
+        "bitcoinjs-lib": "^6.1.0",
+        "bs58": "^5.0.0"
+      },
     }
   }}
+  trinketUrl="https://trinket.io/embed/python3/208f82ef7e4f"
 />
 ## Hints
 

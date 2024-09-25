@@ -20,23 +20,11 @@ In this exercise, you'll implement a function to convert a P2PK (Pay-to-Public-K
 5. Verify that the script ends with OP_EQUALVERIFY (0x88) and OP_CHECKSIG (0xAC).
 6. Construct and return the ASM string: `OP_DUP OP_HASH160 <pubKeyHash> OP_EQUALVERIFY OP_CHECKSIG`
 
-<SandpackComponent
-        template="react"
-        options={{
-          externalResources: ["https://cdn.tailwindcss.com"],
-          showLineNumbers: true,
-          showInlineErrors: true,
-          editorHeight: 500
-        }}
-        customSetup={{
-          dependencies: {
-            "react": "^18.0.0",
-            "react-dom": "^18.0.0",
-          },
-        }}
-        files={{
-          "/decoder.js": {
-            code: `
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/decoder.js": {
+        code: `
 // Simplified OPS object for this exercise
 const OPS = {
   OP_DUP: 118,        // 0x76 in decimal
@@ -63,10 +51,10 @@ export function decodeP2PKHScriptPubKey(hexScript) {
     // Your code here
 }
 ;`,
-            active: true
-          },
-          "/App.js": {
-            code: `
+        active: true
+      },
+      "/App.js": {
+        code: `
 // App.js
 import React, { useState } from "react"
 import { decodeP2PKHScriptPubKey } from "./decoder"
@@ -165,10 +153,23 @@ return (
   </div>
 </div>
 );
-}`,
-hidden: false
-}
-}}
+}`
+      }
+    },
+    options: {
+      externalResources: ["https://cdn.tailwindcss.com"],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+      },
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/71083dbf4f2a"
 />
 
 <Hint
