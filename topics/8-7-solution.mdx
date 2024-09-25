@@ -1,0 +1,619 @@
+---
+title: "Solution"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 7
+project: true
+parent: 8-project
+---
+
+# Bitcoin Script Playground - Final Solution
+
+Congratulations on completing the Bitcoin Script Playground project! This interactive tool allows you to explore and experiment with Bitcoin scripting operations, helping you understand the inner workings of Bitcoin transactions.
+
+## Project Repository
+
+The complete source code for this project is available on GitHub:
+
+[Bitcoin Script Playground Repository](https://github.com/bitcoin-dev-project/bitcoin-stack)
+
+<div className="relative w-full h-[400px] mb-8">
+    <Image
+        src="/bitcoin-topics/static/images/topics/project-bitcoin-stack/repo-screenshot.png"
+        alt="Bitcoin Script Playground Repository"
+        layout="fill"
+        objectFit="cover"
+        className="rounded-lg"
+    />
+</div>
+
+## Project Demo
+
+Here's a quick demonstration of the Bitcoin Script Playground in action:
+
+<video
+    controls
+    className="w-full h-auto rounded-lg shadow-lg"
+    src="/bitcoin-topics/static/images/topics/project-bitcoin-stack/bitcoin-stack3.mov"
+>
+    Your browser does not support the video tag.
+</video>
+
+## Key Features
+
+-   Stack Simulator: Push and pop values, execute opcodes
+-   Script Parser: Parse Bitcoin scripts from hexadecimal format
+-   OP_CHECKSIG Implementation: Simulate signature verification
+-   Interactive UI: User-friendly interface for easy experimentation
+
+## Final Implementation
+
+Below is the final implementation of the Bitcoin Script Playground:
+
+<SandpackComponent
+  template="react"
+  options={{
+    showLineNumbers: true,
+    showInlineErrors: true,
+    editorHeight: 500
+  }}
+  customSetup={{
+    dependencies: {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0",
+      "lucide-react": "^0.390.0",
+      "framer-motion": "^11.3.21",
+      "crypto-js": "^4.1.1",
+      "elliptic": "^6.5.4",
+      "bitcoinjs-lib": "^6.1.0",
+      "bs58": "^5.0.0"
+    },
+  }}
+  files={{
+    "/BitcoinScriptPlayground.js": {
+      code: `
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowDownCircle, ArrowUpCircle, Info, Code, Play } from 'lucide-react';
+import { OP_CODE_FUNCTIONS } from './challenges/OpcodeFunctions';
+import { parseScript } from './challenges/ScriptParser';
+import { OpCode, OP_CODE_NAMES } from './challenges/OpCodes';
+
+const BitcoinScriptPlayground = () => {
+const [stack, setStack] = useState([]);
+const [input, setInput] = useState('0x');
+const [lastOperation, setLastOperation] = useState(null);
+const [showHexInfo, setShowHexInfo] = useState(false);
+const [showMessageHashModal, setShowMessageHashModal] = useState(false);
+const [messageHash, setMessageHash] = useState('0x' + '00'.repeat(32));
+const [scriptHex, setScriptHex] = useState('');
+const [parsedScript, setParsedScript] = useState([]);
+const [activeTab, setActiveTab] = useState('stack'); // 'stack' or 'parser'
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        if (value.length < 2) {
+            setInput('0x');
+        } else if (value.startsWith('0x')) {
+            const hexPart = value.slice(2);
+            if (/^[0-9A-Fa-f]*$/.test(hexPart)) {
+                setInput(value);
+            }
+        }
+    };
+
+    const handleMessageHashChange = (e) => {
+        const value = e.target.value;
+        if (value.length < 2) {
+            setMessageHash('0x');
+        } else if (value.startsWith('0x')) {
+            const hexPart = value.slice(2);
+            if (/^[0-9A-Fa-f]*$/.test(hexPart)) {
+                setMessageHash(value);
+            }
+        }
+    };
+
+    const handleScriptHexChange = (e) => {
+        const value = e.target.value;
+        if (/^[0-9A-Fa-f]*$/.test(value)) {
+            setScriptHex(value);
+        }
+    };
+
+    const push = () => {
+        if (input.length > 2) {
+            const hexValue = input.slice(2);
+            setStack([...stack, Buffer.from(hexValue, 'hex')]);
+            setInput('0x');
+            setLastOperation('push');
+        }
+    };
+
+    const pop = () => {
+        if (stack.length > 0) {
+            setStack(stack.slice(0, -1));
+            setLastOperation('pop');
+        }
+    };
+
+    const executeOpcode = (opcodeName) => {
+        try {
+            const newStack = [...stack];
+            if (opcodeName === 'OP_CHECKSIG') {
+                setShowMessageHashModal(true);
+                return;
+            }
+            OP_CODE_FUNCTIONS[opcodeName](newStack);
+            setStack(newStack);
+            setLastOperation(opcodeName);
+        } catch (error) {
+            console.error('Error executing ' + opcodeName + ':', error);
+            setLastOperation(opcodeName + ' (failed)');
+        }
+    };
+
+    const executeCheckSig = () => {
+        const newStack = [...stack];
+        OP_CODE_FUNCTIONS.OP_CHECKSIG(newStack, () => Buffer.from(messageHash.slice(2), 'hex'));
+        setStack(newStack);
+        setLastOperation('OP_CHECKSIG');
+        setShowMessageHashModal(false);
+    };
+
+    const parseScriptHex = () => {
+        try {
+            const result = parseScript(scriptHex);
+            setParsedScript(result);
+        } catch (error) {
+            console.error('Error parsing script:', error);
+            setParsedScript([{ type: 'error', value: error.message }]);
+        }
+    };
+
+    const getItemColor = (item) => {
+        if (item instanceof Buffer) {
+            if (item.length === 1) {
+                return item[0] === 1 ? 'bg-green-500 text-white' : 'bg-red-500 text-white';
+            }
+            return 'bg-purple-500 text-white';
+        }
+        return 'bg-red-500 text-white';
+    };
+
+    const formatStackItem = (item) => {
+        if (item instanceof Buffer) {
+            const hex = '0x' + item.toString('hex');
+            if (item.length === 1) {
+                return <span className="font-mono">{item[0] === 1 ? 'true' : 'false'} ({hex})</span>;
+            }
+            return <span className="font-mono">{hex}</span>;
+        }
+        return <span>{String(item)}</span>;
+    };
+
+    return (
+        <div className="w-full max-w-4xl mx-auto py-1">
+            <motion.div
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+                    Bitcoin Script Playground
+                </div>
+                <div className="flex mb-4 space-x-2">
+                    <button
+                        onClick={() => setActiveTab('stack')}
+                        className={\`px-4 py-2 rounded-md \${activeTab === 'stack' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-800'}\`}
+                    >
+                        Stack Simulator
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('parser')}
+                        className={\`px-4 py-2 rounded-md \${activeTab === 'parser' ? 'bg-orange-500 text-white' : 'bg-gray-200 text-gray-800'}\`}
+                    >
+                        Script Parser
+                    </button>
+                </div>
+                {activeTab === 'stack' && (
+                    <>
+                        <div className="flex flex-col space-y-2 mb-4">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    value={input}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="0x (enter hex value)"
+                                    onFocus={(e) => e.target.setSelectionRange(2, 2)}
+                                />
+                                <button
+                                    onClick={() => setShowHexInfo(!showHexInfo)}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                                >
+                                    <Info size={16} className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="flex space-x-2">
+                                <motion.button
+                                    onClick={push}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                                >
+                                    <ArrowDownCircle className="inline-block w-5 h-5 mr-1" />
+                                    Push
+                                </motion.button>
+                                <motion.button
+                                    onClick={pop}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+                                >
+                                    <ArrowUpCircle className="inline-block w-5 h-5 mr-1" />
+                                    Pop
+                                </motion.button>
+                            </div>
+                        </div>
+                        {showHexInfo && (
+                            <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">
+                                <p className="text-sm">
+                                    Enter values in hexadecimal format only (e.g., 0x01, 0xff).
+                                    The '0x' prefix is fixed to indicate hex input.
+                                    For OP_CHECKSIG, push the public key and signature onto the stack.
+                                </p>
+                            </div>
+                        )}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4">
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => executeOpcode('OP_CHECKSIG')}
+                                className="px-2 py-1 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm w-full whitespace-nowrap overflow-hidden text-ellipsis"
+                            >
+                                OP_CHECKSIG
+                            </motion.button>
+                        </div>
+                        <div className="border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                            <div className="font-semibold mb-2 text-gray-800 dark:text-white">
+                                Stack <span className="font-normal text-sm">(Last-In-First-Out)</span>:
+                            </div>
+                            <AnimatePresence>
+                                {stack.length === 0 ? (
+                                    <motion.p
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="text-gray-500 dark:text-gray-400 text-center py-2"
+                                    >
+                                        Stack is empty
+                                    </motion.p>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {stack.slice().reverse().map((item, index) => (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ opacity: 0, y: -20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 20 }}
+                                                transition={{ duration: 0.2 }}
+                                                className={\`p-2 rounded-md \${getItemColor(item)} overflow-hidden\`}
+                                            >
+                                                <div className="truncate">
+                                                    {formatStackItem(item)}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                        {lastOperation && (
+                            <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
+                                Last operation: {lastOperation}
+                            </div>
+                        )}
+                    </>
+                )}
+                {activeTab === 'parser' && (
+                    <>
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                value={scriptHex}
+                                onChange={handleScriptHexChange}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                placeholder="Enter script hex"
+                            />
+                        </div>
+                        <motion.button
+                            onClick={parseScriptHex}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                        >
+                            <Code className="inline-block w-5 h-5 mr-1" />
+                            Parse Script
+                        </motion.button>
+                        <div className="mt-4 border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                            <div className="font-semibold mb-2 text-gray-800 dark:text-white">
+                                Parsed Script:
+                            </div>
+                            <AnimatePresence>
+                                {parsedScript.length === 0 ? (
+                                    <motion.p
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        className="text-gray-500 dark:text-gray-400 text-center py-2"
+                                    >
+                                        No script parsed yet
+                                    </motion.p>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {parsedScript.map((item, index) => (
+                                            <motion.div
+                                                key={index}
+                                                initial={{ opacity: 0, y: -20 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: 20 }}
+                                                transition={{ duration: 0.2 }}
+                                                className={\`p-2 rounded-md \${item.type === 'opcode' ? 'bg-purple-500' : item.type === 'data' ? 'bg-green-500' : 'bg-red-500'} text-white\`}
+                                            >
+                                                <div className="font-mono">
+                                                    {item.type}: {item.value}
+                                                </div>
+                                            </motion.div>
+                                        ))}
+                                    </div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    </>
+                )}
+            </motion.div>
+                {showMessageHashModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+                <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Message Hash for OP_CHECKSIG</h3>
+                <div className="relative flex-grow">
+                    <input
+                        type="text"
+                        value={messageHash}
+                        onChange={handleMessageHashChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        placeholder="0x (enter message hash)"
+                        onFocus={(e) => e.target.setSelectionRange(2, 2)}
+                    />
+                </div>
+                <div className="flex justify-end space-x-2 mt-4">
+                    <button
+                        onClick={() => setShowMessageHashModal(false)}
+                        className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-500"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={executeCheckSig}
+                        className="px-3 py-1 bg-orange-500 text-white rounded hover:bg-orange-600"
+                    >
+                        Execute OP_CHECKSIG
+                    </button>
+                </div>
+            </div>
+        </div>
+    )}
+
+</div>
+);
+};
+
+export default BitcoinScriptPlayground
+;`,
+      hidden: false
+    },
+    "/App.js": {
+      code: `
+import React from "react"
+import BitcoinScriptPlayground from "./BitcoinScriptPlayground"
+
+const App = () => {
+return (
+
+<div className="p-4">
+    <h1 className="text-2xl font-bold mb-4">Bitcoin Script Playground</h1>
+    <BitcoinScriptPlayground />
+</div>
+); };
+
+export default App
+;`,
+      hidden: false
+    },"/challenges/OpcodeFunctions.js": {
+      code: `
+export const OP_CODE_FUNCTIONS = {
+    OP_CHECKSIG: (stack, getMessageHash) => {
+        // Simplified OP_CHECKSIG implementation
+        if (stack.length < 2) {
+            throw new Error("Insufficient items on stack for OP_CHECKSIG")
+        }
+        const pubKey = stack.pop()
+        const signature = stack.pop()
+        const messageHash = getMessageHash()
+
+        // In a real implementation, we would verify the signature here
+        // For this example, we'll just push a "true" value to the stack
+        stack.push(Buffer.from([0x01]))
+    }
+    // Add other opcode implementations as needed
+
+}
+;`    },
+    "/challenges/ScriptParser.js": {
+      code:`
+import { OpCode, OP_CODE_NAMES } from "./OpCodes"
+
+export function parseScript(scriptHex) {
+  const script = Buffer.from(scriptHex, 'hex');
+  const parsedScript = [];
+  let i = 0;
+
+while (i < script.length) {
+const opcode = script[i];
+if (opcode <= 0x4e) {
+// Push value
+let length = 0;
+if (opcode < 0x4c) {
+length = opcode;
+i++;
+} else if (opcode === 0x4c) {
+length = script[i + 1];
+i += 2;
+} else if (opcode === 0x4d) {
+length = script.readUInt16LE(i + 1);
+i += 3;
+} else if (opcode === 0x4e) {
+length = script.readUInt32LE(i + 1);
+i += 5;
+}
+const data = script.slice(i, i + length);
+parsedScript.push({ type: 'data', value: data.toString('hex') });
+i += length;
+} else {
+// Opcode
+parsedScript.push({ type: 'opcode', value: OP*CODE_NAMES[opcode] || "UNKNOWN*" + opcode.toString(16) });
+i++;
+}
+}
+
+return parsedScript;
+}
+`    },
+    "/challenges/OpCodes.js": {
+      code:`
+export const OpCode = {
+// Data push opcodes
+OP_0: 0x00,
+OP_PUSHDATA1: 0x4c,
+OP_PUSHDATA2: 0x4d,
+OP_PUSHDATA4: 0x4e,
+OP_1NEGATE: 0x4f,
+OP_1: 0x51,
+OP_16: 0x60,
+
+// Flow control
+OP_NOP: 0x61,
+OP_IF: 0x63,
+OP_NOTIF: 0x64,
+OP_ELSE: 0x67,
+OP_ENDIF: 0x68,
+OP_VERIFY: 0x69,
+OP_RETURN: 0x6a,
+
+// Stack
+OP_TOALTSTACK: 0x6b,
+OP_FROMALTSTACK: 0x6c,
+OP_IFDUP: 0x73,
+OP_DEPTH: 0x74,
+OP_DROP: 0x75,
+OP_DUP: 0x76,
+OP_NIP: 0x77,
+OP_OVER: 0x78,
+OP_PICK: 0x79,
+OP_ROLL: 0x7a,
+OP_ROT: 0x7b,
+OP_SWAP: 0x7c,
+OP_TUCK: 0x7d,
+
+// Splice
+OP_CAT: 0x7e,
+OP_SUBSTR: 0x7f,
+OP_LEFT: 0x80,
+OP_RIGHT: 0x81,
+OP_SIZE: 0x82,
+
+// Bitwise logic
+OP_INVERT: 0x83,
+OP_AND: 0x84,
+OP_OR: 0x85,
+OP_XOR: 0x86,
+OP_EQUAL: 0x87,
+OP_EQUALVERIFY: 0x88,
+
+// Arithmetic
+OP_1ADD: 0x8b,
+OP_1SUB: 0x8c,
+OP_2MUL: 0x8d,
+OP_2DIV: 0x8e,
+OP_NEGATE: 0x8f,
+OP_ABS: 0x90,
+OP_NOT: 0x91,
+OP_0NOTEQUAL: 0x92,
+OP_ADD: 0x93,
+OP_SUB: 0x94,
+OP_MUL: 0x95,
+OP_DIV: 0x96,
+OP_MOD: 0x97,
+OP_LSHIFT: 0x98,
+OP_RSHIFT: 0x99,
+OP_BOOLAND: 0x9a,
+OP_BOOLOR: 0x9b,
+OP_NUMEQUAL: 0x9c,
+OP_NUMEQUALVERIFY: 0x9d,
+OP_NUMNOTEQUAL: 0x9e,
+OP_LESSTHAN: 0x9f,
+OP_GREATERTHAN: 0xa0,
+OP_LESSTHANOREQUAL: 0xa1,
+OP_GREATERTHANOREQUAL: 0xa2,
+OP_MIN: 0xa3,
+OP_MAX: 0xa4,
+OP_WITHIN: 0xa5,
+
+// Crypto
+OP_RIPEMD160: 0xa6,
+OP_SHA1: 0xa7,
+OP_SHA256: 0xa8,
+OP_HASH160: 0xa9,
+OP_HASH256: 0xaa,
+OP_CODESEPARATOR: 0xab,
+OP_CHECKSIG: 0xac,
+OP_CHECKSIGVERIFY: 0xad,
+OP_CHECKMULTISIG: 0xae,
+OP_CHECKMULTISIGVERIFY: 0xaf,
+
+// Locktime
+OP_CHECKLOCKTIMEVERIFY: 0xb1,
+OP_CHECKSEQUENCEVERIFY: 0xb2,
+};
+
+export const OP_CODE_NAMES = Object.fromEntries(
+  Object.entries(OpCode).map(([name, code]) => [code, name])
+);
+`
+    }
+  }}
+/
+
+>
+
+## Next Steps
+
+Now that you've completed this project, consider exploring more advanced topics in Bitcoin scripting:
+
+1. Implement more complex opcodes
+2. Create and verify multi-signature transactions
+3. Explore time-locked transactions with OP_CHECKLOCKTIMEVERIFY
+4. Dive into Bitcoin's scripting language to create custom smart contracts
+
+Remember, continuous learning and experimentation are key to mastering Bitcoin development. Keep exploring and building!
+
+## Feedback and Contributions
+
+If you have any feedback on this project or would like to contribute improvements, please feel free to open an issue or submit a pull request on the GitHub repository.
+
+Happy coding, and welcome to the world of Bitcoin development!

@@ -1,0 +1,79 @@
+---
+title: "Standard & Non-Standard"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 5
+parent: 3-overview
+---
+
+## Standard Script
+
+Standard scripts in bitcoin are predefined and widely accepted transaction scripts.
+
+They are well-tested and secure and nodes can quickly verify and relay them.
+
+Below is a time line showing different output scripts types before and After Segwit:
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/segwit-timeline.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/dark-segwit-timeline.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert
+    title="bitcoin Transaction Relay Policy"
+    type="info"
+    expandable={false}
+>
+    Bitcoin Core will only relay transactions by default that pass the
+    [IsStandardTx()](https://github.com/bitcoin/bitcoin/blob/de1d1895346ed27f471386011d7ff64508f8b39c/src/policy/policy.cpp#L94)
+    check. However, miners are still free to include (valid!) non-standard
+    transactions in their blocks.
+</ExpandableAlert>
+
+## Non-Standard Script
+
+Non-standard scripts in bitcoin are scripts that do not follow the commonly used templates for transactions.
+
+Standard scripts, such as Pay-to-PubKey-Hash (P2PKH) and Pay-to-Script-Hash (P2SH), are widely recognized and accepted by nodes on the bitcoin network.
+
+Any script that deviates from these templates is considered non-standard and it will not be relayed by the network.
+
+They are valid but are not relayed by most nodes for safety reasons
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/isStandard-check.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/dark-isStandard-check.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert
+    title="Want Your Non-Standard Transaction Relayed and Mined?"
+    type="info"
+    expandable={false}
+>
+    To use a non-standard script, wrap your non-standard output scripts in
+    p2sh/p2wsh output scripts. This makes your transaction appear standard and
+    ensures it gets relayed and mined.
+</ExpandableAlert>

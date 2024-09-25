@@ -1,0 +1,230 @@
+---
+title: "Encode / Decode numbers"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 3
+project: true
+parent: 8-project
+---
+
+Implement a function to decode Bitcoin-encoded numbers.
+
+## Background
+
+In Bitcoin, numbers are often encoded in a special format:
+
+-   Numbers are stored in little-endian format (least significant byte first).
+-   The most significant bit of the last byte indicates the sign (0 for positive, 1 for negative).
+-   For negative numbers, the absolute value is encoded, and then the result is negated.
+
+For example:
+
+-   `0x01` represents 1
+-   `0x81` represents -1
+-   `0xff00` represents 255
+-   `0xff80` represents -128
+
+## Task
+
+Complete the `decodeNum` function in `challenges/BitcoinDecoder.js`:
+
+1. Implement the logic to decode a Bitcoin-encoded number from a Buffer.
+2. Handle both positive and negative numbers correctly.
+3. Return the decoded integer value.
+
+## Implementation
+
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/challenges/BitcoinDecoder.js": {
+        code: `
+export function decodeNum(buffer) {
+    // TODO: Implement the decoding logic here
+    // Remember to handle both positive and negative numbers
+    // Return the decoded integer value
+}
+`,
+        active: true
+      },
+      "/BitcoinDecoderSimulator.js": {
+        code: `
+import React, { useState } from "react";
+import { ArrowDownCircle, Info } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { decodeNum } from './challenges/BitcoinDecoder';
+
+const BitcoinDecoderSimulator = () => {
+const [input, setInput] = useState('0x');
+const [decodedItems, setDecodedItems] = useState([]);
+const [showHexInfo, setShowHexInfo] = useState(false);
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        if (value.length < 2) {
+            setInput('0x');
+        } else if (value.startsWith('0x')) {
+            const hexPart = value.slice(2);
+            if (/^[0-9A-Fa-f]*$/.test(hexPart)) {
+                setInput(value);
+            }
+        }
+    };
+
+    const decodeInput = () => {
+        if (input.length > 2) {
+            const hexValue = input.slice(2);
+            const buffer = Buffer.from(hexValue, 'hex');
+            try {
+                const num = decodeNum(buffer);
+                setDecodedItems([...decodedItems, { hex: input, num }]);
+                setInput('0x');
+            } catch (error) {
+                console.error("Error decoding:", error);
+                setDecodedItems([...decodedItems, { hex: input, error: error.message }]);
+            }
+        }
+    };
+
+    return (
+        <div className="w-full max-w-3xl mx-auto py-1">
+            <motion.div
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+                    Bitcoin Number Decoder
+                </div>
+                <div className="flex space-x-2 mb-4">
+                    <div className="relative flex-grow">
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={handleInputChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                            placeholder="0x (enter hex value)"
+                            onFocus={(e) => e.target.setSelectionRange(2, 2)}
+                        />
+                        <button
+                            onClick={() => setShowHexInfo(!showHexInfo)}
+                            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                        >
+                            <Info size={20} />
+                        </button>
+                    </div>
+                    <motion.button
+                        onClick={decodeInput}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                    >
+                        <ArrowDownCircle className="inline-block w-5 h-5 mr-1" />
+                        Decode
+                    </motion.button>
+                </div>
+                {showHexInfo && (
+                    <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">
+                        <p className="text-sm">
+                            Enter values in hexadecimal format only (e.g., 0x01, 0xff).
+                            The '0x' prefix is fixed to indicate hex input.
+                            Bitcoin uses little-endian format for number representation.
+                        </p>
+                    </div>
+                )}
+                <div className="border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                    <div className="font-semibold mb-2 text-gray-800 dark:text-white">
+                        Decoded Numbers:
+                    </div>
+                    <AnimatePresence>
+                        {decodedItems.length === 0 ? (
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="text-gray-500 dark:text-gray-400 text-center py-2"
+                            >
+                                No numbers decoded yet
+                            </motion.p>
+                        ) : (
+                            <div className="space-y-2">
+                                {decodedItems.map((item, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 20 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="p-2 rounded-md bg-purple-500 text-white overflow-hidden"
+                                    >
+                                        <div className="truncate font-mono">
+                                            {item.hex} {item.error ? "(Error: " + item.error + ")" : "(" + item.num + ")"}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        )}
+                    </AnimatePresence>
+                </div>
+            </motion.div>
+        </div>
+    );
+
+};
+
+export default BitcoinDecoderSimulator
+;`,
+        hidden: false
+      },
+      "/App.js": {
+        code: `
+import React from "react"
+import BitcoinDecoderSimulator from "./BitcoinDecoderSimulator"
+
+const App = () => {
+return (
+
+<div className="p-4">
+    <h1 className="text-2xl font-bold mb-4">
+        Bitcoin Number Decoding Challenge
+    </h1>
+    <BitcoinDecoderSimulator />
+</div>
+); };
+
+export default App;
+`,
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21"
+      },
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/be49ab05f3a3"
+/>
+
+<Hint
+    title="Implementation Tips"
+    hints={[
+        "Use buffer.readUIntLE() to read the little-endian unsigned integer",
+        "Check the most significant bit of the last byte for the sign",
+        "For negative numbers, you'll need to calculate the two's complement",
+        "Handle edge cases like empty buffers or single-byte values"
+    ]}
+/>

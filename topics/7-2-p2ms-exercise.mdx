@@ -1,0 +1,205 @@
+---
+title: "Exercise 2: Hard"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 2
+parent: 7-p2ms
+---
+
+In this exercise, you will be working with a Bitcoin P2MS (Pay-to-Multisig) ScriptPubKey.
+
+Your task is to complete the `decompileP2MSScriptPubKey` function, which decompiles a hex-encoded ScriptPubKey and extracts the number of required signatures and the associated public keys.
+
+Follow the hints provided if you get stuck, and test your code by entering a ScriptPubKey hex string in the input field below.
+
+Once you've completed the function, you can compare your solution with the provided answer.
+
+<SandpackComponent
+      template="react"
+      options={{
+        externalResources: ["https://cdn.tailwindcss.com"],
+        showLineNumbers: true,
+        showInlineErrors: true,
+        editorHeight: 500,
+      }}
+      customSetup={{
+        dependencies: {
+          react: "^18.0.0",
+          "react-dom": "^18.0.0",
+        },
+      }}
+      files={{
+        "/App.js": {
+          code: `
+import React, { useState } from 'react';
+import { decompileP2MSScriptPubKey } from './decompileP2MSScriptPubKey';
+
+export default function P2MSDecompile() {
+  const [hexInput, setHexInput] = useState('');
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
+
+const handleDecompile = () => {
+try {
+const parsedResult = decompileP2MSScriptPubKey(hexInput);
+setResult(parsedResult);
+setError(null);
+} catch (e) {
+setError(e.message);
+setResult(null);
+}
+};
+
+return (
+
+  <div className="p-6 max-w-lg mx-auto bg-white rounded-lg shadow-md">
+    <h1 className="text-2xl font-bold mb-4 text-gray-800">P2MS ScriptPubKey Decompiler</h1>
+    <div className="mb-4">
+      <label htmlFor="hexInput" className="block text-sm font-medium text-gray-700">
+        ScriptPubKey (Hex):
+      </label>
+      <input
+        type="text"
+        id="hexInput"
+        className="mt-1 p-2 w-full border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500"
+        value={hexInput}
+        onChange={(e) => setHexInput(e.target.value)}
+        placeholder="Enter the hex-encoded ScriptPubKey"
+      />
+    </div>
+    <button
+      onClick={handleDecompile}
+      className="w-full bg-orange-500 text-white py-2 px-4 rounded-md hover:bg-orange-600 transition"
+    >
+      Decompile
+    </button>
+    {error && <p className="text-red-600 mt-4">{error}</p>}
+    {result && (
+      <div className="mt-4 bg-gray-100 p-4 rounded-md">
+        <h2 className="text-xl font-semibold text-gray-800">Decompiled Result:</h2>
+        <p className="mt-2 text-gray-700"><strong>Required Signatures:</strong> {result.requiredSignatures}</p>
+        <div className="mt-2">
+          <strong className="text-gray-700">Public Keys:</strong>
+          <ul className="list-disc list-inside text-gray-700">
+            {result.publicKeys.map((key, index) => (
+              <li key={index}>{key}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    )}
+  </div>
+);
+}
+`,
+        },
+        "/decompileP2MSScriptPubKey.js": {
+          code: `
+// Complete the function to decompile a P2MS ScriptPubKey
+export function decompileP2MSScriptPubKey(scriptPubKeyHex) {
+const scriptPubKey = Buffer.from(scriptPubKeyHex, 'hex');
+const script = [];
+let i = 0;
+
+while (i < scriptPubKey.length) {
+const byte = scriptPubKey[i];
+
+    // TODO: If the byte represents an opcode, handle the data extraction
+    if (byte >= 0x01 && byte <= 0x4b) {
+      const dataLength = byte;
+      const data = scriptPubKey.slice(i + 1, i + 1 + dataLength);
+      script.push(data);
+      i += 1 + dataLength;
+    } else {
+      script.push(byte);
+      i += 1;
+    }
+
+}
+
+// TODO: Validate if it's a P2MS script and extract the number of required signatures and public keys
+
+const opCheckMultiSig = 0xae;
+if (script[script.length - 1] !== opCheckMultiSig) {
+throw new Error('Invalid P2MS ScriptPubKey');
+}
+
+const m = script[0] - 0x50; // Number of required signatures (subtract 0x50 from the opcode value)
+const publicKeys = script.slice(1, -2).map((key) => key.toString('hex'));
+
+return {
+requiredSignatures: m,
+publicKeys: publicKeys,
+};
+}
+`,
+active: true,
+},
+}}
+/>
+
+<Hint
+    title="Step-by-Step Hints"
+    hints={[
+        "Start by iterating over each byte in the `scriptPubKeyHex` string. You’ll need to determine whether the byte represents an opcode or data.",
+        "For opcodes between 0x01 and 0x4b, you should treat the byte as the length of the data that follows.",
+        "Extract the data by slicing the scriptPubKey buffer and increment the index `i` appropriately.",
+        "Check if the last byte in the script is the `OP_CHECKMULTISIG` opcode (0xae). If it's not, throw an error.",
+        "Subtract 0x50 from the first byte to get the number of required signatures.",
+        "The remaining data elements between the first and last opcodes are the public keys. Convert them to hex strings."
+    ]}
+/>
+
+<ExpandableAlert
+  title="Solution code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+
+```
+
+export function decompileP2MSScriptPubKey(scriptPubKeyHex) {
+  const scriptPubKey = Buffer.from(scriptPubKeyHex, 'hex');
+  const script = [];
+  let i = 0;
+
+  while (i < scriptPubKey.length) {
+    const byte = scriptPubKey[i];
+
+    // If the byte represents an opcode that pushes data onto the stack
+    if (byte >= 0x01 && byte <= 0x4b) {
+      const dataLength = byte;
+      const data = scriptPubKey.slice(i + 1, i + 1 + dataLength);
+      script.push(data);
+      i += 1 + dataLength;
+    } else {
+      script.push(byte);
+      i += 1;
+    }
+  }
+
+  // Validate if it's a P2MS script by checking the last opcode
+  const opCheckMultiSig = 0xae;
+  if (script[script.length - 1] !== opCheckMultiSig) {
+    throw new Error('Invalid P2MS ScriptPubKey');
+  }
+
+  // The first element in the script is the number of required signatures
+  const m = script[0] - 0x50; // Subtract 0x50 from the opcode value to get the integer
+
+  // Extract the public keys
+  const publicKeys = script.slice(1, -2).map((key) => key.toString('hex'));
+
+  return {
+    requiredSignatures: m,
+    publicKeys: publicKeys,
+  };
+}
+
+```
+
+</ExpandableAlert>

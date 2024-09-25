@@ -1,0 +1,40 @@
+---
+title: "Data"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 6
+parent: 3-overview
+---
+
+In bitcoin's scripting language, several opcodes are used to push data onto the stack:
+
+1. **OP_0 to OP_16**: Push numbers 0 to 16 onto the stack.
+
+2. **OP_PUSHBYTES[1-75]**: Push 1 to 75 bytes onto the stack. The number in the opcode name indicates how many bytes to push.
+
+3. **OP_PUSHDATA1, OP_PUSHDATA2, OP_PUSHDATA4**: Push a specific number of bytes onto the stack. The number following the opcode specifies how many bytes of the subsequent data should be pushed.
+
+<OpcodeDataVisualizer></OpcodeDataVisualizer>
+
+4. **OP_1NEGATE**: Pushes the number -1 onto the stack.
+
+<ExpandableAlert title="Maximum Data Size" type="warning" expandable={false}>
+    The maximum amount of data that can be pushed in a single operation is **520
+    bytes**.
+</ExpandableAlert>
+
+<ExpandableAlert
+    title="Script simplification"
+    type="important"
+    expandable={false}
+>
+    Value-pushing opcodes are often omitted in discussions about bitcoin scripts
+    because these discussions typically focus on the logical operations or
+    conditions that scripts perform, such as verifying signatures or checking
+    conditions for spending. These opcodes are straightforward and mainly
+    involve pushing data onto the stack, which is not as interesting or complex
+    as the logical operations performed by other opcodes.
+</ExpandableAlert>

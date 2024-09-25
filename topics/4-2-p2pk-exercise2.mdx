@@ -1,0 +1,352 @@
+---
+title: "Exercise 2: Medium"
+date: 2024-10-07T10:00:00Z
+lastmod: "2024-10-07"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 3
+parent: 4-p2pk
+---
+
+In this exercise, you'll construct a P2PK (Pay-to-Public-Key) ScriptPubKey
+for a given public key within a partially constructed transaction.
+
+Here's a breakdown of the partially constructed transaction:
+
+<div className="overflow-x-auto">
+    <table className="min-w-full">
+        <thead>
+            <tr>
+                <th className="px-4 py-2">Field</th>
+                <th className="px-4 py-2">Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td className="border px-4 py-2">Version</td>
+                <td className="border px-4 py-2 break-all">01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input Count</td>
+                <td className="border px-4 py-2 break-all">01</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input TXID</td>
+                <td className="border px-4 py-2 break-all">
+                    0000000000000000000000000000000000000000000000000000000000000000
+                </td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Input VOUT</td>
+                <td className="border px-4 py-2 break-all">ffffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">ScriptSig Size</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">ScriptSig</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Sequence</td>
+                <td className="border px-4 py-2 break-all">ffffffff</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output Count</td>
+                <td className="border px-4 py-2 break-all">01</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output Amount</td>
+                <td className="border px-4 py-2 break-all">00f2052a01000000</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output ScriptPubKey Size</td>
+                <td className="border px-4 py-2 break-all">23</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Output ScriptPubKey</td>
+                <td className="border px-4 py-2 break-all">N/A</td>
+            </tr>
+            <tr>
+                <td className="border px-4 py-2">Locktime</td>
+                <td className="border px-4 py-2 break-all">00000000</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+The hexadecimal representation of this transaction is:
+
+<CodeSnippet
+    code="
+  01000000
+  01
+  0000000000000000000000000000000000000000000000000000000000000000
+  ffffffff
+  [scriptSig]
+  ffffffff
+  01
+  00f2052a01000000
+  23
+  [scriptPubKey]
+  00000000
+  "
+    language="text"
+    highlightLines={[2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]}
+    showLineNumbers={true}
+/>
+
+For easier copying, here's the same transaction in a single line:
+
+<CodeSnippet
+    code="01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff-[scriptSig]-ffffffff0100f2052a0100000023-[scriptPubKey]-00000000"
+    language="text"
+    showLineNumbers={true}
+/>
+
+### Exercise
+
+Now that you understand the concept of P2PK ScriptPubKey, let's implement it.
+
+Your task is to complete the `construct_p2pk_scriptpubkey` function which locks the funds to the following public key: `02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4`
+
+#### Instructions:
+
+1. Implement the `construct_p2pk_scriptpubkey` function.
+2. The function should take a public key as input and return the complete P2PK ScriptPubKey.
+3. Remember to include the public key length and OP_CHECKSIG in your implementation.
+4. The provided unit test will check if your implementation is correct.
+
+Choose your preferred language below to start coding:
+
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/P2PKScriptPubKey.js": {
+        code: `export function constructP2PKScriptPubKey(publicKey) {
+  // TODO: Implement this function
+  // Hint: Remember to include the public key length and OP_CHECKSIG
+}`,
+        active: true
+      },
+      "/App.js": {
+        code: `import React from 'react';
+import P2PKGame from './P2PKGame';
+
+export default function App() {
+  return (
+    <div style={{ backgroundColor: '#1e1e1e', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+      <P2PKGame />
+    </div>
+  );
+}`
+      },
+      "/P2PKGame.js": {
+        code: `import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { constructP2PKScriptPubKey } from './P2PKScriptPubKey'
+import { LockClosedIcon } from '@heroicons/react/solid'
+
+const P2PKGame = () => {
+const [result, setResult] = useState('')
+const [isCorrect, setIsCorrect] = useState(false)
+const [constructedScriptPubKey, setConstructedScriptPubKey] = useState('')
+
+    const publicKey =
+    	'02802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4'
+    const expectedScriptPubKey =
+    	'2102802e2df5f9fb88065630e5fa3b6f7b7a89deef2b6a3cb5203cd0b897f66acae4ac'
+
+    const runTest = () => {
+    	try {
+    		const result = constructP2PKScriptPubKey(publicKey)
+    		setConstructedScriptPubKey(result)
+    		if (result === expectedScriptPubKey) {
+    			setResult(
+    				"Correct! You've successfully constructed the P2PK ScriptPubKey!"
+    			)
+    			setIsCorrect(true)
+    		} else {
+    			setResult('Incorrect. Try again to construct the correct ScriptPubKey.')
+    			setIsCorrect(false)
+    		}
+    	} catch (error) {
+    		setResult('Error: ' + error.message)
+    		setIsCorrect(false)
+    	}
+    }
+
+return (
+
+<div
+    style={{
+        maxWidth: "28rem",
+        width: "100%",
+        backgroundColor: "#252526",
+        padding: "1.5rem",
+        borderRadius: "0.5rem",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+    }}
+>
+    <h2
+        style={{
+            fontSize: "1.5rem",
+            fontWeight: "bold",
+            marginBottom: "1rem",
+            color: "#d4d4d4",
+            textAlign: "center"
+        }}
+    >
+        P2PK ScriptPubKey Challenge
+    </h2>
+    <div style={{ marginBottom: "1rem" }}>
+        <p
+            style={{
+                fontFamily: "monospace",
+                fontSize: "0.875rem",
+                wordBreak: "break-all",
+                marginTop: "0.5rem",
+                color: "#d4d4d4"
+            }}
+        >
+            Public Key: {publicKey}
+        </p>
+    </div>
+    <motion.div
+        style={{
+            display: "flex",
+            justifyContent: "center",
+            marginBottom: "1rem"
+        }}
+        animate={{ rotate: isCorrect ? [0, 10, -10, 0] : 0 }}
+        transition={{ duration: 0.5 }}
+    >
+        <LockClosedIcon
+            style={{
+                width: "3rem",
+                height: "3rem",
+                color: isCorrect ? "#689f38" : "#f1760f"
+            }}
+        />
+    </motion.div>
+    <button
+        onClick={runTest}
+        style={{
+            width: "100%",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#f1760f",
+            color: "#ffffff",
+            border: "none",
+            borderRadius: "0.25rem",
+            cursor: "pointer",
+            transition: "background-color 0.2s"
+        }}
+        onMouseOver={(e) => (e.target.style.backgroundColor = "#e56c0d")}
+        onMouseOut={(e) => (e.target.style.backgroundColor = "#f1760f")}
+    >
+        Test Your Code
+    </button>
+    <AnimatePresence>
+        {result && (
+            <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                style={{
+                    marginTop: "1rem",
+                    textAlign: "center"
+                }}
+            >
+                <p style={{ color: isCorrect ? "#689f38" : "#d32f2f" }}>
+                    {result}
+                </p>
+                {constructedScriptPubKey && (
+                    <p
+                        style={{
+                            fontFamily: "monospace",
+                            fontSize: "0.875rem",
+                            wordBreak: "break-all",
+                            marginTop: "0.5rem",
+                            color: "#d4d4d4",
+                            backgroundColor: "#3c3c3c",
+                            padding: "0.5rem",
+                            borderRadius: "0.25rem"
+                        }}
+                    >
+                        Constructed ScriptPubKey: {constructedScriptPubKey}
+                    </p>
+                )}
+            </motion.div>
+        )}
+    </AnimatePresence>
+</div>
+); };
+
+export default P2PKGame;`
+      },
+    },
+    options: {
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "framer-motion": "^6.0.0",
+        "@heroicons/react": "^1.0.6"
+      }
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/2c87f0971ba0"
+/>
+
+You can look up the hex characters for each op_code in the [Bitcoin Script wiki page](https://en.bitcoin.it/wiki/Script).
+
+<Hint
+    title="Step-by-Step Hints"
+    hints={[
+        "The public key length should be calculated dynamically based on the input.",
+        "Remember that the public key is in hexadecimal, so each byte is represented by two characters.",
+        "The OP_CHECKSIG opcode in hexadecimal is 'ac'"
+    ]}
+/>
+
+<ExpandableAlert
+  title="Solution code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+  <details>
+    <summary>Python Solution</summary>
+    ```python
+    def construct_p2pk_scriptpubkey(public_key_hex):
+        # Convert hex public key to bytes
+        public_key_bytes = bytes.fromhex(public_key_hex)
+        
+        # Get the length of the public key
+        pub_key_length = len(public_key_bytes)
+
+        # Create the P2PK script
+        script_pub_key = bytes([pub_key_length]) + public_key_bytes + bytes([0xac])  # 0xac is OP_CHECKSIG
+
+        return script_pub_key.hex()
+    ```
+
+  </details>
+
+  <details>
+    <summary>JavaScript Solution</summary>
+    ```javascript
+    export function constructP2PKScriptPubKey(publicKey) {
+        const keyLength = (publicKey.length / 2).toString(16).padStart(2, '0');
+        const opCheckSig = 'ac';
+        return keyLength + publicKey + opCheckSig;
+    }
+    ```
+  </details>
+</ExpandableAlert>

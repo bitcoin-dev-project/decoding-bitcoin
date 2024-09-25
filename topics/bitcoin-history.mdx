@@ -1,0 +1,888 @@
+---
+title: "Bitcoin History"
+date: 2024-07-05T15:32:14Z
+lastmod: "2024-07-06"
+draft: false
+category: History
+layout: TopicLayout
+icon: "FaHistory"
+order: 2
+---
+
+<BitcoinHistory
+    historyEvents={[
+        {
+            id: "2007-post-satoshi-starts",
+            type: "post",
+            title: "Early 2007: Satoshi starts working on Bitcoin",
+            paragraphs: [
+                "Satoshi Nakamoto starts writing code for Bitcoin. This is based on a post to the Cryptography mailing list where Satoshi wrote on Nov 17th, 2008:",
+                "»I believe I've worked through all those little details over the last year and a half while coding it.«"
+            ],
+            links: [
+                {
+                    label: "mailing list (metzdowd.com)",
+                    link: "https://www.metzdowd.com/pipermail/cryptography/2008-November/014863.html"
+                },
+                {
+                    label: "mailing list (nakamotoinstitute.org)",
+                    link: "http://satoshi.nakamotoinstitute.org/emails/cryptography/15/#selection-101.55-103.36"
+                }
+            ],
+            media: {
+                type: "image",
+                src: "/bitcoin-topics/static/images/topics/bitcoin-history/step1-dark.png",
+                alt: "Satoshi starts working on Bitcoin"
+            }
+        },
+        {
+            id: "2008-post-bitcoin-paper",
+            type: "post",
+            title: "1st November 2008: Bitcoin paper published",
+            paragraphs: [
+                "Satoshi Nakamoto announces Bitcoin on the Cryptography mailing list:",
+                "»I've been working on a new electronic cash system that's fully peer-to-peer, with no trusted third party.«"
+            ],
+            links: [
+                {
+                    label: "mailing list (metzdowd.com)",
+                    link: "https://www.metzdowd.com/pipermail/cryptography/2008-October/014810.html"
+                },
+                {
+                    label: "mailing list (nakamotoinstitute.org)",
+                    link: "https://satoshi.nakamotoinstitute.org/emails/cryptography/1/"
+                },
+                {
+                    label: "whitepaper",
+                    link: "https://www.bitcoin.org/bitcoin.pdf"
+                }
+            ],
+            media: {
+                type: "image",
+                src: "/bitcoin-topics/static/images/topics/bitcoin-history/whitepaper.png",
+                alt: "Satoshi starts working on Bitcoin"
+            }
+        },
+        {
+            id: "2009-other-genesis-block",
+            type: "other",
+            title: "Between 3rd and 9th January 2009: Genesis Block mined",
+            paragraphs: [
+                "The Genesis block is mined with a timestamp of Jan 9th.",
+                "The coinbase contains the famous words: »The Times 03/Jan/2009 Chancellor on brink of second bailout for banks«."
+            ],
+            links: [
+                {
+                    label: "block explorer",
+                    link: "https://blockstream.info/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f"
+                },
+                {
+                    label: "wiki entry",
+                    link: "https://en.bitcoin.it/wiki/Genesis_block"
+                }
+            ],
+            media: {
+                type: "image",
+                src: "/bitcoin-topics/static/images/topics/bitcoin-history/step8.png",
+                alt: "Genesis block"
+            }
+        },
+        {
+            id: "2009-release-0-1-0",
+            type: "release",
+            title: "9th January 2009: Bitcoin v0.1 is announced",
+            paragraphs: [
+                "Satoshi Nakamoto writes on the cryptography mailing list:",
+                "»Announcing the first release of Bitcoin, a new electronic cash system that uses a peer-to-peer network to prevent double-spending. It's completely decentralized with no server or central authority.«"
+            ],
+            links: [
+                {
+                    label: "mailing list",
+                    link: "https://satoshi.nakamotoinstitute.org/emails/cryptography/16/#selection-19.0-23.66"
+                }
+            ]
+        },
+        {
+            id: "2009-release-0-2-0",
+            type: "release",
+            title: "16th December 2009: Bitcoin v0.2.0 released",
+            paragraphs: [
+                "Martti Malmi (sirius-m) adds initial support for Linux. Other new features include mining on multiple CPU cores and initial tor proxy support."
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=16.msg73#msg73"
+                }
+            ]
+        },
+        {
+            id: "2010-release-0-3-0",
+            type: "release",
+            title: "6th July 2010: Bitcoin v0.3.0 released",
+            paragraphs: [
+                "Laszlo Hanyecz (Bitcoin pizza guy) adds support for macOS. Other new features include the JSON-RPC interface and a new daemon mode. Users contribute GUI translations into German, Dutch and Italian."
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=238.msg2004#msg2004"
+                }
+            ]
+        },
+        {
+            id: "2010-release-0-3-1",
+            type: "release",
+            title: "15th July 2010: Bitcoin v0.3.1 released (bugfix)",
+            paragraphs: [
+                "Miscellaneous bugs get fixed. Gavin Andresen starts contributing."
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=383.msg3198#msg3198"
+                }
+            ]
+        },
+        {
+            id: "2010-release-0-3-2",
+            type: "release",
+            title: "17th July 2010: Bitcoin v0.3.2 released",
+            paragraphs: [
+                "Satoshi adds checkpoints as a security safeguard that lock a block height to a specific hash. He writes: ",
+                "»I'll probably put a checkpoint in each version from now on. Once the software has settled what the widely accepted block chain is, there's no point in leaving open the unwanted non-zero possibility of revision months later.«"
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=437.msg3807#msg3807"
+                },
+                {
+                    label: "checkpoints added (diff on GitHub)",
+                    link: "https://github.com/bitcoin/bitcoin/commit/4110f33cded01bde5f01a6312248fa6fdd14cc76#diff-118fcbaaba162ba17933c7893247df3aR1344"
+                }
+            ]
+        },
+        {
+            id: "2010-release-0-3-3",
+            type: "release",
+            title: "25th July 2010: Bitcoin v0.3.3 released",
+            paragraphs: [
+                "This release includes the first consensus change.",
+                "The Bitcoin software now follows the chain with the most accumulated work. Prior to that it followed the longest chain - the chain with the most blocks."
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=570.msg5707#msg5707"
+                },
+                {
+                    label: "consensus change (diff on GitHub)",
+                    link: "https://github.com/bitcoin/bitcoin/commit/40cd0369419323f8d7385950e20342e998c994e1#diff-118fcbaaba162ba17933c7893247df3aR1236"
+                }
+            ]
+        },
+        {
+            id: "2010-release-multiple-0-3-xx",
+            type: "release",
+            title: "Throughout the summer of 2010",
+            paragraphs: ["Various Bitcoin v0.3.xx versions are released."],
+            links: []
+        },
+        {
+            id: "2010-bug-overflow-bug",
+            type: "bug",
+            title: "15th August 2010: Critical overflow bug fixed",
+            paragraphs: [
+                "Satoshi pushes out a fix in v0.3.9(ish) and tells users and miners to re-org the block with the overflowed transaction out of history."
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=823.msg9531#msg9531"
+                }
+            ],
+            media: {
+                type: "image",
+                src: "/bitcoin-topics/static/images/topics/bitcoin-history/step7.png",
+                alt: "Genesis block"
+            }
+        },
+        {
+            id: "2010-post-alert-system",
+            type: "post",
+            title: "22nd August 2010: Alert system introduced",
+            paragraphs: [
+                "Satoshi starts working on an alert system which is added in v0.3.11. He writes:",
+                "»I've been working on writing the alert system. Alerts are broadcast through the network and apply to a range of version numbers. Alert messages are signed with a private key that only I have.«",
+                "»Getting surprised by some temporary down time when your node would otherwise be at risk is better than getting surprised by a thief draining all your inventory.«",
+                "»Someday when we haven't found any new bugs for a long time and it has been thoroughly security reviewed without finding anything, this can be scaled back. I'm not arguing that this is the permanent way of things forever. It's still beta software.«"
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=898.msg10722#msg10722"
+                }
+            ]
+        },
+        {
+            id: "2010-post-final",
+            type: "post",
+            title: "12th December 2010: Final post from Satoshi",
+            paragraphs: [
+                "Final post from Satoshi to bitcointalk.org. He adds some DoS limits and removes the previously introduced alert system safe mode.",
+                "»There's more work to do on DoS, but I'm doing a quick build of what I have so far in case it's needed, before venturing into more complex ideas. The build for this is version 0.3.19.«"
+            ],
+            links: [
+                {
+                    label: "bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=2228.msg29479#msg29479"
+                }
+            ]
+        },
+        {
+            id: "2010-other-moved-to-github",
+            type: "other",
+            title: "19th December 2010: Development moves to GitHub",
+            paragraphs: [
+                "Active development and issue tracking of Bitcoin moves to GitHub."
+            ],
+            links: [
+                {
+                    label: "first issue on GitHub",
+                    link: "https://github.com/bitcoin/bitcoin/issues/1"
+                }
+            ]
+        },
+        {
+            id: "2011-other-last-contact-satoshi",
+            type: "other",
+            title: "23th April 2011: Last contact with Satoshi",
+            paragraphs: [
+                "Alleged final email from Satoshi to Mike Hearn:",
+                "»I've moved on to other things. It's in good hands with Gavin and everyone.«"
+            ],
+            links: [
+                {
+                    label: "email conversation on pastebin.com",
+                    link: "https://pastebin.com/syrmi3ET"
+                }
+            ]
+        },
+        {
+            id: "2011-other-new-contributors",
+            type: "other",
+            title: "March-June 2011: New contributors join",
+            paragraphs: [
+                "Several new contributors start working on the project: TheBlueMatt (March 3), sipa (March 12), laanwj (May 15) and gmaxwell (June 18). Their first pull requests are listed below."
+            ],
+            links: [
+                {
+                    label: "TheBlueMatt",
+                    link: "https://github.com/bitcoin/bitcoin/pull/92"
+                },
+                {
+                    label: "sipa",
+                    link: "https://github.com/bitcoin/bitcoin/pull/116"
+                },
+                {
+                    label: "laanwj",
+                    link: "https://github.com/bitcoin/bitcoin/pull/225"
+                },
+                {
+                    label: "gmaxwell",
+                    link: "https://github.com/bitcoin/bitcoin/pull/326"
+                }
+            ],
+            media: {
+                type: "image",
+                src: "/bitcoin-topics/static/images/topics/bitcoin-history/step6.png",
+                alt: "Genesis block"
+            }
+        },
+        {
+            id: "2011-other-first-bip",
+            type: "other",
+            title: "19th August 2011: First BIP",
+            paragraphs: [
+                "With 'BIP 1: BIP Purpose and Guidelines' the first Bitcoin Improvement Proposal is created."
+            ],
+            links: [
+                {
+                    label: "BIP 1 on GitHub",
+                    link: "https://github.com/bitcoin/bips/blob/master/bip-0001.mediawiki"
+                }
+            ]
+        },
+        {
+            id: "2011-release-0-4-0",
+            type: "release",
+            title: "23th September 2011: Bitcoin v0.4 released",
+            paragraphs: [
+                "Version v0.4. is released with the main feature being wallet encryption."
+            ],
+            links: [
+                {
+                    label: "Release notes",
+                    link: "https://bitcoin.org/en/release/v0.4.0"
+                }
+            ]
+        },
+        {
+            id: "2011-release-0-5-0",
+            type: "release",
+            title: "21th November 2011: Bitcoin-QT v0.5. released",
+            paragraphs: [
+                "Features are a the new qt GUI and a major bug fix for the wallet encryption (CVE-2011-4447)."
+            ],
+            links: [
+                {
+                    label: "Release notes",
+                    link: "https://bitcoin.org/en/release/v0.5.0"
+                },
+                {
+                    label: "CVE-2011-4447",
+                    link: "https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2011-4447"
+                }
+            ]
+        },
+        {
+            id: "2011-other-p2sh",
+            type: "other",
+            title: "November 2011 - April 2012: Work on P2SH and other proposals",
+            paragraphs: [
+                "Work on various proposals (OP_EVAL/P2SH/OP_CHV) to allow the receiver of a transaction to specify the script needed to spend it.",
+                "P2SH is implemented in Bitcoin-Qt v0.5.4. Both other proposals are discarded."
+            ],
+            links: [
+                {
+                    label: "BIP 12: OP_EVAL",
+                    link: "https://github.com/bitcoin/bips/blob/master/bip-0012.mediawiki"
+                },
+                {
+                    label: "OP_EVAL PR",
+                    link: "https://github.com/bitcoin/bitcoin/pull/669"
+                },
+                {
+                    label: "OP_EVAL recursion issue",
+                    link: "https://github.com/bitcoin/bitcoin/issues/729"
+                },
+                {
+                    label: "BIP 16: P2SH",
+                    link: "https://github.com/bitcoin/bips/blob/master/bip-0016.mediawiki"
+                },
+                {
+                    label: "BIP 17: OP_CHECKHASHVERIFY",
+                    link: "https://github.com/bitcoin/bips/blob/master/bip-0017.mediawiki"
+                }
+            ]
+        },
+        {
+            id: "2012-release-0-6-0",
+            type: "release",
+            title: "30th March 2012: Bitcoin-QT v0.6 released",
+            paragraphs: [
+                "Features include QR codes for addresses, an implementaion of BIP30 (a security fix for an attack involving duplicate coinbase transactions) and fixes for memory related denial-of-service attacks."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.6.0"
+                }
+            ]
+        },
+        {
+            id: "2012-release-0-7-0",
+            type: "release",
+            title: "17th September 2012: Bitcoin-QT v0.7 released",
+            paragraphs: [
+                "Includes implemention of BIP 22, BIP 34 and BIP 35 and many changes in the GUI and networking RPC code."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.7.0"
+                }
+            ]
+        },
+        {
+            id: "2012-other-bitcoin-foundation",
+            type: "other",
+            title: "27th September 2012: Bitcoin Foundation announced",
+            paragraphs: ["Gavin Andresen announces the Bitcoin Foundation."],
+            links: [
+                {
+                    label: "thread on bitcointalk.org",
+                    link: "https://bitcointalk.org/index.php?topic=113400.0"
+                }
+            ]
+        },
+        {
+            id: "2013-release-0-8-0",
+            type: "release",
+            title: "19th February 2013: Bitcoin-QT v0.8 released",
+            paragraphs: [
+                "This release migrates the blockchain storage from BerkleyDB to LevelDB. Ultraprune is implemented by sipa (Pieter Wuille), separating the UTXO set from the blockchain database."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.8.0"
+                }
+            ]
+        },
+        {
+            id: "2013-bug-hardfork",
+            type: "bug",
+            title: "11th March 2013: Unexpected hardfork",
+            paragraphs: [
+                "An unexpected hardfork occurs, splitting v0.8 from pre-v0.8 nodes."
+            ],
+            links: [
+                {
+                    label: "BIP 50: March 2013 Chain Fork Post-Mortem",
+                    link: "https://github.com/bitcoin/bips/blob/master/bip-0050.mediawiki"
+                },
+                {
+                    label: "bitcoin.org network alert",
+                    link: "https://bitcoin.org/en/alert/2013-03-11-chain-fork"
+                }
+            ]
+        },
+        {
+            id: "2013-other-rebranding-to-core",
+            type: "other",
+            title: "12th December 2013: Rebranding to Bitcoin Core",
+            paragraphs: [
+                "The Bitcoin-Qt software is rebranded to Bitcoin Core."
+            ],
+            links: [
+                {
+                    label: "PR on GitHub",
+                    link: "https://github.com/bitcoin/bitcoin/pull/3400"
+                }
+            ]
+        },
+        {
+            id: "2014-release-0-9-0",
+            type: "release",
+            title: "19th March 2014: Bitcoin Core v0.9 released",
+            paragraphs: [
+                "New features include OP_RETURN as a way to include data in blockchain while marking the UTXOs as unspendable. Additionally autotools is used as the build system and bitcoin-cli is introduced as an RPC-client."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.9.0"
+                }
+            ]
+        },
+        {
+            id: "2014-company-chaincode",
+            type: "company",
+            title: "Sometime in 2014: Chaincode Labs founded",
+            paragraphs: [
+                "Alex Morcos and Suhas Daftuar found Chaincode Labs in 2014 to create a place for engineers and scientists to support the development of decentralized digital currencies."
+            ],
+            links: []
+        },
+        {
+            id: "2014-company-blockstream",
+            type: "company",
+            title: "23th October 2014: Blockstream founded",
+            paragraphs: [
+                "Adam Back, Matt Corallo, Greg Maxwell, Pieter Wuille et al. found Blockstream and release their sidechains whitepaper."
+            ],
+            links: [
+                {
+                    label: "Why We Founded Blockstream",
+                    link: "https://blockstream.com/2014/10/23/en-why-we-are-co-founders-of-blockstream/"
+                }
+            ]
+        },
+        {
+            id: "2015-release-0-10-0",
+            type: "release",
+            title: "16th Febuary 2015: Bitcoin Core v0.10.0 released.",
+            paragraphs: [
+                "Notable features include headers-first synchronization, the REST interface, and the bitcoin-tx utility to create and manipulate transactions."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.10.0"
+                }
+            ]
+        },
+        {
+            id: "2015-other-lightning-whitepaper",
+            type: "other",
+            title: "Febuary 2015: Lightning whitepaper released",
+            paragraphs: [
+                "Joseph Poon and Thaddeus Dryja release the first draft of the Lightning Network Whitepaper."
+            ],
+            links: [
+                {
+                    label: "lightning-network-paper.pdf",
+                    link: "https://lightning.network/lightning-network-paper.pdf"
+                }
+            ]
+        },
+        {
+            id: "2015-other-mit-dci",
+            type: "other",
+            title: "15th April 2015: MIT DCI founded",
+            paragraphs: [
+                "The MIT Media Lab launches the Digital Currency Initiative (DCI). DCI is a research community focused on cryptocurrency and blockchain technology."
+            ],
+            links: [
+                {
+                    label: "Launching a Digital Currency Initiative on Medium",
+                    link: "https://medium.com/mit-media-lab-digital-currency-initiative/launching-a-digital-currency-initiative-238fc678aba2"
+                }
+            ]
+        },
+        {
+            id: "2015-release-0-11-0",
+            type: "release",
+            title: "12th July 2015: Bitcoin Core v0.11.0 released",
+            paragraphs: [
+                "The release includes block file pruning as one of its main features."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.11.0"
+                }
+            ]
+        },
+        {
+            id: "2016-other-bip-2",
+            type: "other",
+            title: "3rd Febrary 2016: BIP 2 created",
+            paragraphs: [
+                "Luke Dashjr creates BIP2 in which he proposed a more well-defined and clear BIP process. The proposal is adopted by the community."
+            ],
+            links: [
+                {
+                    label: "BIP 2: BIP process, revised",
+                    link: "https://github.com/bitcoin/bips/blob/master/bip-0002.mediawiki"
+                }
+            ]
+        },
+        {
+            id: "2016-release-0-12-0",
+            type: "release",
+            title: "23th February 2016: Bitcoin Core v0.12.0 released.",
+            paragraphs: [
+                "Major features are the introduction of libsecp, sendheaders, opt-in RBF (BIP 125) and mempool limiting."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2016/02/23/release-0.12.0/"
+                }
+            ]
+        },
+        {
+            id: "2016-release-0-12-1",
+            type: "release",
+            title: "15th April 2016: Bitcoin Core v0.12.1 released",
+            paragraphs: [
+                "This release includes the BIP 9 versionbits logic and the definition for the OP_CHECKSEQUENCEVERIFY soft fork."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/blog/2016/04/15/release-0.12.1/"
+                }
+            ]
+        },
+        {
+            id: "2016-release-0-13-0",
+            type: "release",
+            title: "23th August 2016: Bitcoin Core v0.13.0 released",
+            paragraphs: [
+                "Includes preparatory changes for segwit, Compact blocks, mempool fee-based filtering, HD wallet support, and CPFP transaction selection."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2016/08/23/release-0.13.0/"
+                }
+            ]
+        },
+        {
+            id: "2016-release-0-13-1",
+            type: "release",
+            title: "27th October 2016: Bitcoin Core v0.13.1 released",
+            paragraphs: [
+                "This release includes the code for SegWit as a softfork."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2016/10/27/release-0.13.1/"
+                }
+            ]
+        },
+        {
+            id: "2016-other-alert-system-retired",
+            type: "other",
+            title: "1st November 2016: Alert System Retirement",
+            paragraphs: [
+                "The network wide alert system, which represents a large source of centralization in Bitcoin, is being retired."
+            ],
+            links: [
+                {
+                    label: "announcement",
+                    link: "https://bitcoin.org/en/alert/2016-11-01-alert-retirement"
+                }
+            ]
+        },
+        {
+            id: "2017-release-0-14-0",
+            type: "release",
+            title: "8th March 2017: Bitcoin Core v0.14 released",
+            paragraphs: [
+                "This release significantly speeds up the initial block download."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2017/03/08/release-0.14.0/"
+                }
+            ]
+        },
+        {
+            id: "2017-other-segwit-activates",
+            type: "other",
+            title: "24th August 2017: SegWit activates",
+            paragraphs: ["SegWit activates on Bitcoin mainnet."]
+        },
+        {
+            id: "2017-release-0-15-0",
+            type: "release",
+            title: "14th September 2017: v0.15 released",
+            paragraphs: [
+                "This release includes a better fee estimates, support for fee bumping in the GUI, multiwallet functionality and the script cache."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2017/09/01/release-0.15.0/)"
+                }
+            ]
+        },
+        {
+            id: "2017-release-0-15-1",
+            type: "release",
+            title: "11th November 2017: v0.15.1 released",
+            paragraphs: [
+                "This release focuses on the safety of the P2P network as a precaution against potential future network forks, as well as bringing bug fixes, optimisations and improvements to the 0.15.x series."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2017/11/11/release-0.15.1/"
+                }
+            ]
+        },
+        {
+            id: "2018-release-0-16-0",
+            type: "release",
+            title: "26th February 2018: Bitcoin Core v0.16 released",
+            paragraphs: [
+                "This release mainly adds SegWit support to the Bitcoin Core wallet."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/2018/02/26/release-0.16.0/"
+                }
+            ]
+        },
+        {
+            id: "2018-release-0-17-0",
+            type: "release",
+            title: "3rd October 2018: Bitcoin Core v0.17.0 released",
+            paragraphs: [
+                "This release adds features to the wallet. One being support for Partially Signed Bitcoin Transactions (PSBT)."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/releases/0.17.0/"
+                }
+            ]
+        },
+        {
+            id: "2019-company-squarecrypto",
+            type: "company",
+            title: "20th March 2019: Square Crypto announced",
+            paragraphs: [
+                "Jack Dorsey announces that Square Crypto is hiring 3-4 engineers and one designer to work full-time on open source contributions to the bitcoin ecosystem."
+            ],
+            links: [
+                {
+                    label: "tweet",
+                    link: "https://twitter.com/jack/status/1108487911802966017"
+                }
+            ]
+        },
+        {
+            id: "2019-release-0-18-0",
+            type: "release",
+            title: "2nd May 2019: Bitcoin Core v0.18.0 released",
+            paragraphs: [
+                "This release includes a lot of new features and small changes."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/releases/0.18.0/"
+                }
+            ]
+        },
+        {
+            id: "2019-post-taproot",
+            type: "post",
+            title: "6th May 2019: Taproot proposed",
+            paragraphs: [
+                "Pieter Wuille releases BIPs to implement Schnorr signatures and taproot in Bitcoin, bringing improvements to privacy, efficiency, and flexibility of Bitcoin smart contracts."
+            ],
+            links: [
+                {
+                    label: "mailing list post",
+                    link: "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-May/016914.html"
+                }
+            ]
+        },
+        {
+            id: "2019-release-0-18-1",
+            type: "release",
+            title: "9th August 2019: Bitcoin Core v0.18.1 released",
+            paragraphs: [
+                "This minor release includes new features, various bug fixes and performance improvements, as well as updated translations."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/releases/0.18.1/"
+                }
+            ]
+        },
+        {
+            id: "2019-post-miniscript",
+            type: "post",
+            title: "19th August 2019: Miniscript announced",
+            paragraphs: [
+                "Pieter Wuille announces Miniscript, a language designed to make programming in Bitcoin SCRIPT more approachable."
+            ],
+            links: [
+                {
+                    label: "mailing list post",
+                    link: "https://lists.linuxfoundation.org/pipermail/bitcoin-dev/2019-August/017270.html"
+                },
+                {
+                    label: "project page",
+                    link: "http://bitcoin.sipa.be/miniscript/"
+                }
+            ]
+        },
+        {
+            id: "2019-release-0-19-0-1",
+            type: "release",
+            title: "24th November 2019: Bitcoin Core v0.19.0.1 released",
+            paragraphs: [
+                "This release includes new features, various bug fixes and performance improvements, as well as updated translations."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/releases/0.19.0.1/"
+                }
+            ]
+        },
+        {
+            id: "2020-release-0-19-1-0",
+            type: "release",
+            title: "9th March 2020: Bitcoin Core v0.19.1 released",
+            paragraphs: [
+                "This release various bug fixes and performance improvements."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/releases/0.19.1/"
+                }
+            ]
+        },
+        {
+            id: "2020-release-0-20-0",
+            type: "release",
+            title: "3rd June 2020: Bitcoin Core v0.20.0 released",
+            paragraphs: [
+                "This release various bug fixes and performance improvements."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoincore.org/en/releases/0.20.0/"
+                }
+            ]
+        },
+        {
+            id: "2020-release-0-20-1",
+            type: "release",
+            title: "1st August 2020: Bitcoin Core v0.20.1 released",
+            paragraphs: [
+                "A minor release including changes regarding misbehaving peers, walletnotify and PSBTs which now contain the witness and non-witness UTXO."
+            ],
+            links: [
+                {
+                    label: "release notes",
+                    link: "https://bitcoin.org/en/release/v0.20.1"
+                }
+            ]
+        },
+        {
+            id: "2020-company-grants",
+            type: "company",
+            title: "2020: Development grants for Bitcoin projects and individual contributors.",
+            paragraphs: [
+                "Companies, including BitMEX, Square Crypto, OKCoin, BTSE, Kraken, the Human Rights Fundation, Paradigm, and Coinbase, give out development grants to Bitcoin projects and individuals."
+            ],
+            links: [
+                {
+                    label: "Square Crypto Grants",
+                    link: "https://squarecrypto.org/#grants"
+                },
+                {
+                    label: "BitMEX Grants",
+                    link: "https://blog.bitmex.com/grants/"
+                },
+                {
+                    label: "OKCoin Grants",
+                    link: "https://developergrant.okcoin.com/"
+                },
+                {
+                    label: "Coinbase Grants",
+                    link: "https://blog.coinbase.com/announcing-our-first-bitcoin-core-developer-grants-3d88559db068"
+                },
+                {
+                    label: "Polylunar Grant Tracker",
+                    link: "https://polylunar.com/bitcoin-grants-tracker/"
+                },
+                {
+                    label: "Bitcoin Words Grant Tracker",
+                    link: "https://bitcoinwords.github.io/grants/"
+                }
+            ]
+        }
+    ]}
+/>
+
+---
+
+<MailingListSignup />
