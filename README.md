@@ -5,7 +5,7 @@ The goal is to make learning about Bitcoin engaging and approachable by using vi
 
 ## Structure
 
--   **/topics**: Contains all topic markdown files.
+-   **/learn**: Contains all topic markdown files.
 -   **/images**: Contains images related to topics, organized by topic.
 -   **README.md**: Overview of the repository.
 -   **CONTRIBUTING.md** (soon): Guidelines for contributing to the repository.
