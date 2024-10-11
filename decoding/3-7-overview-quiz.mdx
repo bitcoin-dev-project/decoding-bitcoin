@@ -308,24 +308,4 @@ Test your knowledge of standard and non-standard scripts, understanding the crit
     ]}
 />
 
-<Quiz
-    questions={[
-        {
-            question:
-                "What is the main difference between OP_CHECKMULTISIG and OP_CHECKMULTISIGVERIFY?",
-            options: [
-                "OP_CHECKMULTISIGVERIFY supports more signatures",
-                "OP_CHECKMULTISIG works with P2SH, while OP_CHECKMULTISIGVERIFY doesn't",
-                "OP_CHECKMULTISIGVERIFY fails the script if the check fails, while OP_CHECKMULTISIG pushes a boolean result",
-                "OP_CHECKMULTISIG is for legacy addresses, OP_CHECKMULTISIGVERIFY is for segwit"
-            ],
-            correctAnswer:
-                "OP_CHECKMULTISIGVERIFY fails the script if the check fails, while OP_CHECKMULTISIG pushes a boolean result",
-            explanation:
-                "OP_CHECKMULTISIGVERIFY is equivalent to OP_CHECKMULTISIG followed by OP_VERIFY. It will cause the script to fail immediately if the multisig check fails, whereas OP_CHECKMULTISIG pushes true or false to the stack, allowing for more flexible script constructions."
-        }
-        // ... (keep the other two questions as they were)
-    ]}
-/>
-
 ---
