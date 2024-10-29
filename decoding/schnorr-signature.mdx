@@ -1,0 +1,280 @@
+---
+title: "Schnorr Signature"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 2
+icon: "FaUsers"
+parent: taproot
+images: ["/bitcoin-topics/static/images/topics/taproot/thumbnail-schnorr.jpg"]
+---
+
+<ExpandableAlert type="info" title="Bitcoin Core Test Framework & Attribution" expandable={true} initialLines={3}>
+The code examples in this article are adapted from the [Bitcoin Optech Taproot Workshop](https://github.com/bitcoinops/taproot-workshop).  
+
+Some code here uses Bitcoin Core's functional test framework.
+
+Working with this will not only help you understand Schnorr signatures but also give you practical experience with tools used in Bitcoin Core development, helping you take your first steps toward contributing to Bitcoin Core.
+
+</ExpandableAlert>
+
+We have two main characters to help us understand how Schnorr signatures work:
+
+**Alice (The signer):** wants to sign a message using Schnorr and send it to Bob.  
+**Bob (The verifier):** wants to verify that the message is truly signed and comes from Alice.
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-1-light.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-1.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+
+The interaction between Alice and Bob involves two key steps: **Signature Generation** and **Signature Verification**.  
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-2-light.svg"
+        width="90%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-2.svg"
+        width="90%"
+        height="auto"
+    />
+</div>
+
+Now, let’s follow Alice as she creates a Schnorr signature.
+
+
+## Signature Generation (Alice)
+
+### Step 1: Generate Key Pair (d, P)
+
+Alice generates a private key `d`, then calculates her public key `P` by multiplying her private key with the generator point:
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{P = d \times G}$$
+</div>
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-3-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-3.svg"
+        height="auto"
+    />
+</div>
+
+To see this in action, run the following code to generate Alice's key pair and display the private and public keys.
+
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/09ee88406bf6"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(30vh)]"
+    ></iframe>
+</div>
+
+### Step 2: Generate Nonce and Nonce Commitment (k, R)
+
+The nonce, referred to as `k`, is a random value that Alice generates during the signature process.  
+Its purpose is to introduces randomness into each signature.
+
+**Why do we need a nonce?**  
+
+<span className="underline">**Answer:**</span> The nonce ensures that even if Alice signs the same message multiple times, each signature will be unique. This added randomness prevents attackers from analyzing repeated patterns and attempting to reverse-engineer Alice’s private key.
+
+
+
+Alice generates the nonce `k` and computes the **Nonce Commitment** 
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{R = k \times G}$$
+</div>
+
+*`k` is a scalar, `R` is a point on the elliptic curve.*
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-4-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-4.svg"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert type="warning" title="Nonce Reuse Attack" expandable={false}>
+Reusing a nonce (k) when creating Schnorr signatures is extremely dangerous!  
+- Check out my <a href="https://x.com/BTCillustrated/status/1688628364926496768" target="_blank">illustrated explanation</a>
+
+</ExpandableAlert>
+
+**Note:**  
+In the Taproot context, BIP340 requires that the y-coordinate of the point `R` (computed from `k`) is `even`
+
+[BitcoinOptech](https://bitcoinops.org) provides a more detailed explanation of this requirement:
+
+
+<ExpandableAlert type="info" title="BIP340 (Taproot) Implementation Details" expandable={true} initialLines={2}>
+BIP340 defines a new way of encoding elliptic curve points. To make the encoding of a point as compact as possible, only the x-coordinate of the point is used (i.e., 32 bytes).
+
+For a given x-coordinate on the secp256k1 curve, there are two possible curve points:
+
+$\mathbf{y^2 = x^3 + 7}$ (Two y-coordinate values for a given x-coordinate)
+
+For x, both (x, y) and (x, -y) are valid curve points (where -y is **SECP256K1_FIELD_SIZE - y** since all arithmetic involving coordinates is modulo **SECP256K1_FIELD_SIZE**).
+
+One of the y-coordinates is **even**, and the other is **odd** (since SECP256K1_FIELD_SIZE is odd).
+
+One of the y-coordinates is a quadratic residue (has a square root modulo the field size), and the other is not.
+
+BIP340 constrains private key points `k` such that the y-value of `R` is **even**. This means that from the x-coordinate, the verifier can unambiguously determine y.
+
+- k and **SECP256K1_ORDER - k** have nonce points R = (x, y) and R = (x, -y) respectively.
+- Only one will have a y-coordinate that is **even**. If a randomly generated nonce k does not yield a valid nonce point R, then the signer can **negate** k to obtain a valid nonce.
+
+The same goes for private key d and its corresponding public key, P.
+
+</ExpandableAlert>
+
+Let’s generate a random nonce `k` and calculate its associated point `R`.  
+
+This example shows how to check if `R`'s y-coordinate (and its negative, `-y`) is even or odd, which is crucial for Taproot’s nonce requirements.
+
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/c0c1a7ad7e3e"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(40vh)]"
+    ></iframe>
+</div>
+
+### Step 3: Challenge Computation (h)
+
+Alice computes the challenge hash `h` using the following formula:  
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{h = H(R \, || \, P \, || \, \text{message})}$$
+</div>
+
+The challenge hash is created by concatenating `R`, `P`, and the message `m`.
+
+### Step 4: Challenge Response (s)
+
+Using the challenge hash, Alice calculates the challenge response `s`:  
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{s = k + h \times d}$$
+</div>
+
+### Step 5: Create the Signature
+
+The final signature for the message is the pair  `(R, s)`.  
+Alice sends both the message `m` and the signature `(R, s)` to Bob.
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-5-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-5.svg"
+        height="auto"
+    />
+</div>
+
+### Hands-On: Complete the Code to Generate a Schnorr Signature
+
+Below is a code snippet that generates a Schnorr signature, but some key parts are missing. Follow the instructions in the code to complete it so that it runs successfully and displays a "Success!" message at the end.
+
+> **Note:** You'll see a method called `tagged_hash` in the code. If you're unfamiliar with tagged hashes and their purpose, refer to our previous topic on <a href="https://bitcoindevs.xyz/decoding/9-2-tagged-hash" target="_blank">Tagged Hashes</a> for a quick refresher.
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/db6d88d9c916"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(80vh-200px)]"
+    ></iframe>
+</div>
+
+> **Security Note:**  In real Taproot (BIP340) implementations, nonce generation is deterministic to protect the private key. Here, we use a random nonce for simplicity.
+
+## Verification Process (Bob)
+
+Bob wants to ensure that the message hasn’t been compromised during transmission and that it’s genuinely signed by Alice.
+
+To verify this, Bob checks if the following verification equation holds:
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{s \times G = R + h \times P}$$
+</div>
+
+If the equation is valid, Bob can be confident that the signature was indeed created by Alice.
+
+All the information needed for verification is already known to Bob:
+
+
+- **s:** Sent by Alice as part of the signature, so Bob has this value.
+- **G:** A constant that is well-known within the Bitcoin protocol.
+- **h:** Bob computes `h = H(R || P || m)`. Since he has `R`, `P`, and `m`, he can calculate `h`.  
+- **P:** This is Alice's public key, which Bob knows in advance.
+
+Once Bob has confirmed that the equation holds, he can be fully assured that the message is authentic, has not been tampered with, and truly originated from Alice.
+
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-6-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-6.svg"
+        height="auto"
+    />
+</div>

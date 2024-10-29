@@ -1,0 +1,62 @@
+---
+title: "Tagged Hashes"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 1
+icon: "FaUsers"
+parent: taproot
+images: ["/bitcoin-topics/static/images/topics/taproot/thumbnail-tagged-hash.jpg"]
+---
+
+Tagged hashes are used throughout the Taproot/Schnorr specification.
+
+## Why Do We Use Tagged Hashes?
+
+Their purpose is to ensure that hashes used in one context can’t be used in another.  
+This means that if you hash the same data in a different context, you won’t get the same hash result.
+
+## How Do Tagged Hashes Work?
+
+Creating tagged hashes is straightforward and involves two steps:
+
+1. Prefix the data you want to hash with the tag `tag = sha256(TagName) || sha256(TagName)`.
+2. Hash as normal: `tagged_hash("TagName", data) = sha256(tag + data)`.
+
+---
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/tag-light.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/tag.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+
+---
+
+You might wonder why we need to hash the tag twice in step 1.  
+The <a href="https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki" target="_blank">BIP 340 specification</a> provides an explanation, which I'll quote here:
+
+> "This is a 64-byte long context-specific constant, and the SHA256 block size is also 64 bytes, optimized implementations are possible (identical to SHA256 itself, but with a modified initial state). Using SHA256 of the tag name itself is reasonably simple and efficient for implementations that don't choose to use the optimization."
+
+## Tagged Hashes in Taproot
+
+Different tag names are used in different contexts.  
+For example, in Taproot BIP 340, the hash function uses the following tags:
+
+- `BIP0340/aux`
+- `BIP0340/nonce`
+- `BIP0340/challenge`
+- `TapLeaf`
+
+Don't worry if you're still confused, we’ll explore where each of these tags is used in the following chapters.
