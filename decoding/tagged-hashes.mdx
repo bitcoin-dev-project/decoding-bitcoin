@@ -5,7 +5,7 @@ lastmod: "2024-07-26"
 draft: false
 category: Scripts
 layout: TopicBanner
-order: 7
+order: 1
 icon: "FaUsers"
 parent: taproot
 images: ["/bitcoin-topics/static/images/topics/taproot/thumbnail-tagged-hash.jpg"]
@@ -45,7 +45,7 @@ Creating tagged hashes is straightforward and involves two steps:
 ---
 
 You might wonder why we need to hash the tag twice in step 1.  
-The BIP 340 specification provides an explanation, which I’ll quote here:
+The <a href="https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki" target="_blank">BIP 340 specification</a> provides an explanation, which I'll quote here:
 
 > "This is a 64-byte long context-specific constant, and the SHA256 block size is also 64 bytes, optimized implementations are possible (identical to SHA256 itself, but with a modified initial state). Using SHA256 of the tag name itself is reasonably simple and efficient for implementations that don't choose to use the optimization."
 
