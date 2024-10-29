@@ -240,6 +240,10 @@ Below is a code snippet that generates a Schnorr signature, but some key parts a
         className="rounded-md shadow-sm h-[calc(80vh-200px)]"
     ></iframe>
 </div>
+
+> **Security Note:**  
+> In real Taproot (BIP340) implementations, nonce generation is deterministic to protect the private key. Here, we use a random nonce for simplicity.
+
 ## Verification Process (Bob)
 
 Bob wants to ensure that the message hasn’t been compromised during transmission and that it’s genuinely signed by Alice.
