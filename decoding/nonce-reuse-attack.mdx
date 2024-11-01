@@ -1,0 +1,119 @@
+---
+title: "Nonce Reuse Attack"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 3
+parent: taproot
+images:
+    [
+        "/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-thumbnail.png"
+    ]
+---
+
+### What is a Nonce in Digital Signatures?
+
+Nonce (short for "number used once") is a random, unique value used in the signing process.
+
+In Schnorr signatures, each signature requires a fresh nonce. Reusing the same nonce is a dangerous mistake that allows an attacker to calculate your private key.
+
+Let's start by breaking down the Schnorr signature equation to see how this happens.
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-1-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-1.svg"
+        height="auto"
+    />
+</div>
+
+If the <span className="text-[#FF6262]">nonce **k**</span> remains the same across different transactions, an attacker can isolate the private key **d** by comparing two signatures.
+
+Imagine you want to sign two separate transactions but mistakenly use the same nonce for both. Here's how it plays out:
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-2-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-2.svg"
+        height="auto"
+    />
+</div>
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{S1 = k - h(R, P, tx1) \times d}$$
+</div>
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{S2 = k - h(R, P, tx2) \times d}$$
+</div>
+
+Here’s where things go wrong when the nonce is reused!
+
+Since the only variable difference between **S1** and **S2** is the hash of the transactions, an attacker can calculate **k** and subsequently derive your private key **d**. This exposes your Bitcoin funds to theft.
+
+---
+
+### 5. Calculating the Private Key from Reused Nonces
+
+With both **S1** and **S2** known, an attacker can use the following equation to isolate **d (private key)**:
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{d = \frac{S1 - S2}{h(R, P, tx1) - h(R, P, tx2)}}$$
+</div>
+
+Since all these values are publicly accessible (S1, S2, and the hashed transactions), reusing the nonce makes it trivial to solve for **d**. **This leads to a complete compromise of the private key**.
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-3-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/nonce-reuse-attack-3.svg"
+        height="auto"
+    />
+</div>
+
+---
+
+### 6. How to Prevent Nonce Reuse Attacks
+
+The solution is straightforward:
+
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!  
+Never reuse a nonce!
+
+Always ensure that your cryptographic library generates a unique, random nonce for each signature.
+
+---
+
+### 7. Final Warning: Don’t Reuse Nonces!
+
+To safeguard your Bitcoin, remember:
+
+**DON’T REUSE NONCES**
+
+This simple rule keeps your private key secure and your transactions safe from attackers.
