@@ -8,50 +8,97 @@ layout: TopicBanner
 order: 1
 icon: "FaUsers"
 parent: taproot
-images: ["/bitcoin-topics/static/images/topics/taproot/thumbnail-tagged-hash.jpg"]
+images:
+    ["/bitcoin-topics/static/images/topics/taproot/thumbnail-tagged-hash.jpg"]
 ---
 
 Tagged hashes are used throughout the Taproot/Schnorr specification.
 
-## Why Do We Use Tagged Hashes?
+### Why Do We Use Tagged Hashes?
 
 Their purpose is to ensure that hashes used in one context can’t be used in another.  
 This means that if you hash the same data in a different context, you won’t get the same hash result.
 
-## How Do Tagged Hashes Work?
+### How Do Tagged Hashes Work?
 
 Creating tagged hashes is straightforward and involves two steps:
 
 1. Prefix the data you want to hash with the tag `tag = sha256(TagName) || sha256(TagName)`.
 2. Hash as normal: `tagged_hash("TagName", data) = sha256(tag + data)`.
 
----
-
 <div className="dark:hidden">
     <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/taproot/tag-light.svg"
+        src="/bitcoin-topics/static/images/topics/taproot/tagged-hash-light.svg"
         width="80%"
         height="auto"
     />
 </div>
 <div className="hidden dark:block">
     <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/taproot/tag.svg"
+        src="/bitcoin-topics/static/images/topics/taproot/tagged-hash.svg"
         width="80%"
         height="auto"
     />
 </div>
 
+### Programming Exercise: Implement a tagged hash function
+
+Complete the implementation of the `tagged_hash` function in Python.
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/6ee70fbeadec"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(50vh)]"
+    ></iframe>
+</div>
+
+<ExpandableAlert
+    title="Solution code"
+    type="solution"
+    expandable={true}
+    initialLines={0}
+>
+```python
+from utils import sha256
+
+def tagged_hash(tag, input_data): # Hash "TagName" using SHA256
+tag_digest = sha256(tag)
+
+    # The preimage becomes sha256("TagName") + sha256("TagName") + data
+    preimage = tag_digest + tag_digest + input_data
+
+    return sha256(preimage)
+
+# Example usage
+
+h = tagged_hash(b'SampleTagName', b'Input data')
+
+# Verify the result
+
+assert h.hex() == "4c55df56134d7f37d3295850659f2e3729128c969b3386ec661feb7dfe29a99c"
+print("Success!")
+
+```
+</ExpandableAlert>
+
+
 ---
 
-You might wonder why we need to hash the tag twice in step 1.  
+You might wonder why we need to hash the tag twice in **step 3: (Repeat tag_hash)**
 The <a href="https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki" target="_blank">BIP 340 specification</a> provides an explanation, which I'll quote here:
 
 > "This is a 64-byte long context-specific constant, and the SHA256 block size is also 64 bytes, optimized implementations are possible (identical to SHA256 itself, but with a modified initial state). Using SHA256 of the tag name itself is reasonably simple and efficient for implementations that don't choose to use the optimization."
 
 ## Tagged Hashes in Taproot
 
-Different tag names are used in different contexts.  
+Different tag names are used in different contexts.
 For example, in Taproot BIP 340, the hash function uses the following tags:
 
 - `BIP0340/aux`
@@ -60,3 +107,4 @@ For example, in Taproot BIP 340, the hash function uses the following tags:
 - `TapLeaf`
 
 Don't worry if you're still confused, we’ll explore where each of these tags is used in the following chapters.
+```
