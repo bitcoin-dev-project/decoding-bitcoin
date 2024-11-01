@@ -140,10 +140,8 @@ Reusing a nonce (k) when creating Schnorr signatures is extremely dangerous!
 **Note:**  
 In the Taproot context, BIP340 requires that the y-coordinate of the point `R` (computed from `k`) is `even`
 
-<a href="https://bitcoinops.org" target="_blank">
-    BitcoinOptech
-</a>
-provides a more detailed explanation of this requirement:
+[BitcoinOptech](https://bitcoinops.org) provides a more detailed explanation of this requirement:
+
 
 <ExpandableAlert type="info" title="BIP340 (Taproot) Implementation Details" expandable={true} initialLines={2}>
 BIP340 defines a new way of encoding elliptic curve points. To make the encoding of a point as compact as possible, only the x-coordinate of the point is used (i.e., 32 bytes).
