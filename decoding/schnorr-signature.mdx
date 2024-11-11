@@ -8,7 +8,10 @@ layout: TopicBanner
 order: 2
 icon: "FaUsers"
 parent: taproot
-images: ["/bitcoin-topics/static/images/topics/taproot/thumbnail-schnorr.jpg"]
+images:
+    [
+        "/bitcoin-topics/static/images/topics/taproot/schnorr-signature-thumbnail.png"
+    ]
 ---
 
 <ExpandableAlert type="info" title="Bitcoin Core Test Framework & Attribution" expandable={true} initialLines={3}>
@@ -141,7 +144,6 @@ Reusing a nonce (k) when creating Schnorr signatures is extremely dangerous!
 In the Taproot context, BIP340 requires that the y-coordinate of the point `R` (computed from `k`) is `even`
 
 [BitcoinOptech](https://bitcoinops.org) provides a more detailed explanation of this requirement:
-
 
 <ExpandableAlert type="info" title="BIP340 (Taproot) Implementation Details" expandable={true} initialLines={2}>
 BIP340 defines a new way of encoding elliptic curve points. To make the encoding of a point as compact as possible, only the x-coordinate of the point is used (i.e., 32 bytes).
@@ -309,7 +311,126 @@ print("Success!")
 
 
 
-> **Security Note:**  In real Taproot (BIP340) implementations, nonce generation is deterministic to protect the private key. Here, we use a random nonce for simplicity.
+
+## Nonce Generation for Schnorr Signatures
+
+In the previous example, we used a random nonce for Schnorr signatures, which depends on a secure random generator. However, if this generator is compromised, it can expose the private key.
+
+
+#### Why is Nonce Generation Important?
+If the randomness in nonce generation is compromised, it can reveal the private key used in signing.
+To avoid this risk, BIP340 suggests a deterministic method for generating nonces.
+
+#### Steps to Generate a Nonce
+
+1. **Compute `t`**: XOR the bytes of the private key (`d`) with a tagged hash of auxiliary random data (`a`).
+
+2. **Generate `rand`**: Hash the tagged data with `t`, the public key (`P`), and the message (`m`).
+
+3. **Calculate `k` (Nonce)**: Set `k = int(rand) mod n`, where `n` is the order of the curve. This ensures a unique, unpredictable nonce for each signature.
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-7-light.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/schnorr-sig-7.svg"
+        height="auto"
+    />
+</div>
+
+---
+
+### Coding Exercise: Nonce Generation
+
+To better understand how nonce generation works, try creating a Schnorr signature using BIP340’s nonce scheme. Follow the instructions in the code snippet below to implement the nonce generation steps yourself.
+
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/8c6d20f8fdcd"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(75vh)]"
+    ></iframe>
+</div>
+
+<ExpandableAlert
+    title="Solution code"
+    type="solution"
+    expandable={true}
+    initialLines={0}
+>
+```python
+# main.py
+from key import generate_key_pair, generate_bip340_key_pair, ECKey, SECP256K1_FIELD_SIZE
+from script import tagged_hash, sha256
+
+
+
+msg = sha256(b'message')
+aux = sha256(b'random auxiliary data')
+
+# Generate a valid BIP340 priv-pub key pair using the convenience function `generate_bip340_key_pair`
+d, P = generate_bip340_key_pair()
+print("message = {}".format(msg.hex()))
+print("pubkey = {}\n".format(P.get_bytes().hex()))
+
+# t is the byte-wise xor of bytes(d) and tagged_hash("BIP0340/aux", aux)
+t = (d.secret ^ int.from_bytes(tagged_hash("BIP0340/aux", aux), 'big')).to_bytes(32, 'big')
+rand = tagged_hash("BIP0340/nonce", t + P.get_bytes() + msg)
+
+# Generate the nonce value k and get the nonce point R
+k, R = generate_key_pair(rand)
+
+# Check that nonce has an even y coordinate
+R_is_even = R.get_y() % 2 == 0
+# If not, negate k
+if not R_is_even:
+    k.negate()
+
+print("nonce: {}".format(k))
+print("nonce point: {}\n".format(R))
+
+# Generate s = k + tagged_hash("BIP0340/challenge", R_x|P_x|msg) * d
+# Method: tagged_hash("BIP0340/challenge", bytes) will give you the byte digest
+# Turn that digest into a ECKey object called h, and then set s = k + h * d
+R_x_bytes = R.get_bytes()
+P_bytes = P.get_bytes()
+h_bytes =  tagged_hash("BIP0340/challenge", R_x_bytes + P_bytes + msg)
+h = ECKey().set(h_bytes)
+s = k + h * d
+
+print("R: {}".format(R))
+print("s: {}\n".format(s.get_bytes().hex()))
+
+# Generate sig = R_x|s
+# Method: get the x bytes from R and concatenate with the secret bytes from s
+sig = R_x_bytes + s.get_bytes()
+
+print("Signature: {}\n".format(sig.hex()))
+
+# Generate a signature using the ECKey.sign_schnorr(msg) method
+# This generates the nonce deterministically, so should return the same signature
+sig2 = d.sign_schnorr(msg, aux)
+
+# Verify and compare signature(s)
+assert P.verify_schnorr(sig, msg)
+assert P.verify_schnorr(sig2, msg)
+assert sig == sig2
+
+print("Success!")
+````
+
+</ExpandableAlert>
 
 ## Verification Process (Bob)
 
@@ -325,14 +446,12 @@ If the equation is valid, Bob can be confident that the signature was indeed cre
 
 All the information needed for verification is already known to Bob:
 
-
-- **s:** Sent by Alice as part of the signature, so Bob has this value.
-- **G:** A constant that is well-known within the Bitcoin protocol.
-- **h:** Bob computes `h = H(R || P || m)`. Since he has `R`, `P`, and `m`, he can calculate `h`.
-- **P:** This is Alice's public key, which Bob knows in advance.
+-   **s:** Sent by Alice as part of the signature, so Bob has this value.
+-   **G:** A constant that is well-known within the Bitcoin protocol.
+-   **h:** Bob computes `h = H(R || P || m)`. Since he has `R`, `P`, and `m`, he can calculate `h`.
+-   **P:** This is Alice's public key, which Bob knows in advance.
 
 Once Bob has confirmed that the equation holds, he can be fully assured that the message is authentic, has not been tampered with, and truly originated from Alice.
-
 
 <div className="dark:hidden">
     <SvgDisplay
