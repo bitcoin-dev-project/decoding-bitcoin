@@ -1,0 +1,402 @@
+---
+title: "Implement OP_CHECKSIG"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 5
+project: true
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/project-stack-thumbnail.webp"
+    ]
+parent: project
+---
+
+In Bitcoin script, OP_CHECKSIG verifies a digital signature against a public key and a message hash. It's a crucial operation for validating transactions.
+
+## Task
+
+Complete the `OP_CHECKSIG` function in `challenges/OpcodeFunctions.js`:
+
+1. Implement `OP_CHECKSIG` to verify a signature against a public key and a message hash.
+2. The function should pop the top two items from the stack: the public key and the signature.
+3. It should then prompt the user for a message hash.
+4. Finally, it should push true (0x01) or false (0x00) onto the stack based on the signature verification result.
+
+## Implementation
+
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      "/challenges/OpcodeFunctions.js": {
+        code: `
+import CryptoJS from 'crypto-js';
+import { ec as EC } from 'elliptic';
+import * as bitcoin from 'bitcoinjs-lib';
+
+const ec = new EC('secp256k1');
+
+export function OP_CHECKSIG(stack, getMessageHash) {
+    if (stack.length < 2) {
+        throw new Error("Insufficient items for OP_CHECKSIG")
+    }
+
+    const pubKeyBuffer = stack.pop()
+    const signatureBuffer = stack.pop()
+
+    try {
+        const pubKey = ec.keyFromPublic(pubKeyBuffer)
+        const signature = signatureBuffer.slice(0, -1) // Remove the hash type
+        const messageHash = getMessageHash()
+        const isValid = pubKey.verify(messageHash, signature)
+
+        stack.push(isValid ? Buffer.from([0x01]) : Buffer.from([0x00]))
+    } catch (error) {
+        console.error("Error in OP_CHECKSIG:", error)
+        stack.push(Buffer.from([0x00]))
+    }
+
+}
+
+export const OP_CODE_FUNCTIONS = {
+    OP_CHECKSIG
+    // Add more opcodes here
+}`,
+        active: true
+      },
+      "/OpcodeSimulator.js": {
+        code: `
+import React, { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react"
+import { OP_CODE_FUNCTIONS } from "./challenges/OpcodeFunctions"
+
+const OpcodeSimulator = () => {
+const [stack, setStack] = useState([]);
+const [input, setInput] = useState('0x');
+const [lastOperation, setLastOperation] = useState(null);
+const [showHexInfo, setShowHexInfo] = useState(false);
+const [showMessageHashModal, setShowMessageHashModal] = useState(false);
+const [messageHash, setMessageHash] = useState('0x' + '00'.repeat(32));
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        if (value.length < 2) {
+            setInput('0x');
+        } else if (value.startsWith('0x')) {
+            const hexPart = value.slice(2);
+            if (/^[0-9A-Fa-f]*$/.test(hexPart)) {
+                setInput(value);
+            }
+        }
+    };
+
+    const handleMessageHashChange = (e) => {
+        const value = e.target.value;
+        if (value.length < 2) {
+            setMessageHash('0x');
+        } else if (value.startsWith('0x')) {
+            const hexPart = value.slice(2);
+            if (/^[0-9A-Fa-f]*$/.test(hexPart)) {
+                setMessageHash(value);
+            }
+        }
+    };
+
+    const push = () => {
+        if (input.length > 2) {
+            const hexValue = input.slice(2);
+            setStack([...stack, Buffer.from(hexValue, 'hex')]);
+            setInput('0x');
+            setLastOperation("push");
+        }
+    };
+
+    const pop = () => {
+        if (stack.length > 0) {
+            setStack(stack.slice(0, -1));
+            setLastOperation("pop");
+        }
+    };
+
+    const executeOpcode = (opcodeName) => {
+        try {
+            const newStack = [...stack];
+            if (opcodeName === 'OP_CHECKSIG') {
+                setShowMessageHashModal(true);
+                return;
+            }
+            OP_CODE_FUNCTIONS[opcodeName](newStack);
+            setStack(newStack);
+            setLastOperation(opcodeName);
+        } catch (error) {
+            console.error("Error executing " + opcodeName + ":", error);
+            setLastOperation(opcodeName + " (failed)");
+        }
+    };
+
+    const executeCheckSig = () => {
+        const newStack = [...stack];
+        OP_CODE_FUNCTIONS.OP_CHECKSIG(newStack, () => Buffer.from(messageHash.slice(2), 'hex'));
+        setStack(newStack);
+        setLastOperation("OP_CHECKSIG");
+        setShowMessageHashModal(false);
+    };
+
+    const getItemColor = (item) => {
+        if (item instanceof Buffer) {
+            if (item.length === 1) {
+                return item[0] === 1 ? "bg-green-500 text-white" : "bg-red-500 text-white";
+            }
+            return "bg-purple-500 text-white";
+        }
+        return "bg-red-500 text-white";
+    };
+
+    const formatStackItem = (item) => {
+        if (item instanceof Buffer) {
+            const hex = "0x" + item.toString('hex');
+            if (item.length === 1) {
+                return <span className="font-mono">{item[0] === 1 ? "true" : "false"} ({hex})</span>;
+            }
+            return <span className="font-mono">{hex}</span>;
+        }
+        return <span>{String(item)}</span>;
+    };
+
+    return (
+        <div className="w-full max-w-3xl mx-auto py-1">
+            <motion.div
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+                    Bitcoin OP_CHECKSIG Simulator
+                </div>
+                <div className="flex flex-col space-y-2 mb-4">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    value={input}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="0x (enter hex value)"
+                                    onFocus={(e) => e.target.setSelectionRange(2, 2)}
+                                />
+                                <button
+                                    onClick={() => setShowHexInfo(!showHexInfo)}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                                >
+                                    <Info size={16} className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="flex space-x-2">
+                                <motion.button
+                                    onClick={push}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                                >
+                                    <ArrowDownCircle className="inline-block w-5 h-5 mr-1" />
+                                    Push
+                                </motion.button>
+                                <motion.button
+                                    onClick={pop}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+                                >
+                                    <ArrowUpCircle className="inline-block w-5 h-5 mr-1" />
+                                    Pop
+                                </motion.button>
+                            </div>
+                        </div>
+                {showHexInfo && (
+                    <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">
+                        <p className="text-sm">
+                            Enter values in hexadecimal format only (e.g., 0x01, 0xff).
+                            The '0x' prefix is fixed to indicate hex input.
+                            For OP_CHECKSIG, push the public key and signature onto the stack.
+                        </p>
+                    </div>
+                )}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4">
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => executeOpcode('OP_CHECKSIG')}
+                        className="px-2 py-1 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm w-full whitespace-nowrap overflow-hidden text-ellipsis"
+                    >
+                        OP_CHECKSIG
+                    </motion.button>
+                </div>
+                <div className="border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                    <div className="font-semibold mb-2 text-gray-800 dark:text-white">
+                        Stack <span className="font-normal text-sm">(Last-In-First-Out)</span>:
+                    </div>
+                    <AnimatePresence>
+                        {stack.length === 0 ? (
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="text-gray-500 dark:text-gray-400 text-center py-2"
+                            >
+                                Stack is empty
+                            </motion.p>
+                        ) : (
+                            <div className="space-y-2">
+                                {stack.slice().reverse().map((item, index) => (
+                                    <motion.div
+                                        key={index}
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 20 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={\`p-2 rounded-md \${getItemColor(item)} overflow-hidden\`}
+                                    >
+                                        <div className="truncate">
+                                            {formatStackItem(item)}
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        )}
+                    </AnimatePresence>
+                </div>
+                {lastOperation && (
+                    <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
+                        Last operation: {lastOperation}
+                    </div>
+                )}
+            </motion.div>
+
+{showMessageHashModal && (
+
+<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+<div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
+<h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">Message Hash for OP_CHECKSIG</h3>
+<div className="relative flex-grow">
+<input
+type="text"
+value={messageHash}
+onChange={handleMessageHashChange}
+className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+placeholder="0x (enter message hash)"
+onFocus={(e) => e.target.setSelectionRange(2, 2)}
+/>
+</div>
+<div className="flex justify-end space-x-2 mt-4">
+<button
+onClick={() => setShowMessageHashModal(false)}
+className="px-3 py-1 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-white rounded hover:bg-gray-300 dark:hover:bg-gray-500" >
+Cancel
+</button>
+<button
+                    onClick={executeCheckSig}
+                    className="px-3 py-1 bg-orange-500 text-white rounded hover:bg-orange-600"
+                >
+Execute OP_CHECKSIG
+</button>
+</div>
+</div>
+</div>
+)}
+</div>
+);
+};
+
+export default OpcodeSimulator`,
+        hidden: false
+      },
+      "/App.js": {
+        code: `
+import React from "react"
+import OpcodeSimulator from "./OpcodeSimulator"
+
+const App = () => {
+return (
+
+<div className="p-4">
+    <h1 className="text-2xl font-bold mb-4">Bitcoin OP_CHECKSIG Challenge</h1>
+    <OpcodeSimulator />
+</div>
+); };
+
+export default App;
+`,
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21",
+        "crypto-js": "^4.1.1",
+        "elliptic": "^6.5.4",
+        "bitcoinjs-lib": "^6.1.0",
+        "bs58": "^5.0.0"
+      },
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/208f82ef7e4f"
+/>
+## Hints
+
+<Hint
+    title="Implementation Tips"
+    hints={[
+        "Use the elliptic library's EC class for signature verification",
+        "Remember to handle the DER-encoded signature format",
+        "The public key should be in compressed or uncompressed format",
+        "Ensure proper error handling for invalid inputs or verification failures"
+    ]}
+/>
+
+## Solution
+
+<ExpandableAlert
+  title="Solution Code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+
+```javascript
+export function OP_CHECKSIG(stack, getMessageHash) {
+    if (stack.length < 2) {
+        throw new Error("Insufficient items for OP_CHECKSIG")
+    }
+
+    const pubKeyBuffer = stack.pop()
+    const signatureBuffer = stack.pop()
+
+    try {
+        const pubKey = ec.keyFromPublic(pubKeyBuffer)
+        const signature = signatureBuffer.slice(0, -1) // Remove the hash type
+        const messageHash = getMessageHash()
+        const isValid = pubKey.verify(messageHash, signature)
+
+        stack.push(isValid ? Buffer.from([0x01]) : Buffer.from([0x00]))
+    } catch (error) {
+        console.error("Error in OP_CHECKSIG:", error)
+        stack.push(Buffer.from([0x00]))
+    }
+}
+```
+
+</ExpandableAlert>
+
+Test your implementation using the Bitcoin OP_CHECKSIG Simulator above. Try various inputs to ensure your opcode handles different scenarios correctly.

@@ -1,0 +1,275 @@
+---
+title: "Exercise 2: Hard"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 2
+images: ["/bitcoin-topics/static/images/topics/thumbnails/p2sh-thumbnail.webp"]
+parent: p2sh
+---
+
+# Creating a P2SH Address in bitcoin
+
+In this exercise, you'll implement the core functionality to create a Pay-to-Script-Hash (P2SH) address in bitcoin.
+
+<SandpackComponent
+  template="react"
+  options={{
+    externalResources: ["https://cdn.tailwindcss.com"],
+    showLineNumbers: true,
+    showInlineErrors: true,
+    editorHeight: 500
+  }}
+  customSetup={{
+    dependencies: {
+      "react": "^18.0.0",
+      "react-dom": "^18.0.0",
+      "js-sha256": "^0.9.0",
+      "bs58": "^5.0.0"
+    }
+  }}
+  files={{
+    "/bitcoinUtils.js": {
+      code: `import { sha256 } from 'js-sha256'
+import { encode } from 'bs58'
+
+export function generateP2SHAddress(redeemScript: string): string {
+	// TODO: Implement P2SH address generation
+	// 1. Validate the redeem script (hex format)
+	// 2. Hash the redeem script using SHA256 and RIPEMD160
+	// 3. Add version byte (0x05 for P2SH)
+	// 4. Calculate checksum (first 4 bytes of double SHA256)
+	// 5. Combine version byte, hashed script, and checksum
+	// 6. Encode the result in Base58
+	// 7. Return the P2SH address
+
+    // Placeholder implementation
+    return 'Implement P2SH address generation here'
+
+}
+
+export function hexToASM(hex: string): string {
+	// TODO: Implement conversion from hex to ASM
+	// 1. Define known opcodes
+	// 2. Parse the hex script byte by byte
+	// 3. Convert known opcodes to their string representations
+	// 4. For push data operations, extract the correct number of bytes
+	// 5. Join the parsed elements with spaces
+
+    // Placeholder implementation
+    return 'Implement hex to ASM conversion here'
+
+}
+
+// Helper function: perform RIPEMD160 on the input
+function ripemd160(input: string): string {
+// Note: In a real implementation, you'd use a proper RIPEMD160 function
+// For this exercise, we'll use a placeholder
+return sha256(input).slice(0, 40) // Simulating RIPEMD160 with truncated SHA256
+}
+
+// Helper function: convert hex string to byte array
+function hexToBytes(hex: string): Uint8Array {
+const bytes = []
+for (let i = 0; i < hex.length; i += 2) {
+bytes.push(parseInt(hex.substr(i, 2), 16))
+}
+return new Uint8Array(bytes)
+}
+`,
+            active: true
+          },
+    "/App.js": {
+      code: `import React from 'react'
+import { generateP2SHAddress, hexToASM } from './bitcoinUtils'
+
+function App() {
+const [redeemScript, setRedeemScript] = React.useState('')
+const [p2shAddress, setP2shAddress] = React.useState('')
+const [asmScript, setAsmScript] = React.useState('')
+
+    const handleGenerate = () => {
+    	try {
+    		const address = generateP2SHAddress(redeemScript)
+    		setP2shAddress(address)
+    		setAsmScript(hexToASM(redeemScript))
+    	} catch (error) {
+    		setP2shAddress('Error: ' + error.message)
+    		setAsmScript('')
+    	}
+    }
+
+    return (
+    	<div className="flex items-center justify-center min-h-screen bg-[#1e1e1e]">
+    		<div className="max-w-md w-full mx-auto p-6 bg-[#1e1e1e] rounded-lg shadow-md">
+    			<h1 className="text-2xl font-bold mb-4 text-center text-[#f1760f]">
+    				P2SH Address Generator
+    			</h1>
+    			<div className="mb-4">
+    				<label className="block text-sm font-medium text-[#d4d4d4] mb-1">
+    					Redeem Script (hex):
+    				</label>
+    				<input
+    					type="text"
+    					value={redeemScript}
+    					onChange={(e) => setRedeemScript(e.target.value)}
+    					className="mt-1 block w-full px-3 py-2 text-sm rounded-md border border-[#4c4d52] bg-[#3c3c3c] text-[#d4d4d4] shadow-sm focus:border-[#f1760f] focus:ring focus:ring-[#f1760f] focus:ring-opacity-50"
+    					placeholder="Enter redeem script in hex format"
+    				/>
+    			</div>
+    			<button
+    				onClick={handleGenerate}
+    				className="w-full bg-[#f1760f] hover:bg-[#e56c0d] text-[#d4d4d4] font-bold py-2 px-4 rounded transition duration-300"
+    			>
+    				Generate P2SH Address
+    			</button>
+    			{p2shAddress && (
+    				<div className="mt-4">
+    					<h2 className="text-lg font-semibold text-[#f1760f]">
+    						Generated P2SH Address:
+    					</h2>
+    					<p className="mt-2 p-2 bg-[#252526] rounded border border-[#4c4d52] text-[#d4d4d4]">
+    						{p2shAddress}
+    					</p>
+    				</div>
+    			)}
+    			{asmScript && (
+    				<div className="mt-4">
+    					<h2 className="text-lg font-semibold text-[#f1760f]">
+    						ASM Representation:
+    					</h2>
+    					<p className="mt-2 p-2 bg-[#252526] rounded border border-[#4c4d52] text-[#d4d4d4] whitespace-pre-wrap">
+    						{asmScript}
+    					</p>
+    				</div>
+    			)}
+    		</div>
+    	</div>
+
+); }
+
+export default App;`
+    },
+          "/package.json": {
+code: JSON.stringify({
+dependencies: {
+"react": "^18.0.0",
+"react-dom": "^18.0.0",
+"js-sha256": "^0.9.0",
+"bs58": "^5.0.0"
+}
+}, null, 2),
+hidden: true
+},
+}}
+/>
+
+## Exercise Instructions
+
+Your task is to implement the `generateP2SHAddress` and `hexToASM` functions in the `bitcoinUtils.js` file.
+
+1. Implement `generateP2SHAddress` as described in the previous instructions.
+2. Implement `hexToASM` to convert the hex redeem script to its ASM representation:
+    - Parse the hex script byte by byte.
+    - Convert known opcodes to their string representations (e.g., '51' to 'OP_1').
+    - For push data operations, extract the correct number of bytes as a hex string.
+    - Join the parsed elements with spaces.
+
+Test your implementation with this redeem script: `5221031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe1321031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe1352ae`
+
+Expected results:
+
+-   P2SH Address: `3PRx8wvqghQB1S8xGpFBmcVjN5fxGvpjLE`
+-   ASM: `OP_2 031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe13 031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe13 OP_2 OP_CHECKMULTISIG`
+
+This script represents a 2-of-2 multisig P2SH address.
+
+<ExpandableAlert
+  title="Solution code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+
+>
+
+```
+import { sha256 } from 'js-sha256';
+import { encode } from 'bs58';
+
+export function generateP2SHAddress(redeemScript) {
+  // 1. Validate the redeem script (hex format)
+  if (!/^[0-9a-fA-F]+$/.test(redeemScript)) {
+    throw new Error('Invalid redeem script: must be a hex string');
+  }
+
+  // 2. Hash the redeem script using SHA256 and RIPEMD160
+  const scriptHash = ripemd160(sha256(hexToBytes(redeemScript)));
+
+  // 3. Add version byte (0x05 for P2SH)
+  const versionScriptHash = '05' + scriptHash;
+
+  // 4. Calculate checksum (first 4 bytes of double SHA256)
+  const checksum = sha256(sha256(hexToBytes(versionScriptHash))).slice(0, 8);
+
+  // 5. Combine version byte, hashed script, and checksum
+  const binaryAddress = hexToBytes(versionScriptHash + checksum);
+
+  // 6. Encode the result in Base58
+  const p2shAddress = encode(binaryAddress);
+
+  // 7. Return the P2SH address
+  return p2shAddress;
+}
+
+export function hexToASM(hex) {
+  const opcodes = {
+    '00': 'OP_0',
+    '51': 'OP_1',
+    '52': 'OP_2',
+    '53': 'OP_3',
+    '54': 'OP_4',
+    '55': 'OP_5',
+    'ac': 'OP_CHECKSIG',
+    'ae': 'OP_CHECKMULTISIG',
+    // Add more opcodes as needed
+  };
+
+  let asm = [];
+  for (let i = 0; i < hex.length; i += 2) {
+    const byte = hex.substr(i, 2);
+    if (opcodes[byte]) {
+      asm.push(opcodes[byte]);
+    } else {
+      const length = parseInt(byte, 16);
+      if (length > 0 && i + 2 + length * 2 <= hex.length) {
+        const data = hex.substr(i + 2, length * 2);
+        asm.push(data);
+        i += length * 2;
+      } else {
+        asm.push(byte); // Push unknown byte as is
+      }
+    }
+  }
+  return asm.join(' ');
+}
+
+// Helper function: perform RIPEMD160 on the input
+function ripemd160(input) {
+  // Note: In a real implementation, you'd use a proper RIPEMD160 function
+  // For this exercise, we'll use a placeholder
+  return sha256(input).slice(0, 40);  // Simulating RIPEMD160 with truncated SHA256
+}
+
+// Helper function: convert hex string to byte array
+function hexToBytes(hex) {
+  const bytes = [];
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes.push(parseInt(hex.substr(i, 2), 16));
+  }
+  return new Uint8Array(bytes);
+}
+```
+
+</ExpandableAlert>

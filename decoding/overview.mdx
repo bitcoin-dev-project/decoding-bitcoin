@@ -1,0 +1,47 @@
+---
+title: "Overview"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 3
+icon: "FaClipboardList"
+images:
+    ["/bitcoin-topics/static/images/topics/thumbnails/overview-thumbnail.webp"]
+children:
+    - stack
+    - bitcoin-opcodes
+    - locking-unlocking
+    - script-success-failure
+    - standard-nonstandard
+    - pushdata-opcodes
+    - quiz
+---
+
+bitcoin scripts are simple programs written in a language called Script or bitcoin Script. These scripts define the conditions under which bitcoin can be spent or transferred.
+
+Key features of bitcoin Script include:
+
+1. **Stack-based**: Operates using a stack data structure, similar to the Forth programming language from the 1960s.
+2. **Turing incomplete**: No infinite loops allowed. This limitation is intentional to prevent scripts from running indefinitely and consuming resources
+3. **Stateless**: Each script contains all necessary information for validation, requiring no external data.
+
+<div className="dark:hidden w-full">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/overview.gif"
+        width="100%"
+        height="auto"
+        className="rounded-lg"
+    />
+</div>
+<div className="hidden dark:block w-full">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/overview.gif"
+        width="100%"
+        height="auto"
+        className="rounded-lg"
+    />
+</div>
+
+---

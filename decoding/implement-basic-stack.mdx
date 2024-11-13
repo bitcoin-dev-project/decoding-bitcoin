@@ -1,0 +1,328 @@
+---
+title: "Basic stack operations (Push, Pop)"
+date: 2024-01-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 2
+project: true
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/project-stack-thumbnail.webp"
+    ]
+parent: project
+---
+
+Implement a simple stack data structure for Bitcoin script operations.
+
+## Task
+
+Complete the `Stack` class in `challenges/Stack.js`:
+
+1. `push(hexValue)`: Add a new item (converted from hex to Buffer) to the stack.
+2. `pop()`: Remove and return the top item from the stack.
+
+Both methods should return a new Stack instance.
+
+## Implementation
+
+<ExerciseSelector
+  sandpackConfig={{
+    files: {
+      '/challenges/Stack.js': {
+        code: `
+export class Stack {
+    constructor(items = []) {
+        this.items = items;
+    }
+
+    push(hexValue) {
+        // TODO: Implement push method
+    }
+
+    pop() {
+        // TODO: Implement pop method
+    }
+
+    getItems() {
+        return this.items;
+    }
+
+}
+`,
+        active: true
+      },
+      '/StackSimulator.js': {
+        code: `
+import React, { useState } from "react";
+import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Stack } from './challenges/Stack';
+
+const StackSimulator = ({ showOperations }) => {
+const [stack, setStack] = useState(new Stack());
+const [input, setInput] = useState('0x');
+const [lastOperation, setLastOperation] = useState(null);
+const [showHexInfo, setShowHexInfo] = useState(false);
+
+    const handleInputChange = (e) => {
+        const value = e.target.value;
+        if (value.length < 2) {
+            setInput('0x');
+        } else if (value.startsWith('0x')) {
+            const hexPart = value.slice(2);
+            if (/^[0-9A-Fa-f]*$/.test(hexPart)) {
+                setInput(value);
+            }
+        }
+    };
+
+    const push = () => {
+        if (input.length > 2) {
+            const hexValue = input.slice(2);
+            const newStack = stack.push(hexValue);
+            setStack(newStack);
+            setInput('0x');
+            setLastOperation("push");
+        }
+    };
+
+    const pop = () => {
+        try {
+            const newStack = stack.pop();
+            setStack(newStack);
+            setLastOperation("pop");
+        } catch (error) {
+            console.error("Error popping from stack:", error);
+            setLastOperation("pop (failed)");
+        }
+    };
+
+    const getItemColor = (item) => {
+        if (item.toString().startsWith("Error:")) {
+            return "bg-red-500 text-white";
+        }
+        if (item.length === 1) {
+            const value = item[0];
+            if (value === 0x01) {
+                return "bg-green-500 text-white"; // Success (true)
+            } else if (value === 0x00) {
+                return "bg-red-500 text-white"; // Failure (false)
+            }
+        }
+        return "bg-purple-500 text-white"; // Default color
+    };
+
+    const formatStackItem = (item) => {
+        if (item.toString().startsWith("Error:")) {
+            return <span>{item.toString()}</span>;
+        }
+        if (item.length === 1) {
+            const value = item[0];
+            if (value === 0x01) {
+                return <span className="font-mono">true (0x01)</span>;
+            } else if (value === 0x00) {
+                return <span className="font-mono">false (0x00)</span>;
+            }
+        }
+        const hex = \`0x\${item.toString('hex')}\`;
+        return <span className="font-mono">{hex}</span>;
+    };
+
+    return (
+        <div className="w-full max-w-3xl mx-auto py-1">
+            <motion.div
+                className="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg text-sm sm:text-base shadow-md"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+            >
+                <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
+                    Bitcoin Stack Evaluator
+                </div>
+                <div className="flex flex-col space-y-2 mb-4">
+                            <div className="relative w-full">
+                                <input
+                                    type="text"
+                                    value={input}
+                                    onChange={handleInputChange}
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-orange-500"
+                                    placeholder="0x (enter hex value)"
+                                    onFocus={(e) => e.target.setSelectionRange(2, 2)}
+                                />
+                                <button
+                                    onClick={() => setShowHexInfo(!showHexInfo)}
+                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-6 h-6 flex items-center justify-center text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+                                >
+                                    <Info size={16} className="w-4 h-4" />
+                                </button>
+                            </div>
+                            <div className="flex space-x-2">
+                                <motion.button
+                                    onClick={push}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+                                >
+                                    <ArrowDownCircle className="inline-block w-5 h-5 mr-1" />
+                                    Push
+                                </motion.button>
+                                <motion.button
+                                    onClick={pop}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    className="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50"
+                                >
+                                    <ArrowUpCircle className="inline-block w-5 h-5 mr-1" />
+                                    Pop
+                                </motion.button>
+                            </div>
+                        </div>
+                {showHexInfo && (
+                    <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">
+                        <p className="text-sm">
+                            Enter values in hexadecimal format only (e.g., 0x01, 0xff).
+                            The '0x' prefix is fixed to indicate hex input.
+                            For arithmetic operations, the hex values will be interpreted as numbers.
+                        </p>
+                    </div>
+                )}
+                <div className="border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
+                    <div className="font-semibold mb-2 text-gray-800 dark:text-white">
+                        Stack <span className="font-normal text-sm">(Last-In-First-Out)</span>:
+                    </div>
+                    <AnimatePresence>
+                        {stack.getItems().length === 0 ? (
+                            <motion.p
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                exit={{ opacity: 0 }}
+                                className="text-gray-500 dark:text-gray-400 text-center py-2"
+                            >
+                                Stack is empty
+                            </motion.p>
+                        ) : (
+                            <div className="space-y-2">
+                                {stack.getItems()
+                                    .slice()
+                                    .reverse()
+                                    .map((item, index) => (
+                                        <motion.div
+                                            key={\`\${index}-\${item.toString('hex')}\`}
+                                            initial={{ opacity: 0, y: -20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: 20 }}
+                                            transition={{ duration: 0.2 }}
+                                            className={\`p-2 rounded-md \${getItemColor(item)} overflow-hidden\`}
+                                        >
+                                            <div className="truncate">
+                                                {formatStackItem(item)}
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                            </div>
+                        )}
+                    </AnimatePresence>
+                </div>
+                {lastOperation && (
+                    <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
+                        Last operation: {lastOperation}
+                    </div>
+                )}
+            </motion.div>
+        </div>
+    );
+
+};
+
+export default StackSimulator
+;`,
+        hidden: false
+      },
+      '/App.js': {
+        code: `
+import React from "react"
+import StackSimulator from "./StackSimulator"
+
+const App = () => {
+return (
+
+<div className="p-4">
+    <h1 className="text-2xl font-bold mb-4">Bitcoin Stack Challenge</h1>
+    <StackSimulator showOperations={false} />
+</div>
+); };
+
+export default App;
+`,
+        hidden: false
+      }
+    },
+    options: {
+      externalResources: ['https://cdn.tailwindcss.com'],
+      showLineNumbers: true,
+      showInlineErrors: true,
+      editorHeight: 500
+    },
+    customSetup: {
+      dependencies: {
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "lucide-react": "^0.390.0",
+        "framer-motion": "^11.3.21"
+      },
+    }
+  }}
+  trinketUrl="https://trinket.io/embed/python3/a65e45077fa4"
+/>
+
+## Hints
+
+<Hint
+    title="Implementation Tips"
+    hints={[
+        "Use Buffer.from(hexValue, 'hex') to convert hex strings to Buffers",
+        "Create new arrays with spread operator [...this.items] for immutability",
+        "Return new Stack instances in both push and pop methods",
+        "Check for empty stack in pop method and throw an error if empty"
+    ]}
+/>
+
+## Solution
+
+<ExpandableAlert
+  title="Solution Code"
+  type="solution"
+  expandable={true}
+  initialLines={0}
+>
+
+```javascript
+export class Stack {
+    constructor(items = []) {
+        this.items = items
+    }
+
+    push(hexValue) {
+        const newItem = Buffer.from(hexValue, "hex")
+        return new Stack([...this.items, newItem])
+    }
+
+    pop() {
+        if (this.items.length === 0) {
+            throw new Error("Stack is empty")
+        }
+        const newItems = this.items.slice(0, -1)
+        return new Stack(newItems)
+    }
+
+    getItems() {
+        return this.items
+    }
+}
+```
+
+</ExpandableAlert>
+
+Test your implementation using the Stack Simulator above.

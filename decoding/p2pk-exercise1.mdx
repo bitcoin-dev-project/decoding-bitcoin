@@ -1,0 +1,82 @@
+---
+title: "Exercise 1: Easy"
+date: 2024-10-07T10:00:00Z
+lastmod: "2024-10-07"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 2
+images: ["/bitcoin-topics/static/images/topics/thumbnails/p2pk-thumbnail.webp"]
+parent: p2pk
+---
+
+In this exercise, we'll be looking at the ScriptPubKey from the transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi sent 10 BTC to Hal Finney.
+
+### Your Task
+
+Your task is to identify the different components of the P2PK ScriptPubKey in its hexadecimal representation.
+
+\*_Use the interactive highlighter below to select the correct parts of the script when prompted._
+
+<HexTransactionHighlighter
+    hexString="4104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac"
+    title="P2PK ScriptPubKey Highlighter"
+    fields={[
+        { name: "OP_PUSHBYTES_65", start: 0, end: 2 },
+        { name: "OP_CHECKSIG", start: 132, end: 134 },
+        { name: "Public Key", start: 2, end: 132 }
+    ]}
+/>
+
+### Components to Identify:
+
+1. **OP_PUSHBYTES_65**: This opcode indicates that the next 65 bytes should be pushed onto the stack.
+2. **Public Key**: The actual public key (65 bytes in uncompressed format).
+3. **OP_CHECKSIG**: The opcode that verifies the signature against the public key.
+
+<Hint
+    title="Additional Hints"
+    hints={[
+        "Remember that in hexadecimal, each byte is represented by two characters.",
+        "The public key takes up 65 bytes (130 hexadecimal characters).",
+        "The public key starts immediately after OP_PUSHBYTES_65 and is 130 characters long in hex.",
+        "OP_CHECKSIG is represented by 'ac' in hexadecimal and appears at the end of the script."
+    ]}
+/>
+
+After completing this exercise, try to answer the following questions:
+
+<Quiz
+    questions={[
+        {
+            question: "Why is the public key 65 bytes long in this script?",
+            options: [
+                "It's a compressed public key",
+                "It's an uncompressed public key",
+                "It includes a checksum"
+            ],
+            correctAnswer: "It's an uncompressed public key",
+            explanation:
+                "Uncompressed public keys in Bitcoin are 65 bytes long, starting with 0x04 followed by the x and y coordinates (32 bytes each)."
+        },
+        {
+            question:
+                "In a P2PK script, if the public key is invalid (e.g., not on the secp256k1 curve), at what point would the script fail?",
+            options: [
+                "During script creation",
+                "When the transaction is broadcast to the network",
+                "When the transaction is mined into a block",
+                "When someone tries to spend the output"
+            ],
+            correctAnswer: "When someone tries to spend the output",
+            explanation:
+                "Bitcoin's script validation is lazy. An invalid public key in a P2PK script won't cause issues during creation, broadcast, or mining. The script only fails when someone attempts to spend the output, as that's when OP_CHECKSIG tries to use the invalid public key to verify the signature, causing the script to fail and the spend attempt to be rejected."
+        }
+    ]}
+/>
+
+By completing this exercise, you'll gain a better understanding of how P2PK scripts are structured and how to interpret their hexadecimal representations.
+
+This will be helpful as we explore more complex script types in future lessons.
+
+---

@@ -1,0 +1,202 @@
+---
+title: "P2PK - Pay To Public Key"
+date: 2024-10-05T15:32:14Z
+lastmod: "2024-10-06"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 4
+icon: "FaKey"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/p2pk-thumbnail.webp"]
+children:
+    - p2pk-problems
+    - p2pk-exercise1
+    - p2pk-exercise2
+    - p2pk-exercise3
+---
+
+The first payment on the Bitcoin network was a P2PK transaction in [block 170](https://mempool.space/tx/f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16), where Satoshi Nakamoto sent 10 BTC to Hal Finney
+
+We will explore this transaction in detail to understand how P2PK works, from its creation to its validation. (Understanding P2PK serves as an ideal foundation for more complex scripts)
+
+<TransactionsDisplay
+    rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
+    txId="f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16"
+    txTitle="Satoshi Sends 10 BTC to Hal Finney"
+    highlightIndex={{ outputs: 0 }}
+/>
+
+**TLDR:** P2PK allows bitcoins to be sent directly to a _public key_. To spend the bitcoins, the recipient must provide a _valid signature_.
+
+<ExpandableAlert title="NOTE" type="info">
+    Despite being simple, P2PK is not as widely used as P2PKH. We'll cover why
+    this is the case later on.
+</ExpandableAlert>
+
+### How does it work ?
+
+The ability to lock and unlock coins is the mechanism by which we transfer bitcoin.  
+**Locking** is giving bitcoins to someone.  
+**Unlocking** is spending bitcoins that you have received.
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/unlock-script.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/overview/dark-unlock-script.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+
+#### 1- Locking (ScriptPubKey):
+
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/spk.svg"
+    width="44%"
+    height="auto"
+/>
+
+When creating this P2PK transaction, Satoshi specifies **Finney's public key in
+the ScriptPubKey**.
+
+      This script specifies the conditions that must be met to spend the bitcoins in the future, and it's placed within the output of a transaction.
+
+    **ScriptPubKey**: A P2PK locking script looks like this:
+
+<CodeSnippet
+    code={` 
+  <Public key Finney> OP_CHECKSIG
+  `}
+    language="text"
+/>
+
+Click on **Output 1** of the transaction below to view the scriptPubKey that Satoshi used to lock 10 BTC to Finney's public key and see this in action.
+
+<TransactionsDisplay
+    rawTx="0100000001c997a5e56e104102fa209c6a852dd90660a20b2d9c352423edce25857fcd3704000000004847304402204e45e16932b8af514961a1d3a1a25fdf3f4f7732e9d624c6c61548ab5fb8cd410220181522ec8eca07de4860a4acdd12909d831cc56cbbac4622082221a8768d1d0901ffffffff0200ca9a3b00000000434104ae1a62fe09c5f51b13905f07f06b99a2f7159b2225f374cd378d71302fa28414e7aab37397f554a7df5f142c21c1b7303b8a0626f1baded5c72a704f7e6cd84cac00286bee0000000043410411db93e1dcdb8a016b49840f8c53bc1eb68a382e97b1482ecad7b148a6909a5cb2e0eaddfb84ccf9744464f82e160bfa9b8b64f9d4c03f999b8643f656b412a3ac00000000"
+    txId="f4184fc596403b9d638783cf57adfe4c75c605f6356fbc91338530e9831e9e16"
+    txTitle="Satoshi Sends 10 BTC to Finney"
+    highlightIndex={{ outputs: 0 }}
+/>
+
+-   **OP_PUSHBYTES_65**: (41 in Hex) Length of the uncompressed public key (65 bytes)
+-   **04ae1a ... 6cd84c**: Represents Hal Finney's uncompressed public key
+-   **OP_CHECKSIG**: (0xac in Hex) Verifies the signature for the provided public key. It returns TRUE (1) if valid, otherwise FALSE (0)
+
+<ExpandableAlert
+  title="Why Satoshi used Uncompressed pub key (65 bytes) ?"
+  type="warning"
+  expandable={true}
+  initialLines={1}
+>
+Some have [speculated](https://bitcoin.stackexchange.com/a/5960) that Satoshi was unaware of public key compression.
+
+It wasn't until Pieter Wuille discovered that the compressed SEC format existed in OpenSSL that people start using it.  
+The advantage of using Compressed pub key is:  
+their public keys are smaller => smaller transaction on the network => save block space
+
+</ExpandableAlert>
+
+#### 2- Unlocking (ScriptSig)
+
+<SvgDisplay
+    src="/bitcoin-topics/static/images/topics/p2pk/scriptsig.svg"
+    width="44%"
+    height="auto"
+/>
+
+To spend bitcoin that Satoshi sent, Finney must provide a valid signature corresponding to the public key.
+
+    This signature proves that Finney has the private key corresponding to the public key specified in the ScriptPubKey.
+
+**ScriptSig:** A P2PK Unlocking script looks like this:
+
+<CodeSnippet
+    code={` 
+  <Signature Finney>
+  `}
+    language="text"
+/>
+
+Click on **Input 1** of this transaction to view the scriptSig created by Hal Finney.
+
+<TransactionsDisplay
+  rawTx="0100000001169e1e83e930853391bc6f35f605c6754cfead57cf8387639d3b4096c54f18f400000000484730440220576497b7e6f9b553c0aba0d8929432550e092db9c130aae37b84b545e7f4a36c022066cb982ed80608372c139d7bb9af335423d5280350fe3e06bd510e695480914f01ffffffff0100ca9a3b000000001976a914340cfcffe029e6935f4e4e5839a2ff5f29c7a57188ac00000000"
+  txId="ea44e97271691990157559d0bdd9959e02790c34db6c006d779e82fa5aee708e"
+  txTitle="Hal Finney receives his 10 BTC"
+  highlightIndex={{ inputs: 0 }}
+
+/>
+
+-   **OP_PUSHBYTES_71**: (47 in Hex) Length of the signature (71 bytes).
+-   **30442 ... 914f01**: Signature followed by SigHash byte
+
+#### 3- Validation
+
+Bitcoin uses **Script**, a stack-based scripting language, to validate transactions.  
+It processes commands from left to right and is intentionally designed to be non-Turing complete, lacking features like loops.
+
+When validating a transaction, the ScriptSig and ScriptPubKey are combined. This concatenated script looks something like this:
+
+<CodeSnippet
+    code={` 
+    <signature Finney> <public key Finney> OP_CHECKSIG
+  `}
+    language="text"
+/>
+
+The combined script will validate if the signature is valid, but fail if the signature is invalid.
+
+The ScriptSig will only unlock the ScriptPubKey if the signature is valid for that public key. In other words, only someone with knowledge of the private key can produce a valid ScriptSig.
+
+<ExpandableAlert title="NOTE" type="info">
+    For the script to be valid, the top element of the stack must be non-zero
+    after evaluation
+</ExpandableAlert>
+
+You can play with this tool below to see step by step how we evaluate P2PK the stack
+
+<ScriptStackVisualizer type="p2pk" />
+
+<ExpandableAlert
+  title="Element VS Operation (Optional)"
+  type="info"
+  expandable={true}
+  initialLines={1}
+>
+In the previous example, Signature and Public Key are elements, while OP_CHECKSIG is an operation. To understand the difference between an Element and an Operation, read this.
+
+**Elements:** Data pushed onto the stack.
+
+-   **Type:** Byte strings (1 to 520 bytes).
+-   **Example:** `Signatures` or `public keys`
+
+**Operations:** Commands that manipulate stack elements.
+
+-   **Type:** Consume and push elements.
+-   **Example:** `OP_DUP`, `OP_HASH160`, `OP_CHECKSIG`
+
+### Example: OP_CHECKSIG
+
+1. **OP_CHECKSIG**
+    - **Function:** Verifies the ECDSA signature.
+    - **Stack Operation:** Consumes 2 elements (pubkey and signature) and pushes 1 element (1 (TRUE) if valid, 0 (FALSE) if not).
+
+### Summary Table
+
+| Type          | Description                      | Example       | Consumption | Push            |
+| ------------- | -------------------------------- | ------------- | ----------- | --------------- |
+| **Element**   | Data for the stack               | DER Signature | N/A         | N/A             |
+| **Operation** | Duplicates the top stack element | OP_DUP        | 0 elements  | 1 element       |
+| **Operation** | Hashes the top stack element     | OP_HASH160    | 1 element   | 1 element       |
+| **Operation** | Verifies a signature             | OP_CHECKSIG   | 2 elements  | 1 element (0/1) |
+
+</ExpandableAlert>
+
+---
