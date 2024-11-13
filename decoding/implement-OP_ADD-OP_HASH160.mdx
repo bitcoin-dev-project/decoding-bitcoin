@@ -1,66 +1,118 @@
 ---
-title: "Basic stack operations (Push, Pop)"
+title: "Implement OP_ADD, OP_HASH160"
 date: 2024-01-05T15:32:14Z
 lastmod: "2024-10-06"
 draft: false
 category: Scripts
 layout: TopicBanner
-order: 2
+order: 4
 project: true
-parent: 8-project
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/project-stack-thumbnail.webp"
+    ]
+parent: project
 ---
 
-Implement a simple stack data structure for Bitcoin script operations.
+In Bitcoin script, OP_ADD adds the top two items on the stack, while OP_HASH160 computes the RIPEMD160(SHA256(x)) hash of the top stack item.
 
 ## Task
 
-Complete the `Stack` class in `challenges/Stack.js`:
+Complete the `OP_ADD` and `OP_HASH160` functions in `challenges/OpcodeFunctions.js`:
 
-1. `push(hexValue)`: Add a new item (converted from hex to Buffer) to the stack.
-2. `pop()`: Remove and return the top item from the stack.
-
-Both methods should return a new Stack instance.
+1. Implement `OP_ADD` to add the top two stack items, handling Bitcoin's number encoding.
+2. Implement `OP_HASH160` to compute the RIPEMD160(SHA256(x)) hash of the top stack item.
 
 ## Implementation
 
 <ExerciseSelector
   sandpackConfig={{
     files: {
-      '/challenges/Stack.js': {
+      "/challenges/OpcodeFunctions.js": {
         code: `
-export class Stack {
-    constructor(items = []) {
-        this.items = items;
+import CryptoJS from 'crypto-js';
+
+export function encodeNum(num) {
+    if (num === 0) return Buffer.alloc(0);
+
+    const absNum = Math.abs(num);
+    const negative = num < 0;
+    const result = [];
+    let currentNum = absNum;
+
+    while (currentNum) {
+        result.push(currentNum & 0xff);
+        currentNum >>>= 8;
     }
 
-    push(hexValue) {
-        // TODO: Implement push method
+    if (result[result.length - 1] & 0x80) {
+        if (negative) {
+            result.push(0x80);
+        } else {
+            result.push(0);
+        }
+    } else if (negative) {
+        result[result.length - 1] |= 0x80;
     }
 
-    pop() {
-        // TODO: Implement pop method
+    return Buffer.from(result);
+
+}
+
+export function decodeNum(buffer) {
+    if (buffer.length === 0) return 0;
+
+    const bigEndian = Buffer.from(buffer).reverse();
+    let result = 0;
+    const negative = bigEndian[0] & 0x80;
+
+    if (negative) {
+        result = bigEndian[0] & 0x7f;
+    } else {
+        result = bigEndian[0];
     }
 
-    getItems() {
-        return this.items;
+    for (let i = 1; i < bigEndian.length; i++) {
+        result <<= 8;
+        result += bigEndian[i];
+    }
+
+    if (negative) {
+        return -result;
+    } else {
+        return result;
     }
 
 }
-`,
+
+export const OP_ADD = (stack) => {
+    // TODO: Implement OP_ADD
+}
+
+export const OP_HASH160 = (stack) => {
+    // TODO: Implement OP_HASH160
+}
+
+export const OP_CODE_FUNCTIONS = {
+    OP_ADD,
+    OP_HASH160
+    // Add more opcodes here
+}`,
         active: true
       },
-      '/StackSimulator.js': {
+      "/OpcodeSimulator.js": {
         code: `
-import React, { useState } from "react";
-import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Stack } from './challenges/Stack';
+import React, { useState } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { ArrowDownCircle, ArrowUpCircle, Info } from "lucide-react"
+import { OP_CODE_FUNCTIONS, decodeNum } from "./challenges/OpcodeFunctions"
 
-const StackSimulator = ({ showOperations }) => {
-const [stack, setStack] = useState(new Stack());
+const OpcodeSimulator = () => {
+const [stack, setStack] = useState([]);
 const [input, setInput] = useState('0x');
 const [lastOperation, setLastOperation] = useState(null);
 const [showHexInfo, setShowHexInfo] = useState(false);
+const [scriptAsm, setScriptAsm] = useState('');
 
     const handleInputChange = (e) => {
         const value = e.target.value;
@@ -77,21 +129,28 @@ const [showHexInfo, setShowHexInfo] = useState(false);
     const push = () => {
         if (input.length > 2) {
             const hexValue = input.slice(2);
-            const newStack = stack.push(hexValue);
-            setStack(newStack);
+            setStack([...stack, Buffer.from(hexValue, 'hex')]);
             setInput('0x');
             setLastOperation("push");
         }
     };
 
     const pop = () => {
-        try {
-            const newStack = stack.pop();
-            setStack(newStack);
+        if (stack.length > 0) {
+            setStack(stack.slice(0, -1));
             setLastOperation("pop");
+        }
+    };
+
+    const executeOpcode = (opcodeName) => {
+        try {
+            const newStack = [...stack];
+            OP_CODE_FUNCTIONS[opcodeName](newStack);
+            setStack(newStack);
+            setLastOperation(opcodeName);
         } catch (error) {
-            console.error("Error popping from stack:", error);
-            setLastOperation("pop (failed)");
+            console.error("Error executing " + opcodeName + ":", error);
+            setLastOperation(opcodeName + " (failed)");
         }
     };
 
@@ -122,8 +181,13 @@ const [showHexInfo, setShowHexInfo] = useState(false);
                 return <span className="font-mono">false (0x00)</span>;
             }
         }
-        const hex = \`0x\${item.toString('hex')}\`;
-        return <span className="font-mono">{hex}</span>;
+        const hex = "0x" + item.toString('hex');
+        try {
+            const num = decodeNum(item);
+            return <span className="font-mono">{hex} ({num})</span>;
+        } catch {
+            return <span className="font-mono">{hex}</span>;
+        }
     };
 
     return (
@@ -137,6 +201,7 @@ const [showHexInfo, setShowHexInfo] = useState(false);
                 <div className="text-xl sm:text-2xl font-bold mb-4 text-gray-800 dark:text-white">
                     Bitcoin Stack Evaluator
                 </div>
+
                 <div className="flex flex-col space-y-2 mb-4">
                             <div className="relative w-full">
                                 <input
@@ -175,6 +240,7 @@ const [showHexInfo, setShowHexInfo] = useState(false);
                                 </motion.button>
                             </div>
                         </div>
+
                 {showHexInfo && (
                     <div className="mb-4 p-3 bg-blue-100 text-blue-800 rounded-md">
                         <p className="text-sm">
@@ -184,12 +250,27 @@ const [showHexInfo, setShowHexInfo] = useState(false);
                         </p>
                     </div>
                 )}
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 mb-4">
+                    {Object.keys(OP_CODE_FUNCTIONS).map((opcodeName) => (
+                        <motion.button
+                            key={opcodeName}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => executeOpcode(opcodeName)}
+                            className="px-2 py-1 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 text-sm w-full"
+                        >
+                            {opcodeName}
+                        </motion.button>
+                    ))}
+                </div>
+
                 <div className="border border-gray-300 rounded-md p-4 bg-gray-50 dark:bg-gray-700">
                     <div className="font-semibold mb-2 text-gray-800 dark:text-white">
                         Stack <span className="font-normal text-sm">(Last-In-First-Out)</span>:
                     </div>
                     <AnimatePresence>
-                        {stack.getItems().length === 0 ? (
+                        {stack.length === 0 ? (
                             <motion.p
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
@@ -200,27 +281,25 @@ const [showHexInfo, setShowHexInfo] = useState(false);
                             </motion.p>
                         ) : (
                             <div className="space-y-2">
-                                {stack.getItems()
-                                    .slice()
-                                    .reverse()
-                                    .map((item, index) => (
-                                        <motion.div
-                                            key={\`\${index}-\${item.toString('hex')}\`}
-                                            initial={{ opacity: 0, y: -20 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: 0, y: 20 }}
-                                            transition={{ duration: 0.2 }}
-                                            className={\`p-2 rounded-md \${getItemColor(item)} overflow-hidden\`}
-                                        >
-                                            <div className="truncate">
-                                                {formatStackItem(item)}
-                                            </div>
-                                        </motion.div>
-                                    ))}
+                                {stack.slice().reverse().map((item, index) => (
+                                    <motion.div
+                                        key={index + "-" + item.toString('hex')}
+                                        initial={{ opacity: 0, y: -20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 20 }}
+                                        transition={{ duration: 0.2 }}
+                                        className={"p-2 rounded-md " + getItemColor(item) + " overflow-hidden"}
+                                    >
+                                        <div className="truncate">
+                                            {formatStackItem(item)}
+                                        </div>
+                                    </motion.div>
+                                ))}
                             </div>
                         )}
                     </AnimatePresence>
                 </div>
+
                 {lastOperation && (
                     <div className="mt-4 text-center text-gray-600 dark:text-gray-400">
                         Last operation: {lastOperation}
@@ -232,21 +311,20 @@ const [showHexInfo, setShowHexInfo] = useState(false);
 
 };
 
-export default StackSimulator
-;`,
+export default OpcodeSimulator`,
         hidden: false
       },
-      '/App.js': {
+      "/App.js": {
         code: `
 import React from "react"
-import StackSimulator from "./StackSimulator"
+import OpcodeSimulator from "./OpcodeSimulator"
 
 const App = () => {
 return (
 
 <div className="p-4">
-    <h1 className="text-2xl font-bold mb-4">Bitcoin Stack Challenge</h1>
-    <StackSimulator showOperations={false} />
+    <h1 className="text-2xl font-bold mb-4">Bitcoin Opcode Challenge</h1>
+    <OpcodeSimulator />
 </div>
 ); };
 
@@ -266,11 +344,12 @@ export default App;
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "lucide-react": "^0.390.0",
-        "framer-motion": "^11.3.21"
+        "framer-motion": "^11.3.21",
+        "crypto-js": "^4.1.1"
       },
     }
   }}
-  trinketUrl="https://trinket.io/embed/python3/a65e45077fa4"
+  trinketUrl="https://trinket.io/embed/python3/12cf9af5968a"
 />
 
 ## Hints
@@ -278,10 +357,10 @@ export default App;
 <Hint
     title="Implementation Tips"
     hints={[
-        "Use Buffer.from(hexValue, 'hex') to convert hex strings to Buffers",
-        "Create new arrays with spread operator [...this.items] for immutability",
-        "Return new Stack instances in both push and pop methods",
-        "Check for empty stack in pop method and throw an error if empty"
+        "Use the provided encodeNum and decodeNum functions for OP_ADD",
+        "For OP_HASH160, use CryptoJS.SHA256 and CryptoJS.RIPEMD160",
+        "Remember to handle edge cases like insufficient stack items",
+        "The stack contains Buffer objects, not plain numbers"
     ]}
 />
 
@@ -293,32 +372,23 @@ export default App;
   expandable={true}
   initialLines={0}
 >
-
 ```javascript
-export class Stack {
-    constructor(items = []) {
-        this.items = items
-    }
+export function OP_ADD(stack) {
+    if (stack.length < 2) throw new Error("Insufficient items for OP_ADD");
+    const b = decodeNum(stack.pop());
+    const a = decodeNum(stack.pop());
+    stack.push(encodeNum(a + b));
+}
 
-    push(hexValue) {
-        const newItem = Buffer.from(hexValue, "hex")
-        return new Stack([...this.items, newItem])
-    }
-
-    pop() {
-        if (this.items.length === 0) {
-            throw new Error("Stack is empty")
-        }
-        const newItems = this.items.slice(0, -1)
-        return new Stack(newItems)
-    }
-
-    getItems() {
-        return this.items
-    }
+export function OP_HASH160(stack) {
+    if (stack.length < 1) throw new Error("Insufficient items for OP_HASH160");
+    const item = stack.pop();
+    const sha256 = CryptoJS.SHA256(CryptoJS.lib.WordArray.create(item));
+    const ripemd160 = CryptoJS.RIPEMD160(sha256);
+    stack.push(Buffer.from(ripemd160.toString(), 'hex'));
 }
 ```
 
 </ExpandableAlert>
 
-Test your implementation using the Stack Simulator above.
+Test your implementation using the Bitcoin Opcode Simulator above. Try various inputs to ensure your opcodes handle different scenarios correctly.
