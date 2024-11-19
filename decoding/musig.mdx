@@ -7,6 +7,7 @@ category: Scripts
 layout: TopicBanner
 order: 7
 icon: "FaUsers"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
 parent: taproot
 ---
 
@@ -22,6 +23,19 @@ To make this article simple to follow, we will answer three important questions 
 
 MuSig is simply a protocol for aggregating public keys and signatures.
 
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-1.webp"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-1.webp"
+        height="auto"
+    />
+</div>
+
 ### Why do we need MuSig?
 
 The reasons we use MuSig are:
@@ -30,12 +44,30 @@ The reasons we use MuSig are:
 
 -   **Privacy:** Nobody can tell if a transaction used multiple signers or just one. Your multi-sig setup stays private, as it looks identical to a regular transaction.
 
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-2.webp"
+        width="120%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-2.webp"
+        width="120%"
+        height="auto"
+    />
+</div>
+
 ### How does MuSig work?
 
 Now we need your focus here, please. Grab a coffee, and let's dive in.
 
-Alice, Bob, and Carol want to create an aggregated signature such as:  
-**s_agg = s_a + s_b + s_c**
+Alice, Bob, and Carol want to create an aggregated signature such as:
+
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{s_{agg} = s_a + s_b + s_c}$$
+</div>
 
 To create this signature, we need to go through three main steps:
 
@@ -48,60 +80,88 @@ Some of these steps require rounds of communication between participants:
 -   Aggregating public keys does **not** require communication.
 -   Aggregating nonces and signatures requires **three rounds of communication** (MuSig2 optimizes this to **two rounds**).
 
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-3.webp"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-3.webp"
+        height="auto"
+    />
+</div>
+
 ---
 
 ## Step 1: Public Key Aggregation (Offline Process)
 
 A naive way to do public key aggregation is by summing up each participant's public key:
 
-**P_agg = P_a + P_b + P_c**
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{P_{agg} = P_a + P_b + P_c}$$
+</div>
 
 However, this approach is vulnerable to a **key cancellation attack.**
 
----
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-4.webp"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-4.webp"
+        height="auto"
+    />
+</div>
 
-### What is a key cancellation attack?
+<ExpandableAlert type="info" title="What is a key cancellation attack?" expandable={true} initialLines={1}>
 
-Imagine a scenario where Alice and Bob want to create a 2-of-2 aggregated signature. To achieve this, they need to:
+Imagine a scenario where Alice and Bob want to create a 2-of-2 aggregated signature.
+
+To achieve this, they need to:
 
 1. Exchange public keys.
 2. Exchange nonce commitments (needed for Schnorr signatures).
 
-But if Bob knows Alice’s public key (P_a) and nonce (R_a) beforehand, Bob can deceive Alice by sending modified values to her:
+But if Bob knows Alice's public key (P<span className="text-xs align-sub">a</span>) and nonce (R<span className="text-xs align-sub">a</span>) beforehand, Bob can deceive Alice by sending modified values to her:
 
--   **P'\_b = P_b - P_a**
--   **R'\_b = R_b - R_a**
+-   **P'<span className="text-xs align-sub">b</span> = P<span className="text-xs align-sub">b</span> - P<span className="text-xs align-sub">a</span>**
+-   **R'<span className="text-xs align-sub">b</span> = R<span className="text-xs align-sub">b</span> - R<span className="text-xs align-sub">a</span>**
 
 When Alice calculates the signature, this manipulation causes issues.
 
----
+### Let's break it down:
 
-### Let’s break it down:
+The aggregated Schnorr signature equation is:
 
-The aggregated Schnorr signature equation is:  
-**s_agg = s_a + s_b'**
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{s_{agg} = s_a + s_b'}$$
+</div>
 
 Expanding it:
 
-**s*agg * G = (R*a + h * P_a) + (R'\_b + h \* P'\_b)**  
-**= R_a + R'\_b + h(P_a + P'\_b)**  
-**= R_a + (R_b - R_a) + h(P_a + P_b - P_a)**  
-**= R_b + h(P_b)**  
-**= s_b \* G**
-
----
+**s<span className="text-xs align-sub">agg</span> _ G = (R<span className="text-xs align-sub">a</span> + h _ P<span className="text-xs align-sub">a</span>) + (R'<span className="text-xs align-sub">b</span> + h \* P'<span className="text-xs align-sub">b</span>)**  
+**= R<span className="text-xs align-sub">a</span> + R'<span className="text-xs align-sub">b</span> + h(P<span className="text-xs align-sub">a</span> + P'<span className="text-xs align-sub">b</span>)**  
+**= R<span className="text-xs align-sub">a</span> + (R<span className="text-xs align-sub">b</span> - R<span className="text-xs align-sub">a</span>) + h(P<span className="text-xs align-sub">a</span> + P<span className="text-xs align-sub">b</span> - P<span className="text-xs align-sub">a</span>)**  
+**= R<span className="text-xs align-sub">b</span> + h(P<span className="text-xs align-sub">b</span>)**  
+**= s<span className="text-xs align-sub">b</span> \* G**
 
 **Did you catch it?**  
 Bob can now sign the transaction alone without Alice's cooperation: **s_agg = s_b**
 
----
+</ExpandableAlert>
 
 ### How do we counteract the key cancellation attack?
 
 To counteract this, we add a **challenge factor** to each participant's public key:
 
-**P'\_i = c_i \* P_i**  
-(_c_i = challenge factor_)
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{P'_i = c_i \times P_i}$$
+</div>
 
 The challenge factor is generated based on the participants' aggregated public key.
 
@@ -110,7 +170,18 @@ This ensures that no individual participant can create a public key that offsets
 Here’s how we construct individual public keys and the aggregated public key:  
 (_Remember, all of this happens offline. There’s no need for communication; public keys can be exchanged through offline channels._)
 
-[Insert illustration here.]
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-5.webp"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/taproot/musig-5.webp"
+        height="auto"
+    />
+</div>
 
 ---
 
@@ -202,12 +273,12 @@ Now, let’s move to the next step: **Aggregate Nonce**.
 
 The process of aggregating nonces is as follows:
 
-1. Alice, Bob, and Carol each generate a random nonce **k_A**, **k_B**, and **k_C**.
+1. Alice, Bob, and Carol each generate a random nonce **k<span className="text-xs align-sub">A</span>**, **k<span className="text-xs align-sub">B</span>**, and **k<span className="text-xs align-sub">C</span>**.
 2. They calculate their respective nonce points:
-   **R_A = k_A * G**, **R_B = k_B * G**, **R_C = k_C * G**.
-3. They exchange these nonce points (**R_A**, **R_B**, and **R_C**).
+   **R<span className="text-xs align-sub">A</span> = k<span className="text-xs align-sub">A</span> * G**, **R<span className="text-xs align-sub">B</span> = k<span className="text-xs align-sub">B</span> * G**, **R<span className="text-xs align-sub">C</span> = k<span className="text-xs align-sub">C</span> * G**.
+3. They exchange these nonce points (**R<span className="text-xs align-sub">A</span>**, **R<span className="text-xs align-sub">B</span>**, and **R<span className="text-xs align-sub">C</span>**).
 4. Finally, they calculate the aggregated nonce:
-   **R_agg = R_A + R_B + R_C**
+   **R<span className="text-xs align-sub">agg</span> = R<span className="text-xs align-sub">A</span> + R<span className="text-xs align-sub">B</span> + R<span className="text-xs align-sub">C</span>**
 
 ---
 
@@ -215,31 +286,31 @@ The process of aggregating nonces is as follows:
 
 Great question! The process of aggregating nonces is somewhat similar to aggregating public keys.
 
-**Except**: Public keys (e.g., **P_A**, **P_B**, and **P_C**) stay the same for every signature process, but random numbers (**k_A**, **k_B**, **k_C**) must change with every signature.
+**Except**: Public keys (e.g., **P<span className="text-xs align-sub">A</span>**, **P<span className="text-xs align-sub">B</span>**, and **P<span className="text-xs align-sub">C</span>**) stay the same for every signature process, but random numbers (**k<span className="text-xs align-sub">A</span>**, **k<span className="text-xs align-sub">B</span>**, **k<span className="text-xs align-sub">C</span>**) must change with every signature.
 
-Thus, in each signature process, we need a round of communication where Alice, Bob, and Carol exchange their **R_i** values to construct:
-**R_agg = R_A + R_B + R_C**
+Thus, in each signature process, we need a round of communication where Alice, Bob, and Carol exchange their **R<span className="text-xs align-sub">i</span>** values to construct:
+**R<span className="text-xs align-sub">agg</span> = R<span className="text-xs align-sub">A</span> + R<span className="text-xs align-sub">B</span> + R<span className="text-xs align-sub">C</span>**
 
-However, before this step (where they exchange **R_i**), there is a **prior round of communication** to ensure none of them cheats by changing their **R_i** after seeing the others’ values.
+However, before this step (where they exchange **R<span className="text-xs align-sub">i</span>**), there is a **prior round of communication** to ensure none of them cheats by changing their **R<span className="text-xs align-sub">i</span>** after seeing the others’ values.
 
 ---
 
 ### How do we prevent cheating?
 
-To prevent cheating, Alice, Bob, and Carol must first exchange the **hashes** of their nonce points (e.g., **H(R_A)**, **H(R_B)**, **H(R_C)**) before revealing their actual **R_i** values. This ensures that once they reveal their **R_i**, they cannot modify their values after seeing others’.
+To prevent cheating, Alice, Bob, and Carol must first exchange the **hashes** of their nonce points (e.g., **H(R<span className="text-xs align-sub">A</span>)**, **H(R<span className="text-xs align-sub">B</span>)**, **H(R<span className="text-xs align-sub">C</span>)**) before revealing their actual **R<span className="text-xs align-sub">i</span>** values. This ensures that once they reveal their **R<span className="text-xs align-sub">i</span>**, they cannot modify their values after seeing others’.
 
 ---
 
 ### Summary: Two Rounds of Communication for Nonce Aggregation
 
 1. **Exchange hash commitments:**
-   Alice, Bob, and Carol share **H(R_A)**, **H(R_B)**, and **H(R_C)**.
+   Alice, Bob, and Carol share **H(R<span className="text-xs align-sub">A</span>)**, **H(R<span className="text-xs align-sub">B</span>)**, and **H(R<span className="text-xs align-sub">C</span>)**.
 
 2. **Exchange nonce points:**
-   They reveal **R_A**, **R_B**, and **R_C**.
+   They reveal **R<span className="text-xs align-sub">A</span>**, **R<span className="text-xs align-sub">B</span>**, and **R<span className="text-xs align-sub">C</span>**.
 
-Once all **R_i** values are shared, they compute the aggregated nonce:
-**R_agg = R_A + R_B + R_C**
+Once all **R<span className="text-xs align-sub">i</span>** values are shared, they compute the aggregated nonce:
+**R<span className="text-xs align-sub">agg</span> = R<span className="text-xs align-sub">A</span> + R<span className="text-xs align-sub">B</span> + R<span className="text-xs align-sub">C</span>**
 
 ---
 
@@ -333,7 +404,9 @@ print("Success!")
 
 After computing the **aggregate public key** (`P_agg`) and **aggregate nonce** (`R_agg`), each participant calculates their **partial signature**:
 
-`s_i = k_i + H(x(R_agg) | P_agg | m) * d_i`
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{s_i = k_i + H(x(R_{agg}) | P_{agg} | m) \times d_i}$$
+</div>
 
 Where:
 
@@ -351,7 +424,9 @@ Participants exchange their `s_i` values, and the **aggregate signature** is com
 
 This simplifies to:
 
-`s_agg = k_agg + H(x(R_agg) | P_agg | m) * d_agg`
+<div className="text-center my-4 text-orange-500">
+  $$\mathbf{s_{agg} = k_{agg} + H(x(R_{agg}) | P_{agg} | m) \times d_{agg}}$$
+</div>
 
 Where:
 
@@ -364,9 +439,9 @@ Where:
 
 The final aggregate signature is:
 
-`(R_agg, s_agg)`
+`(R<span className="text-xs align-sub">agg</span>, s<span className="text-xs align-sub">agg</span>)`
 
-This pair can be verified using `P_agg` and the message `m`.
+This pair can be verified using `P<span className="text-xs align-sub">agg</span>` and the message `m`.
 
 ---
 
