@@ -1,0 +1,219 @@
+---
+title: "MuSig"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Scripts
+layout: TopicBanner
+order: 7
+icon: "FaUsers"
+parent: taproot
+---
+
+# MuSig
+
+By the end of this article, we want Alice, Bob, and Carol to sign a transaction using MuSig.
+
+We will explain step by step using both theory and code. Your task by the end is to write the code for this signature generation.
+
+---
+
+## 1. Theory
+
+To make this article simple to follow, we will answer three important questions that will help you understand the concept: **What? Why? How?**
+
+---
+
+### What is MuSig?
+
+MuSig is simply a protocol for aggregating public keys and signatures.
+
+---
+
+### Why do we need MuSig?
+
+The reasons we use MuSig are:
+
+- **Transaction Size/Fees:** Smaller transaction sizes lead to lower fees.
+- **Privacy:** We gain enhanced privacy.
+
+---
+
+### How does MuSig work?
+
+Now we need your focus here, please. Grab a coffee, and let's dive in.
+
+Alice, Bob, and Carol want to create an aggregated signature such as:  
+**s_agg = s_a + s_b + s_c**
+
+To create this signature, we need to go through three main steps:
+
+1. Aggregating public keys.  
+2. Aggregating nonces.  
+3. Aggregating the signature.
+
+Some of these steps require rounds of communication between participants:
+
+- Aggregating public keys does **not** require communication.
+- Aggregating nonces and signatures requires **three rounds of communication** (MuSig2 optimizes this to **two rounds**).
+
+---
+
+## Step 1: Public Key Aggregation (Offline Process)
+
+A naive way to do public key aggregation is by summing up each participant's public key:
+
+**P_agg = P_a + P_b + P_c**
+
+However, this approach is vulnerable to a **key cancellation attack.**
+
+---
+
+### What is a key cancellation attack?
+
+Imagine a scenario where Alice and Bob want to create a 2-of-2 aggregated signature. To achieve this, they need to:
+
+1. Exchange public keys.  
+2. Exchange nonce commitments (needed for Schnorr signatures).
+
+But if Bob knows Alice’s public key (P_a) and nonce (R_a) beforehand, Bob can deceive Alice by sending modified values to her:  
+
+- **P'_b = P_b - P_a**  
+- **R'_b = R_b - R_a**
+
+When Alice calculates the signature, this manipulation causes issues.
+
+---
+
+### Let’s break it down:
+
+The aggregated Schnorr signature equation is:  
+**s_agg = s_a + s_b'**
+
+Expanding it:
+
+**s_agg * G = (R_a + h * P_a) + (R'_b + h * P'_b)**  
+**= R_a + R'_b + h(P_a + P'_b)**  
+**= R_a + (R_b - R_a) + h(P_a + P_b - P_a)**  
+**= R_b + h(P_b)**  
+**= s_b * G**
+
+---
+
+**Did you catch it?**  
+Bob can now sign the transaction alone without Alice's cooperation: **s_agg = s_b**
+
+---
+
+### How do we counteract the key cancellation attack?
+
+To counteract this, we add a **challenge factor** to each participant's public key:  
+
+**P'_i = c_i * P_i**  
+(*c_i = challenge factor*)
+
+The challenge factor is generated based on the participants' aggregated public key. 
+
+This ensures that no individual participant can create a public key that offsets the public keys of others.
+
+Here’s how we construct individual public keys and the aggregated public key:  
+(*Remember, all of this happens offline. There’s no need for communication; public keys can be exchanged through offline channels.*)
+
+[Insert illustration here.]
+
+---
+
+Now, let’s move to the next step: **Aggregate Nonce**.
+
+## Step 2: Aggregate nonces
+
+## Step 2: Aggregate Nonce (1st and 2nd Round of Communication)
+
+The process of aggregating nonces is as follows:
+
+1. Alice, Bob, and Carol each generate a random nonce **k_A**, **k_B**, and **k_C**.  
+2. They calculate their respective nonce points:  
+   **R_A = k_A * G**, **R_B = k_B * G**, **R_C = k_C * G**.  
+3. They exchange these nonce points (**R_A**, **R_B**, and **R_C**).  
+4. Finally, they calculate the aggregated nonce:  
+   **R_agg = R_A + R_B + R_C**
+
+---
+
+### Where do the rounds of communication happen in this process?
+
+Great question! The process of aggregating nonces is somewhat similar to aggregating public keys.
+
+**Except**: Public keys (e.g., **P_A**, **P_B**, and **P_C**) stay the same for every signature process, but random numbers (**k_A**, **k_B**, **k_C**) must change with every signature.
+
+Thus, in each signature process, we need a round of communication where Alice, Bob, and Carol exchange their **R_i** values to construct:  
+**R_agg = R_A + R_B + R_C**
+
+However, before this step (where they exchange **R_i**), there is a **prior round of communication** to ensure none of them cheats by changing their **R_i** after seeing the others’ values.
+
+---
+
+### How do we prevent cheating?
+
+To prevent cheating, Alice, Bob, and Carol must first exchange the **hashes** of their nonce points (e.g., **H(R_A)**, **H(R_B)**, **H(R_C)**) before revealing their actual **R_i** values. This ensures that once they reveal their **R_i**, they cannot modify their values after seeing others’.
+
+---
+
+### Summary: Two Rounds of Communication for Nonce Aggregation
+
+1. **Exchange hash commitments:**  
+   Alice, Bob, and Carol share **H(R_A)**, **H(R_B)**, and **H(R_C)**.  
+
+2. **Exchange nonce points:**  
+   They reveal **R_A**, **R_B**, and **R_C**.  
+
+Once all **R_i** values are shared, they compute the aggregated nonce:  
+**R_agg = R_A + R_B + R_C**
+
+---
+
+
+
+
+
+
+## Step 3: Signature Aggregation (Final Step)
+
+After computing the **aggregate public key** (`P_agg`) and **aggregate nonce** (`R_agg`), each participant calculates their **partial signature**:
+
+`s_i = k_i + H(x(R_agg) | P_agg | m) * d_i`
+
+
+Where:
+- `k_i`: Participant's random nonce.
+- `d_i`: Participant's private key.
+- `H`: Hash function with `R_agg`, `P_agg`, and the message `m`.
+
+---
+
+### Aggregating the Signatures
+
+Participants exchange their `s_i` values, and the **aggregate signature** is computed as:
+
+`s_agg = s_A + s_B + s_C`
+
+
+This simplifies to:
+
+`s_agg = k_agg + H(x(R_agg) | P_agg | m) * d_agg`
+
+
+Where:
+- `k_agg = k_A + k_B + k_C` (aggregate nonce scalar).
+- `d_agg = d_A + d_B + d_C` (aggregate private key scalar).
+
+---
+
+### Final Signature
+
+The final aggregate signature is:
+
+`(R_agg, s_agg)`
+
+
+This pair can be verified using `P_agg` and the message `m`.
