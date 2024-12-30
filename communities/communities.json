@@ -686,8 +686,58 @@
                     "topic": "Taproot Basics",
                     "topicSlug": "taproot-basics",
                     "description": "Begin your journey into Bitcoin's latest script upgrade - Taproot. Learn about Schnorr signatures, tagged hashes, and the fundamental building blocks that enable improved privacy and scalability in Bitcoin.",
-                    "resources": [],
-                    "baseQuestions": [],
+                    "resources": [
+                        {
+                            "id": 1,
+                            "title": "Tagged Hashes",
+                            "link": "tagged-hashes",
+                            "parentTopic": "taproot"
+                        },
+                        {
+                            "id": 2,
+                            "title": "Schnorr Signature",
+                            "link": "schnorr-signature",
+                            "parentTopic": "taproot"
+                        },
+                        {
+                            "id": 3,
+                            "title": "Nonce Reuse Attack",
+                            "link": "nonce-reuse-attack",
+                            "parentTopic": "taproot"
+                        },
+                        {
+                            "id": 4,
+                            "title": "MuSig",
+                            "link": "musig",
+                            "parentTopic": "taproot"
+                        }
+                    ],
+                    "baseQuestions": [
+                        {
+                            "text": "What is the purpose of a nonce in Schnorr signatures, and why is it crucial not to reuse it?",
+                            "relatedMaterial": "/decoding/taproot"
+                        },
+                        {
+                            "text": "What security vulnerability could occur if you implement MuSig public key aggregation by simply adding the public keys together (P_agg = P_a + P_b + P_c)?",
+                            "relatedMaterial": "/decoding/taproot"
+                        },
+                        {
+                            "text": "What are the three rounds of communication required in MuSig signature generation, and why are they necessary?",
+                            "relatedMaterial": "/decoding/taproot"
+                        },
+                        {
+                            "text": "If an attacker observes two different Schnorr signatures that used the same nonce k, explain step by step how they can derive the private key d.",
+                            "relatedMaterial": "/decoding/taproot"
+                        },
+                        {
+                            "text": "Explain how MuSig improves privacy and transaction efficiency in Bitcoin.",
+                            "relatedMaterial": "/decoding/taproot"
+                        },
+                        {
+                            "text": "Describe the key cancellation attack in the context of MuSig",
+                            "relatedMaterial": "/decoding/taproot"
+                        }
+                    ],
                     "weeklyCall": {
                         "date": "2025-01-03T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
@@ -698,7 +748,20 @@
                         },
                         "description": "Dear Bitcoiners!\n\nWelcome to Decoding Bitcoin study cohort launch session where we will have a quick presentation from Jamal, creator of Decoding Bitcoin platform. We will set a few expectations, answer any questions, and get to know each other. No preparation needed 😇\n\nLocation - Lounge channel on Discord:\nhttps://discord.gg/6XPJ96sCY4"
                     },
-                    "groupAssignments": [],
+                    "groupAssignments": [
+                        {
+                            "groupId": 1,
+                            "deputyName": ""
+                        },
+                        {
+                            "groupId": 2,
+                            "deputyName": ""
+                        },
+                        {
+                            "groupId": 3,
+                            "deputyName": ""
+                        }
+                    ],
                     "additionalResources": []
                 },
                 {
