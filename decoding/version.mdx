@@ -1,0 +1,42 @@
+---
+title: "Version"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.1
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
+parent: "transaction-structure"
+---
+
+Just like software updates labeled as v1.0, v2.0, v3.0, Bitcoin transactions use version numbers to indicate which features they support.
+
+<TransactionCreation enabledFields={["version"]} />
+
+Bitcoin transaction versions and their features:
+
+1. **Version 1:** The original transaction format that follows basic Bitcoin transaction rules.
+
+2. **Version 2:** Introduced in BIP68, BIP112, and BIP113, enabling:
+
+    - **OP_CHECKSEQUENCEVERIFY (CSV)**: Allows relative timelock constraints
+    - **Relative lock-time**: Prevents spending until a certain number of blocks have passed
+    - **Median-time-past**: Uses median timestamp of previous 11 blocks for time-based locks
+
+3. **Version 3:** Introduced to prevent transaction pinning attacks
+
+<ExpandableAlert title="Note" type="info" expandable={false}>
+    Don't worry if these new terms seem complex - we'll cover timelocks, CSV
+    operations, and more in detail in later sections!
+</ExpandableAlert>
+
+## Encoding
+
+The version is stored as a 4-byte integer in **little-endian** format. For example:
+
+-   Hex: `01000000` → Version: `1`
+-   Hex: `02000000` → Version: `2`
+
+Most transactions today use version 1 or 2, with version 2 being necessary when using relative timelocks or CSV operations.

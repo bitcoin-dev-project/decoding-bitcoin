@@ -1,0 +1,50 @@
+---
+title: "Transaction Structure"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 2
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
+children:
+    - version
+    - marker-flag
+    - inputs
+    - outputs
+    - locktime
+---
+
+At a high level, a Bitcoin transaction has five main components:
+
+-   **Version**
+-   **Marker & Flag**
+-   **Inputs**
+-   **Outputs**
+-   **Locktime**
+
+Let's analyze a real transaction from the Bitcoin blockchain to understand these components better.
+
+We'll use transaction ID [89699cce128...c5a497fbae881](https://mempool.space/tx/89699cce128a694b4fb3be0e07ae0a9b63f0da1bc62fb3a4eb3c5a497fbae881) from block `877417` as an example.
+
+To get the raw transaction data, run:
+
+<CodeSnippet
+    code={`$ bitcoin-cli getrawtransaction 89699cce128a694b4fb3be0e07ae0a9b63f0da1bc62fb3a4eb3c5a497fbae881`}
+    language="bash"
+/>
+
+The output will be the serialized transaction format (A long hexadecimal string representing all transaction data).
+
+<ExpandableAlert title="What is Serialization?" type="info" expandable={false}>
+    Serialization is the process of converting structured data into a compact
+    format (in this case, a hex string) that can be easily stored and
+    transmitted across the Bitcoin network.
+</ExpandableAlert>
+
+You can explore this transaction's structure using the interactive tool below:
+
+<TransactionCreation />
+
+In the following sections, we'll break down each component of the transaction structure in detail.

@@ -23,8 +23,10 @@ In bitcoin's scripting language, several opcodes are used to push data onto the 
 4. **OP_1NEGATE**: Pushes the number -1 onto the stack.
 
 <ExpandableAlert title="Maximum Data Size" type="warning" expandable={false}>
-    Due to practical limitations and security considerations, the maximum amount of data that can be pushed in a single operation is **520
-    bytes**. As such, the **OP_PUSHDATA4** opcode is never used in practice (it allows for pushing 65536-4294967295 bytes). 
+    Due to practical limitations and security considerations, the maximum amount
+    of data that can be pushed in a single operation is **520 bytes**. As such,
+    the **OP_PUSHDATA4** opcode is never used in practice (it allows for pushing
+    65536-4294967295 bytes).
 </ExpandableAlert>
 
 <ExpandableAlert

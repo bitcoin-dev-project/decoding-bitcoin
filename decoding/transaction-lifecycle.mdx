@@ -1,0 +1,51 @@
+---
+title: "Transaction Lifecycle"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 1
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
+---
+
+Watch how a Bitcoin transaction moves through the network, from creation to confirmation:
+
+<div className="full-width">
+    <TransactionAnimationPlayer
+        svgPaths={[
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/000.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/00.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/0.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/1.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/2.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/3.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/4.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/5.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/6.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/7.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/8.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/9.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/10.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/11.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/12.svg",
+            "/bitcoin-topics/static/images/topics/transactions/lifecycle/13.svg"
+        ]}
+        svgId="esVE0LwtziS1"
+    />
+</div>
+
+## The Journey of a Bitcoin Transaction
+
+1. [**Creation**](./transaction-creation): A new transaction is built using unspent outputs (UTXOs)
+
+2. [**Signing**](./transaction-signing): The transaction is signed with the sender's private key
+
+3. [**Broadcasting**](./transaction-broadcasting): The signed transaction propagates through the network
+
+4. [**Validation by Nodes**](./transaction-validation): Network nodes verify the transaction's validity
+
+5. [**Mining**](./transaction-mining): Miners include the valid transaction in a block
+
+Each step has its own dedicated topic where you can learn more about the technical details and processes involved.

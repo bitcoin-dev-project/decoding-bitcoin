@@ -1,0 +1,84 @@
+---
+title: "UTXO vs Account Models"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
+---
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/utxo-accountModel.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/utxo-accountModel.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+Tracking user balances in decentralized blockchains like Bitcoin and Ethereum relies on two models:
+
+1. **Account Model** (Ethereum): Tracks balances like a bank ledger (simple and intuitive).
+2. **UTXO Model** (Bitcoin): Tracks specific unspent outputs from transactions—complex but powerful.
+
+---
+
+### How Transactions Work ?
+
+Every blockchain transaction includes:
+
+-   **Amount**: Value transferred.
+-   **Payer & Payee**: Sender and recipient.
+-   **Authorization**: Digital signature ensuring security.
+
+Transactions update balances by changing the system’s state.  
+**Example**: Alice sends Bob 5 BTC, decreasing her balance by 5 BTC and increasing Bob's by 5 BTC.
+
+## 1- Account Model (Simple and Familiar)
+
+The account model is like a bank ledger, recording total balances without detailing individual inputs or outputs.
+
+**Example**:  
+Alice: 60 ETH → Bob sends 5 ETH → Alice: 65 ETH, Bob: 15 ETH.
+
+| **Pros**                     | **Cons**                     |
+| ---------------------------- | ---------------------------- |
+| Easy to understand           | Vulnerable to replay attacks |
+| Flexible for smart contracts | Limited privacy              |
+
+|
+
+## 2- UTXO Model (Detailed and Secure)
+
+The UTXO model tracks specific outputs from past transactions.
+
+**Example**:
+
+-   Bob receives UTXOs worth 2 BTC, 3 BTC, and 5 BTC.
+-   Spending 6 BTC uses the 5 BTC UTXO and part of the 3 BTC UTXO, creating a new "change" UTXO.
+
+| **Pros**                            | **Cons**                             |
+| ----------------------------------- | ------------------------------------ |
+| High privacy (new addresses per tx) | More complex and less intuitive      |
+| Prevents double-spending            | Harder to design for state-heavy use |
+|                                     | Requires management of UTXOs         |
+
+|
+
+## Comparing Models
+
+| **Feature**     | **Account Model**            | **UTXO Model**                          |
+| --------------- | ---------------------------- | --------------------------------------- |
+| **Balances**    | Total balance (e.g., 10 ETH) | Collection of UTXOs (e.g., 2, 3, 5 BTC) |
+| **Ease of Use** | Intuitive                    | Complex                                 |
+| **Privacy**     | Limited                      | High if new addresses used              |
+| **Design**      | Flexible for smart contracts | Stateless, simple transfers             |
