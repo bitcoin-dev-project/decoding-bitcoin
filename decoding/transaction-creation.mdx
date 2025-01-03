@@ -1,0 +1,147 @@
+---
+title: "Creating a Transaction"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 5
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/creating-tx.webp"
+    ]
+---
+
+Alice wants to pay 5 BTC to Bob for a digital item.  
+To make this payment, she needs to create a Bitcoin transaction using the unspent outputs (UTXOs) in her wallet.
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction1.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction1.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert title="What Are UTXOs?" type="info" expandable={true}>
+UTXOs are unspent transaction outputs that can be used as inputs for new transactions.  
+Think of UTXOs as the "coins" sitting in Alice's wallet, waiting to be spent.
+
+Alice checks her wallet and finds two UTXOs:
+
+-   **UTXO #1**: 4 BTC
+-   **UTXO #2**: 2 BTC
+
+Together, these provide enough funds (6 BTC total) to pay Bob 5 BTC.
+
+</ExpandableAlert>
+
+### 1. Inputs: Where the Money Comes From
+
+To create a transaction, Alice needs to specify which UTXOs she wants to use as inputs.
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+Alice's wallet shows these available UTXOs:
+
+-   **UTXO #1**: 4 BTC (from Transaction 1, Output Index 1)
+-   **UTXO #2**: 2 BTC (from Transaction 2, Output Index 0)
+
+Together, these UTXOs provide enough funds (4 BTC + 2 BTC = 6 BTC) for the payment and any transaction fees.
+
+#### Creating Transaction Inputs
+
+Each input in a Bitcoin transaction must include:
+
+1. The Transaction ID (Where the UTXO came from)
+2. The Output Index (Which output from that transaction)
+3. A placeholder for the Signature (which will be added when Alice signs the transaction)
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction3.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction3.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+### 2. Outputs: Where the Money Goes
+
+For this transaction, Alice needs to create two outputs:
+
+-   **5 BTC to Bob** (the payment amount)
+-   **0.99 BTC back to Alice** (as change, assuming 0.01 BTC transaction fee)
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction4.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction4.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert title="Why Is Change Needed?" type="info" expandable={true}>
+In Bitcoin, UTXOs must be spent in their entirety. You cannot partially spend a UTXO.
+Instead, you create a new output that sends the excess amount back to yourself as change.
+
+For example: If you have a 6 BTC UTXO and want to send 5 BTC, you must:
+
+1. Spend the entire 6 BTC UTXO
+2. Create one output of 5 BTC to the recipient
+3. Create another output sending the remaining 1 BTC back to yourself
+
+</ExpandableAlert>
+
+### Transaction Fees
+
+A transaction fee incentivizes miners to include your transaction in a block. The fee is the difference between inputs and outputs:
+
+```
+Fee = Total Input Amount - Total Output Amount
+```
+
+In this example:
+
+-   Inputs: 6 BTC
+-   Outputs: 5 BTC (to Bob) + 0.99 BTC (change)
+-   Fee: 0.01 BTC
+
+### Final Step: Signing the Transaction
+
+The transaction structure is now complete but not yet valid. Alice must sign it to prove she owns the inputs.
+The signing process will be covered in detail in the next topic.

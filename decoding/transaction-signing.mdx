@@ -1,0 +1,82 @@
+---
+title: "Signing Transactions"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 7
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signing-tx.webp"
+    ]
+---
+
+After creating her transaction, Alice has all the essential parts in place:
+
+-   **Inputs** referencing her UTXOs.
+-   **Outputs** specifying where the bitcoin should go.
+
+However, the network will only accept her transaction if it’s **validly signed**. Let’s see how that works.
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction3.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/transaction3.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+## 1. Why Sign the Transaction?
+
+Signing a transaction proves to the Bitcoin network that **you own the private keys** for the UTXOs you’re spending.
+
+Each input in a transaction references a specific previous output, which is “locked” to a Bitcoin script (Public-Key-Hash in this case).
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+By signing, Alice demonstrates ownership of the private key required to satisfy the conditions of that script.
+
+## 2. The Signing Process
+
+Let's look at a transaction with two inputs. Input 0 is locked to PKH1, and Input 1 is locked to PKH2.
+
+Each input requires its own signature. For Input 0, Alice must use the private key that matches PKH1. For Input 1, she needs the private key that matches PKH2.
+
+Before signing, the wallet creates a "cleaned" version of the transaction. This means all signature fields are temporarily empty.
+
+Why use a cleaned version? Because:
+
+-   Each signature needs to commit to the exact same transaction data
+-   The order of signing doesn't matter
+-   Verification becomes simpler and more reliable
+
+The signing happens in steps:
+
+1. The wallet takes the cleaned transaction
+2. It hashes the entire transaction data
+3. It signs this hash with the appropriate private key
+4. It repeats for each input
+
+(...)
