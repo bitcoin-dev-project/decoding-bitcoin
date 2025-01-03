@@ -1,22 +1,22 @@
 name: Send dispatch to dependent repos
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
+    # Runs on pushes targeting the default branch
+    push:
+        branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
 
 jobs:
-  # Build job
-  dispatch:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dispatch to bitcoin-dev-project
-        run: |
-          curl -X POST \
-          -H "Authorization: token ${{ secrets.DISPATCH_UPDATE_BDP }}" \
-          -H "Accept: application/vnd.github+json" \
-          https://api.github.com/repos/bitcoin-dev-project/bitcoin-dev-project/dispatches \
-          -d '{"event_type": "update_submodules"}'
+    # Build job
+    dispatch:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Dispatch to bitcoin-dev-project
+              run: |
+                  curl -X POST \
+                  -H "Authorization: token ${{ secrets.DISPATCH_UPDATE_BDP }}" \
+                  -H "Accept: application/vnd.github+json" \
+                  https://api.github.com/repos/bitcoin-dev-project/bitcoin-dev-project/dispatches \
+                  -d '{"event_type": "update_submodules"}'
