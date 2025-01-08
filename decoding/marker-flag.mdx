@@ -16,14 +16,13 @@ parent: "transaction-structure"
 
 <TransactionCreation enabledFields={["marker", "flag"]} />
 
-The marker and flag are optional fields introduced with **SegWit**.
+The marker and flag are **optional** fields introduced with **SegWit**.
 
-They indicate that a transaction uses the segregated witness structure defined in **BIP144**.  
-Witness data is required for inputs locked by **P2WPKH**, **P2WSH**, or **P2TR**.
+They indicate that a transaction uses the segregated witness structure defined in **BIP144** (Witness data is required for inputs locked by **P2WPKH**, **P2WSH**, or **P2TR**).
 
 ## Marker
 
-Marker indicates that the transaction uses the extended format.
+Marker indicates that the transaction uses the SegWit transaction format (also known as the extended format).
 
 -   Marker is **1 byte**.
 -   Must always be `0x00` to signal a SegWit transaction.
@@ -46,9 +45,4 @@ Marker indicates that the transaction uses the extended format.
 
 How do old nodes treat marker and flag for SegWit transactions?
 
-<a
-    href="https://chat.bitcoinsearch.xyz/?author=holocat&question=How%2520do%2520old%2520nodes%2520treat%2520marker%2520and%2520flag%2520for%2520SegWit%2520transactions%253F"
-    target="_blank"
->
-    Answer here
-</a>
+-> <a href="https://chat.bitcoinsearch.xyz/?author=holocat&question=How%2520do%2520old%2520nodes%2520treat%2520marker%2520and%2520flag%2520for%2520SegWit%2520transactions%253F" target="_blank" rel="noopener noreferrer">Answer here</a>
