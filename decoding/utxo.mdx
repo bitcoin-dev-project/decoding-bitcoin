@@ -31,7 +31,7 @@ images:
 Tracking user balances in decentralized networks relies on two models:
 
 1. **Account Model** (Ethereum): Tracks balances like a bank ledger (simple and intuitive).
-2. **UTXO Model** (Bitcoin): Tracks specific unspent outputs from transactions—complex but powerful.
+2. **UTXO Model** (Bitcoin): Tracks specific unspent outputs from transactions (complex but powerful)
 
 ---
 
@@ -61,13 +61,11 @@ Bob has three "bills" (UTXOs):
 -   One 3 BTC UTXO
 -   One 2 BTC UTXO
 
-To spend 7 BTC, Bob must:
+To spend 7 BTC, Bob has multiple options:
 
-1. Use the 5 BTC UTXO
-2. Use the 3 BTC UTXO
-3. Get 1 BTC back as "change" (new UTXO)
-
-Key Points:
+1. Use the 5 BTC and 3 BTC UTXOs and receive 1 BTC back as 'change' (a new UTXO).
+2. Alternatively, use the 5 BTC and 2 BTC UTXOs without needing any change.
+   Key Points:
 
 -   UTXOs can only be spent once (like using a paper bill)
 -   Each transaction creates new UTXOs
