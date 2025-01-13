@@ -8,7 +8,163 @@ layout: TopicBanner
 order: 6
 icon: "FaClipboardList"
 images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
-children: ["weight-vsize", "fee-rate", "rbf"]
+children: ["transaction-weight", "blocksize-vs-blockweight", "fee-rate", "rbf"]
 ---
 
-(coming soon)
+## Topics:
+
+<div className="grid grid-cols-2 gap-4">
+    <div>
+        1. Transaction Fees
+        2. Weight-vsize
+        3. Fee Rate
+    </div>
+    <div>
+        4. Fee Bumping (RBF, CPFP)
+        5. Security Budget Problem
+    </div>
+</div>
+
+---
+
+Fees in Bitcoin are calculated as the difference between inputs and outputs amounts.
+
+<div className="text-center my-4 text-orange-500">
+    $$\mathbf{Fee = \sum{Inputs} - \sum{Outputs}}$$
+</div>
+
+Let's calculate the fee for the following <a href="https://mempool.space/tx/c27c4d2236fce2a7542e024408d7f89b95e50e42a2c3d10be499c3102ccb45ef" target="_blank" rel="noopener noreferrer">transaction</a>:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_0_temp.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_0_temp.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+
+**Fee = Input - (Output1 + Output2)**
+= 299.99430000 - (0.00140000 + 299.99240000)
+= 0.00050000 BTC (50,000 sats)
+
+**Remember:** Sum(Inputs) should always be greater than Sum(Outputs)
+
+---
+
+## Why Do We Need Fees?
+
+The purpose of fees is to incentivize miners to include transactions in the block.  
+Without fees, miners would have no reason to include transactions in their blocks.
+
+-   But how exactly do miners decide which transactions to include ?
+
+---
+
+### How Miners Select Transactions ?
+
+Miners receive two types of rewards for securing the network:
+
+1. **Block Reward**
+2. **Transaction Fees**
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_1.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_1.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+A miner who mines a block will have revenue as:
+
+<div className="text-orange-500 text-sm">
+    $$Revenue = Tx\ Fees + Block\ Subsidy$$
+</div>
+
+To maximize their revenue, miners prioritize transactions that pay higher fees. The way they determine which transactions pay more will be covered in the next topic when we discuss fee rates.
+
+For now, understand that:
+
+-   Transactions paying **higher fees** get priority for inclusion (fast confirmation)
+-   Transactions paying **lower fees** may wait longer in the mempool (or even fail)
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+---
+
+### Minimum Relay Fee
+
+While miners can choose which transactions to include based on fees, there's actually a minimum threshold that transactions must meet just to be relayed through the network.
+
+This is called the **minimum relay fee**.
+
+-   It's the minimum fee required for nodes to relay and accept a transaction
+-   Default is typically 1 sat/vbyte (we'll explain this unit sat/vbyte in the next topic)
+-   Transactions below this threshold will be rejected by nodes
+-   Helps prevent spam and DoS attacks on the network
+
+<ExpandableAlert title="NOTE" type="info">
+    💡 Even if you pay the minimum relay fee, your transaction might still take
+    a long time to confirm if network activity is high. The minimum relay fee is
+    just the baseline for transaction acceptance.
+</ExpandableAlert>
+
+This brings us to an important question: What happens when you submit a transaction with fees that are above the minimum relay fee but still too low for current network conditions?
+
+---
+
+### Fee Adjustment Methods
+
+When network activity increases, transactions with lower fees might get stuck in the mempool. This can happen even if you paid above the minimum relay fee, as miners will prioritize transactions offering higher fees.
+
+Let's say you have a transaction that's been sitting in the mempool for hours because you set the fee too low during a period of high network activity.
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_3.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_3.svg"
+        width="80%"
+        height="auto"
+    />
+</div>
+
+You have two main solutions to "unstick" it:
+
+1. **RBF (Replace-by-Fee)**
+2. **CPFP (Child Pays for Parent)**
+
+We will cover both these fee adjustment methods in detail in upcoming sections.
