@@ -9,79 +9,63 @@ order: 6
 icon: "FaClipboardList"
 images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
 parent: "fee-calculation"
+
 ---
+When sending Bitcoin transactions, we need to pay fees based on how much block space our transaction occupies. There are three main ways to measure a transaction's size:
 
-When sending Bitcoin transactions, we need to pay fees. But how does the network determine how much we should pay?
+- **Transaction Size**: The raw byte count of the transaction
+- **Transaction Weight**: A weighted measure that counts witness data differently
+- **Virtual Bytes (vBytes)**: Used for fee calculations (covered in the next topic on fee rates)
 
-It all comes down to space - specifically, how much space our transaction takes up in a block.
+## Transaction Size
 
-## Transaction Size (Legacy)
-
-Originally, measuring transaction size was straightforward:
+The most straightforward measurement is the raw byte count of a transaction:
 
 <div className="text-center my-4 text-orange-500">
     $$\mathbf{Transaction\ Size = Bytes\ of\ serialized\ transaction}$$
 </div>
 
-This simple measurement worked because:
-- Each transaction was just a series of bytes
-- Fees were calculated based on these bytes
+For example, here's a raw transaction in hexadecimal:
 
-
-
-## Enter SegWit Transactions
-
-The legacy system was simple, but it had a problem: transaction signatures.
-
-Every Bitcoin transaction needs signatures to prove ownership, similar to signing a check. These signatures:
-- Take up a lot of space (often 65% of the transaction)
-- Were part of the main transaction data
-- Could be slightly modified without invalidating them (transaction malleability)
-
-This is where SegWit (Segregated Witness) comes in. "Segregated" means separated, and "Witness" refers to the signature.  
-
-So SegWit simply means:
-"Let's store the signatures separately from the main transaction data!"  
-
-
-
-<div className="dark:hidden w-full rounded-lg">
+<div className="dark:hidden">
     <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_5.svg"
-        width="100%"
+                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_8.svg"
         height="auto"
     />
 </div>
-<div className="hidden dark:block w-full rounded-lg">
+<div className="hidden dark:block">
     <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_5.svg"
-        width="100%"
+                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_8.svg"
         height="auto"
     />
 </div>
+This transaction is 225 bytes long - we simply count the number of characters and divide by 2 (since each byte is represented by 2 hex characters).
 
-SegWit splits each transaction into two parts:
-- **Base data**: The essential information (addresses, amounts) - the "what"
-- **Witness data**: The signatures - the "proof"
+## Transaction Weight
 
-
-#### Transaction Weight
-
-But splitting the data created a new challenge: how do we measure transaction size now? 
-The solution was a new measurement called "transaction weight", calculated as:
+With the introduction of SegWit, a new measurement called "transaction weight" was created:
 
 <div className="text-center my-4 text-orange-500">
     $$\mathbf{Transaction\ Weight = (Base\ Size × 4) + Witness\ Size}$$
 </div>
 
-For example, if you have a transaction with base data of 200 bytes and witness data of 100 bytes, the weight would be: (200 × 4) + 100 = 900 weight units
+Where:
+- **Base Size** = Size of transaction data without witness data (signatures)
+- **Witness Size** = Size of witness data (signatures) only
 
-This formula means:
-- Base data counts heavily (4× weight)
-- Witness data counts lightly (1× weight)
-
+<div className="dark:hidden">
+    <SvgDisplay
+                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_7.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_7.svg"
+        height="auto"
+    />
+</div>
 <ExpandableAlert title="NOTE" type="info">
-    💡 For legacy (non-SegWit) transactions, the entire transaction is considered base data, 
-    so weight = size × 4
+    💡 For legacy (non-SegWit) transactions, all data is considered base size 
+    and witness size is zero.
 </ExpandableAlert>
-
