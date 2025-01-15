@@ -133,13 +133,11 @@ The TXID is created differently depending on the transaction type:
 -   **Segwit transactions**: HASH256 of transaction data, excluding the marker, flag, and witness fields
 
 This difference in segwit transactions was intentionally designed to prevent transaction malleability, as signatures are no longer part of the TXID calculation.
-
 <ExpandableAlert title="Historical Note" type="info">
-There was a unique situation in Bitcoin's history where duplicate TXIDs occurred in blocks 91,722 and 91,880. This led to:
+    There was a unique situation in Bitcoin's history where duplicate TXIDs occurred in blocks 91,722 and 91,880. This led to:
 
-- BIP 30: Preventing blocks from containing duplicate TXIDs
-- BIP 34: Requiring coinbase transactions to include block height in their data
-    
+    1. BIP 30: Preventing blocks from containing duplicate TXIDs
+    2. BIP 34: Requiring coinbase transactions to include block height in their data
 </ExpandableAlert>
 
 ## Implementation Details
