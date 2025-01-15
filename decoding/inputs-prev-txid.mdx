@@ -1,0 +1,172 @@
+---
+title: "Inputs: Previous txid"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/transaction-module/fees-thumbnail-prevtxid.jpg"]
+parent: "transaction-structure"
+---
+
+<TransactionCreation
+    enabledFields={["txid", "vout", "scriptsig_size", "scriptsig", "sequence"]}
+/>
+
+The previous transaction ID (txid) is a **32-byte hash** that uniquely identifies the transaction containing the output we want to spend.
+
+Let's examine our transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_11_txid.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_11_txid.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+## 1- Byte Order
+
+The txid uses Bitcoin's internal byte order (little-endian). Let's examine this transaction's previous txid:
+
+<CodeSnippet
+    code={`# Display order (what you see on block explorers)
+display_txid = "5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614"
+
+# Internal order (how it appears in raw transaction)
+
+internal_txid = "14e68f759adcfe66c6aa77d38dc0816cbecf3e9e12d76794f3f9e34c9b1a6e5e"`}
+language="python"
+/>
+
+You can view this transaction in a block explorer using the display order:
+
+-> <a href="https://mempool.space/tx/5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614" target="_blank">https://mempool.space/tx/5e6e1a9b4ce3f9f39467d7129e3ecfbe...</a>
+
+<ExpandableAlert title="Converting between byte orders" type="info">
+Here's a Python function to convert between display and internal byte orders:
+
+<CodeSnippet
+    code={`def reverse_bytes(hex_string):
+    """Convert between internal and display byte order"""
+    return bytes.fromhex(hex_string)[::-1].hex()`}
+    language="python"
+/>
+</ExpandableAlert>
+
+## 2- Implementation Example
+
+Here's how you might parse a transaction input's txid:
+
+<CodeSnippet
+    code={`def parse_txid(raw_tx: bytes, offset: int = 0) -> tuple[str, int]:
+    """
+    Parse a transaction ID from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (txid, new_offset)
+    """
+    # Read 32 bytes for txid
+    txid_bytes = raw_tx[offset:offset + 32]
+    
+    # Convert to hex string (internal byte order)
+    txid = txid_bytes.hex()
+    
+    return txid, offset + 32`}
+    language="python"
+/>
+
+## 3- Inspecting with Bitcoin Core RPC Commands
+
+You can use Bitcoin Core's RPC commands to look up and inspect transactions by their txid. Use `getrawtransaction <txid> true` to view the full transaction details:
+
+<CodeSnippet
+    code={`$ bitcoin-cli getrawtransaction \\
+    5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614 true
+
+{
+"txid": "5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614",
+"hash": "5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614",
+"version": 1,
+"size": 225,
+"vsize": 225,
+"weight": 900,
+"locktime": 0,
+"vin": [
+{
+"txid": "14e68f759adcfe66c6aa77d38dc0816cbecf3e9e12d76794f3f9e34c9b1a6e5e",
+"vout": 0,
+"scriptSig": {
+"asm": "3045022100b18dd5124cf2fcd31af3747a55ed941867f781c340007d9d86dae9e04fa8933f02200bdf817b2e6122ba97b8de40541728ead3988df7462241d6ce70e0f6788e126c[ALL] 02cd3dfbe89ebca9ee2cfeb5d36234c7d33bce1c329f8a0a318271a48f",
+"hex": "483045022100b18dd5124cf2fcd31af3747a55ed941867f781c340007d9d86dae9e04fa8933f02200bdf817b2e6122ba97b8de40541728ead3988df7462241d6ce70e0f6788e126c012102cd3dfbe89ebca9ee2cfeb5d36234c7d33bce1c329f8a0a318271a48f"
+},
+"sequence": 4294967295
+}
+],
+"vout": [...]
+}`}
+language="bash"
+/>
+
+<ExpandableAlert title="Note" type="info">
+    Remember to use the display order of the txid when querying through RPC
+    commands. The internal byte order used in raw transactions must be reversed.
+</ExpandableAlert>
+
+## Creating a TXID
+
+The TXID is created differently depending on the transaction type:
+
+-   **Legacy transactions**: HASH256 (double SHA-256) of all transaction data
+-   **Segwit transactions**: HASH256 of transaction data, excluding the marker, flag, and witness fields
+
+This difference in segwit transactions was intentionally designed to prevent transaction malleability, as signatures are no longer part of the TXID calculation.
+
+<ExpandableAlert title="Historical Note" type="info">
+There was a unique situation in Bitcoin's history where duplicate TXIDs occurred in blocks 91,722 and 91,880. This led to:
+
+1. BIP 30: Preventing blocks from containing duplicate TXIDs
+2. BIP 34: Requiring coinbase transactions to include block height in their data
+    </ExpandableAlert>
+
+## Implementation Details
+
+Here's a detailed look at how transaction IDs are calculated in code:
+
+<CodeSnippet
+    code={`class Tx:
+    def id(self):
+        """Human-readable hexadecimal of the transaction hash"""
+        return self.hash().hex()
+
+    def hash(self):
+        """Binary hash of the legacy serialization"""
+        return hash256(self.serialize())[::-1]`}
+    language="python"
+
+/>
+
+The transaction ID is created by:
+
+1. Serializing the entire transaction
+2. Performing a double SHA256 hash
+3. Reversing the byte order
+4. Converting to hexadecimal (for display)
+
+<ExpandableAlert title="Note" type="info">
+    The transaction ID calculation differs between legacy and segwit
+    transactions. For segwit, the witness data is excluded from the ID
+    calculation to prevent transaction malleability.
+</ExpandableAlert>

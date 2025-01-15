@@ -9,13 +9,13 @@ order: 6
 icon: "FaClipboardList"
 images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
 parent: "fee-calculation"
-
 ---
+
 When sending Bitcoin transactions, we need to pay fees based on how much block space our transaction occupies. There are three main ways to measure a transaction's size:
 
-- **Transaction Size**: The raw byte count of the transaction
-- **Transaction Weight**: A weighted measure that counts witness data differently
-- **Virtual Bytes (vBytes)**: Used for fee calculations (covered in the next topic on fee rates)
+-   **Transaction Size**: The raw byte count of the transaction
+-   **Transaction Weight**: A weighted measure that counts witness data differently
+-   **Virtual Bytes (vBytes)**: Used for fee calculations (covered in the next topic on fee rates)
 
 ## Transaction Size
 
@@ -29,17 +29,18 @@ For example, here's a raw transaction in hexadecimal:
 
 <div className="dark:hidden">
     <SvgDisplay
-                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_8.svg"
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_8.svg"
         height="auto"
     />
 </div>
 <div className="hidden dark:block">
     <SvgDisplay
-                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_8.svg"
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_8.svg"
         height="auto"
     />
 </div>
-This transaction is 225 bytes long - we simply count the number of characters and divide by 2 (since each byte is represented by 2 hex characters).
+This transaction is 225 bytes long - we simply count the number of characters
+and divide by 2 (since each byte is represented by 2 hex characters).
 
 ## Transaction Weight
 
@@ -50,22 +51,50 @@ With the introduction of SegWit, a new measurement called "transaction weight" w
 </div>
 
 Where:
-- **Base Size** = Size of transaction data without witness data (signatures)
-- **Witness Size** = Size of witness data (signatures) only
+
+-   **Base Size** = Size of transaction data without witness data (signatures)
+-   **Witness Size** = Size of witness data (signatures) only
 
 <div className="dark:hidden">
     <SvgDisplay
-                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_7.svg"
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_7.svg"
         height="auto"
     />
 </div>
 <div className="hidden dark:block">
     <SvgDisplay
-                src="/bitcoin-topics/static/images/topics/transactions/fees/fees_7.svg"
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_7.svg"
         height="auto"
     />
 </div>
 <ExpandableAlert title="NOTE" type="info">
-    💡 For legacy (non-SegWit) transactions, all data is considered base size 
+    💡 For legacy (non-SegWit) transactions, all data is considered base size
     and witness size is zero.
 </ExpandableAlert>
+
+## Why Use Weight? Enter SegWit
+
+Transaction weight was introduced alongside Segregated Witness (SegWit) to solve several problems:
+
+1. **Transaction Malleability**: A security issue where anyone could modify a transaction's signature (and thus its ID) before confirmation, without invalidating the transaction (more on this later).
+2. **Block Space Efficiency**: Signatures take up ~65% of transaction data
+3. **Backward Compatibility**: Needed a way to increase block capacity without a hard fork
+
+SegWit achieves this by separating transaction data into two parts:
+
+-   **Base data**: Transaction structure including inputs, outputs, version, and locktime (everything except signatures)
+-   **Witness data**: Signatures and other data needed to validate the transaction, stored separately in the "witness" section
+
+<div className="dark:hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_5.svg"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_5.svg"
+        height="auto"
+    />
+</div>
+---

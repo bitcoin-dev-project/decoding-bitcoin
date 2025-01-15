@@ -1,0 +1,116 @@
+---
+title: "Input count"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/transaction-module/fees-thumbnail-inputcount.jpg"]
+parent: "transaction-structure"
+---
+
+<TransactionCreation
+    enabledFields={[
+        "input_count",
+        "txid",
+        "vout",
+        "scriptsig_size",
+        "scriptsig",
+        "sequence"
+    ]}
+/>
+
+The number of inputs is stored as a variable-length integer (varint).  
+Let's examine this real transaction:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_10_inputcount.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_10_inputcount.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+Breaking this down:
+
+-   `01000000`: Version (4 bytes)
+-   `01`: Input count (1 byte, highlighted in the image below)
+-   `14e68f...`: First input begins
+
+As shown in the highlighted section of the transaction hex above, this transaction has an input count of 1 (`0x01`).  
+This single byte tells us that we should expect exactly one input in this transaction.
+
+The encoding format depends on the value range:
+
+| Decimal Range | Hex Range                         | Bytes used | Format                                    |
+| ------------- | --------------------------------- | ---------- | ----------------------------------------- |
+| 0 to 252      | 0x00 to 0xfc                      | 1          | uint8_t                                   |
+| 253 to 2¹⁶-1  | 0xfd to 0xffff                    | 3          | `0xfd` followed by the number as uint16_t |
+| 2¹⁶ to 2³²-1  | 0x10000 to 0xffffffff             | 5          | `0xfe` followed by the number as uint32_t |
+| 2³² to 2⁶⁴-1  | 0x100000000 to 0xffffffffffffffff | 9          | `0xff` followed by the number as uint64_t |
+
+For example:
+
+-   The number 100 is encoded directly as `0x64`
+-   The number 1000 is encoded as `0xfd 0xe8 0x03`
+-   The number 100000 is encoded as `0xfe 0xa0 0x86 0x01 0x00`
+
+<ExpandableAlert title="Note" type="info" expandable={false}>
+    In our example transaction, the input count is 1 (`0x01`), so it uses the
+    simplest encoding format of a single byte.
+</ExpandableAlert>
+
+## Implementation
+
+Here's a Python implementation for reading and writing varints:
+
+<CodeSnippet
+    code={`def read_varint(s):
+    '''Reads a variable integer from a stream
+    
+    The first byte determines the format:
+    - If < 0xfd: directly contains the number
+    - If 0xfd: next 2 bytes contain number
+    - If 0xfe: next 4 bytes contain number 
+    - If 0xff: next 8 bytes contain number
+    '''
+    i = s.read(1)[0]
+    if i == 0xfd:
+        return int.from_bytes(s.read(2), 'little')
+    elif i == 0xfe:
+        return int.from_bytes(s.read(4), 'little')
+    elif i == 0xff:
+        return int.from_bytes(s.read(8), 'little')
+    else:
+        return i
+
+def encode_varint(i):
+'''Encodes an integer as a varint
+
+    - Numbers < 0xfd: 1 byte
+    - Numbers < 0x10000: 3 bytes (0xfd + 2 bytes)
+    - Numbers < 0x100000000: 5 bytes (0xfe + 4 bytes)
+    - Numbers < 0x10000000000000000: 9 bytes (0xff + 8 bytes)
+    '''
+    if i < 0xfd:
+        return bytes([i])
+    elif i < 0x10000:
+        return b'\\xfd' + i.to_bytes(2, 'little')
+    elif i < 0x100000000:
+        return b'\\xfe' + i.to_bytes(4, 'little')
+    elif i < 0x10000000000000000:
+        return b'\\xff' + i.to_bytes(8, 'little')
+    else:
+        raise ValueError(f'integer too large: {i}')`}
+    language="python"
+
+/>
