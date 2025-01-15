@@ -1,0 +1,137 @@
+---
+title: "Vout: Output index"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/transaction-module/fees-thumbnail-vout.jpg"]
+parent: "transaction-structure"
+---
+
+The output index (vout) is a 4-byte unsigned integer that identifies which output from the previous transaction we want to spend.
+
+<TransactionCreation enabledFields={["vout"]} />
+
+Let's examine our transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_12_vout.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/fees_12_vout.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+In this transaction, we can see the vout value highlighted in orange: `00000000`.  
+When decoded from little-endian format, this represents index 0, meaning this input is spending the first output from the previous transaction.
+
+The vout value tells us which output we're spending from the previous transaction:
+
+-   Outputs are zero-indexed (first output is 0, second is 1, etc.)
+-   Stored as a 4-byte little-endian integer
+
+## Outpoints
+
+The combination of a TXID and vout (written as TXID:vout) is called an "outpoint". Every output in the Bitcoin blockchain can be uniquely identified by its outpoint. Here are some notable examples:
+
+-   `4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b:0` - The first-ever Bitcoin transaction output (genesis block)
+-   `a1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d:0` - The famous Bitcoin pizza transaction (spending the first output)
+
+<ExpandableAlert title="Special Case: Coinbase Transactions" type="info">
+    Coinbase transactions (which create new bitcoins) don't reference any
+    previous outputs. In these cases, the vout is set to the maximum value of
+    0xFFFFFFFF (4294967295).
+</ExpandableAlert>
+
+## Implementation Example
+
+Here's how you might parse a transaction input's vout:
+
+<CodeSnippet
+    code={`def parse_vout(raw_tx: bytes, offset: int = 0) -> tuple[int, int]:
+    """
+    Parse an output index from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (vout, new_offset)
+    """
+    # Read 4 bytes for vout
+    vout_bytes = raw_tx[offset:offset + 4]
+    
+    # Convert to integer (little-endian)
+    vout = int.from_bytes(vout_bytes, 'little')
+    
+    return vout, offset + 4`}
+    language="python"
+/>
+
+## RPC Commands
+
+-   Use `gettxout <txid> <n>` to view details of an unspent transaction output:
+
+<CodeSnippet
+    code={`$ bitcoin-cli gettxout "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d" 0
+
+{
+"bestblock": "00000000000000000003a963aad5832ac54a8a6a2cf4c4856e30e3aa279e42fd",
+"confirmations": 750001,
+"value": 0.00100000,
+"scriptPubKey": {
+"asm": "OP_DUP OP_HASH160 62e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac OP_EQUALVERIFY OP_CHECKSIG",
+"desc": "pkh([62e907b1]02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5)#8tscl5xj",
+"hex": "76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac",
+"type": "pubkeyhash",
+"address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+}
+}`}
+language="bash"
+/>
+
+-   View all unspent transaction outputs (UTXOs) in your wallet with `listunspent`:
+
+<CodeSnippet
+    code={`$ bitcoin-cli listunspent
+
+[
+{
+"txid": "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d",
+"vout": 0,
+"address": "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa",
+"label": "",
+"amount": 0.00100000,
+"confirmations": 750000,
+"spendable": true,
+"solvable": true,
+"desc": "pkh([62e907b1]02c6047f9441ed7d6d3045406e95c07cd85c778e4b8cef3ca7abac09b95c709ee5)#8tscl5xj",
+"safe": true
+}
+]`}
+language="bash"
+/>
+
+## Usage and Verification in Bitcoin
+
+The vout is crucial for transaction validation and UTXO management. When processing transactions, nodes:
+
+1. **Locate and Validate**: Use txid to find the previous transaction and verify the vout points to a valid output
+2. **Check UTXO Status**: Confirm the referenced output hasn't been spent already
+3. **Verify Conditions**: Ensure all spending conditions for that output are met
+
+<ExpandableAlert title="Warning" type="warning">
+    If the vout references a non-existent output index, the transaction is
+    invalid and will be rejected by the network.
+</ExpandableAlert>
