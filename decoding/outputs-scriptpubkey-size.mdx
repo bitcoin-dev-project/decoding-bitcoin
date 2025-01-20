@@ -1,0 +1,105 @@
+---
+title: "Outputs: ScriptPubKey Size"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/fees-thumbnail-scriptpubkey-size.jpg"
+    ]
+parent: "transaction-structure"
+---
+
+<TransactionCreation enabledFields={["scriptpubkey_size"]} />
+
+The ScriptPubKey size is stored as a variable-length integer (varint) that indicates the length of the following ScriptPubKey field in bytes.
+
+Let's examine a real transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-scriptpksize.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-scriptpksize.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+## Common ScriptPubKey Sizes
+
+Different types of Bitcoin addresses result in different ScriptPubKey sizes:
+
+| Script Type | Size (bytes) | Compact Size Value |
+| ----------- | ------------ | ------------------ |
+| P2PK        | 35 or 67     | 0x23 or 0x43       |
+| P2PKH       | 25           | 0x19               |
+| P2SH        | 23           | 0x17               |
+| P2WPKH      | 22           | 0x16               |
+| P2WSH       | 34           | 0x22               |
+
+<ExpandableAlert title="Note" type="info">
+    The most common script type today is P2WPKH (Pay to Witness Public Key
+    Hash), which has a ScriptPubKey size of 22 bytes (0x16).
+</ExpandableAlert>
+
+## Variable Integer Encoding
+
+Like other variable-length fields in Bitcoin transactions, the ScriptPubKey size uses varint encoding:
+
+| Decimal Range | Hex Range                         | Bytes Used | Format          |
+| ------------- | --------------------------------- | ---------- | --------------- |
+| 0 to 252      | 0x00 to 0xfc                      | 1          | uint8_t         |
+| 253 to 2¹⁶-1  | 0xfd to 0xffff                    | 3          | 0xfd + uint16_t |
+| 2¹⁶ to 2³²-1  | 0x10000 to 0xffffffff             | 5          | 0xfe + uint32_t |
+| 2³² to 2⁶⁴-1  | 0x100000000 to 0xffffffffffffffff | 9          | 0xff + uint64_t |
+
+## Implementation Example
+
+Here's how you might parse a ScriptPubKey size:
+
+<CodeSnippet
+    code={`def parse_scriptpubkey_size(raw_tx: bytes, offset: int = 0) -> tuple[int, int]:
+    """
+    Parse ScriptPubKey size from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (size, new_offset)
+    """
+    # Read the varint
+    first_byte = raw_tx[offset]
+    
+    if first_byte < 0xfd:
+        size = first_byte
+        offset += 1
+    elif first_byte == 0xfd:
+        size = int.from_bytes(raw_tx[offset+1:offset+3], 'little')
+        offset += 3
+    elif first_byte == 0xfe:
+        size = int.from_bytes(raw_tx[offset+1:offset+5], 'little')
+        offset += 5
+    else:  # 0xff
+        size = int.from_bytes(raw_tx[offset+1:offset+9], 'little')
+        offset += 9
+        
+    return size, offset`}
+    language="python"
+/>
+
+<ExpandableAlert title="Warning" type="warning">
+    The ScriptPubKey size must accurately reflect the length of the following
+    ScriptPubKey field. If these don't match, the transaction is invalid.
+</ExpandableAlert>

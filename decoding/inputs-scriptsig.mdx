@@ -1,0 +1,216 @@
+---
+title: "Inputs: ScriptSig"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/fees-thumbnail-scriptsig.jpg"
+    ]
+parent: "transaction-structure"
+---
+
+<TransactionCreation enabledFields={["scriptsig"]} />
+
+The ScriptSig is a variable-length field in transaction inputs that provides the "unlocking" data needed to spend a previous output. Let's examine our transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-scriptsig.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-scriptsig.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+Let's break down the highlighted hex string from our transaction:
+
+<CodeSnippet code={`     48 3045...126c01 21 02cd...259d2`} language="text" />
+
+<div className="overflow-x-auto">
+    <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+        <thead className="bg-orange-100 dark:bg-orange-900">
+            <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Hex Value
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Length
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Description
+                </th>
+            </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <code>48</code>
+                </td>
+                <td className="px-6 py-4">1 byte</td>
+                <td className="px-6 py-4">
+                    Script length in hex (72 bytes in decimal)
+                </td>
+            </tr>
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <code>3045...126c01</code>
+                </td>
+                <td className="px-6 py-4">71 bytes + 1 byte</td>
+                <td className="px-6 py-4">
+                    DER-encoded signature (71 bytes) + SIGHASH_ALL byte (01)
+                </td>
+            </tr>
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <code>21</code>
+                </td>
+                <td className="px-6 py-4">1 byte</td>
+                <td className="px-6 py-4">
+                    Public key length in hex (33 bytes in decimal)
+                </td>
+            </tr>
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4 whitespace-nowrap">
+                    <code>02cd...259d2</code>
+                </td>
+                <td className="px-6 py-4">33 bytes</td>
+                <td className="px-6 py-4">
+                    Compressed public key (02 prefix indicates even
+                    y-coordinate)
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+This ScriptSig follows the standard P2PKH (Pay to Public Key Hash) pattern, which we can identify by its two key components:
+
+1. A DER-encoded signature followed by SIGHASH byte (`3045...126c01`)
+2. A compressed public key (`02cd...259d2`)
+
+<CodeSnippet code={`    <signature> <pubkey>`} language="text" />
+
+The signature proves ownership of the private key, while the public key must hash to match the address in the previous output's ScriptPubKey.
+
+## 1- Purpose and Structure
+
+The ScriptSig serves as the "key" that unlocks the previous output's "lock" (ScriptPubKey). It typically contains:
+
+-   Digital signatures proving ownership
+-   Public keys or other data required by the previous output's script
+
+For legacy transactions, the ScriptSig contains both the signature and any other data needed to satisfy the previous output's spending conditions. For segwit transactions, most of this data moves to the witness field, leaving the ScriptSig empty or minimal.
+
+## 2- Implementation Example
+
+Here's how you might parse a ScriptSig:
+
+<CodeSnippet
+    code={`def parse_scriptsig(raw_tx: bytes, offset: int = 0) -> tuple[bytes, int]:
+    """
+    Parse a ScriptSig from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (scriptsig, new_offset)
+    """
+    # Read the script size (varint)
+    script_size, offset = read_varint(raw_tx, offset)
+    
+    # Read the actual script bytes
+    script = raw_tx[offset:offset + script_size]
+    
+    return script, offset + script_size
+
+def decode_der_signature(sig_bytes: bytes) -> tuple[int, int]:
+"""
+Decode a DER-encoded ECDSA signature into r and s values
+""" # Skip sequence byte
+pos = 1 # Skip length byte
+pos += 1 # Skip marker for r value
+pos += 1 # Get r length
+r_len = sig_bytes[pos]
+pos += 1 # Get r value
+r = int.from_bytes(sig_bytes[pos:pos + r_len], 'big')
+pos += r_len # Skip marker for s value
+pos += 1 # Get s length
+s_len = sig_bytes[pos]
+pos += 1 # Get s value
+s = int.from_bytes(sig_bytes[pos:pos + s_len], 'big')
+
+    return r, s`}
+    language="python"
+
+/>
+
+<ExpandableAlert title="Note" type="info">
+    The ScriptSig format varies depending on the type of transaction. This
+    example shows a P2PKH (Pay to Public Key Hash) input, which is the most
+    common type.
+</ExpandableAlert>
+
+## 3- Common Script Types
+
+### P2PKH (Pay to Public Key Hash)
+
+The most common legacy transaction type has this ScriptSig pattern:
+
+<CodeSnippet code={`   <signature> <pubkey>`} language="text" />
+
+### P2SH (Pay to Script Hash)
+
+For P2SH inputs, the ScriptSig contains:
+
+<CodeSnippet code={`   <signatures...> <redeem script>`} language="text" />
+
+### Segwit Transactions
+
+For native segwit transactions (P2WPKH/P2WSH), the ScriptSig is empty as the unlocking data moves to the witness field.
+
+<ExpandableAlert title="Note" type="info">
+    For P2SH-wrapped segwit transactions, the ScriptSig contains only the
+    witness program, while the actual unlocking data is in the witness field.
+</ExpandableAlert>
+
+## 4- Size Considerations
+
+The ScriptSig size is encoded as a varint before the actual script data. Common sizes are:
+
+-   P2PKH: ~107 bytes
+-   P2SH: Variable (depends on redeem script complexity)
+-   Native Segwit: 0 bytes
+-   P2SH-wrapped Segwit: ~23 bytes
+
+<ExpandableAlert title="Warning" type="warning">
+    Large ScriptSigs increase transaction size and therefore fees. Segwit moves
+    this data to the witness, which receives a fee discount.
+</ExpandableAlert>
+
+## 5- Validation Rules
+
+When validating a ScriptSig:
+
+1. The script must parse successfully
+2. The combined script (ScriptSig + ScriptPubKey) must execute without errors
+3. The final stack must contain a true value
+4. The script size must not exceed the maximum allowed size
+
+<ExpandableAlert title="Historical Note" type="info">
+    The original Bitcoin design allowed more complex operations in ScriptSig,
+    but many were disabled to prevent transaction malleability. This led to the
+    development of segregated witness (segwit).
+</ExpandableAlert>

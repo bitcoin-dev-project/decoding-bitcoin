@@ -1,0 +1,116 @@
+---
+title: "Outputs: Amount"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/fees-thumbnail-amount.jpg"
+    ]
+parent: "transaction-structure"
+---
+
+<TransactionCreation enabledFields={["amount"]} />
+
+The amount field in a transaction output specifies how many satoshis (the smallest unit of bitcoin) are being assigned to this output.
+
+Let's examine our transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-amount.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-amount.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+## Amount Field Structure
+
+-   **Size**: 8 bytes (64 bits)
+-   **Format**: Little-endian integer
+-   **Unit**: Satoshis (1 BTC = 100,000,000 satoshis)
+-   **Range**: 0 to 21,000,000 \* 100,000,000 satoshis (maximum bitcoin supply)
+
+<ExpandableAlert title="Note" type="info">
+    The amount field uses 8 bytes because the maximum bitcoin supply (21 million
+    BTC) in satoshis exceeds what could be stored in 4 bytes (maximum
+    ~42.94967296 BTC).
+</ExpandableAlert>
+
+## Implementation Example
+
+Here's how you might parse a transaction output's amount:
+
+<CodeSnippet
+    code={`def parse_amount(raw_tx: bytes, offset: int = 0) -> tuple[int, int]:
+    """
+    Parse an amount from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (amount, new_offset)
+    """
+    # Read 8 bytes for amount
+    amount_bytes = raw_tx[offset:offset + 8]
+    
+    # Convert to integer (little-endian)
+    amount = int.from_bytes(amount_bytes, 'little')
+    
+    return amount, offset + 8`}
+    language="python"
+/>
+
+## Amount Validation Rules
+
+When validating transaction amounts, nodes must ensure:
+
+1. **Non-negative**: All output amounts must be ≥ 0 satoshis
+2. **Input sum ≥ Output sum**: The sum of all input amounts must be greater than or equal to the sum of all output amounts
+3. **Maximum supply**: No single output can exceed the maximum bitcoin supply (21 million BTC)
+
+<ExpandableAlert title="Warning" type="warning">
+    The difference between input and output amounts becomes the transaction fee,
+    which is collected by miners. Be careful not to accidentally set high fees
+    by miscalculating output amounts!
+</ExpandableAlert>
+
+## Unit Conversion
+
+Here's a helpful function for converting between BTC and satoshis:
+
+<CodeSnippet
+    code={`def btc_to_satoshis(btc: float) -> int:
+    """Convert BTC amount to satoshis"""
+    return int(btc * 100_000_000)
+
+def satoshis_to_btc(sats: int) -> float:
+"""Convert satoshi amount to BTC"""
+return sats / 100_000_000`}
+language="python"
+/>
+
+Common conversions:
+
+-   1 BTC = 100,000,000 satoshis
+-   0.00000001 BTC = 1 satoshi
+-   0.001 BTC = 100,000 satoshis
+
+<ExpandableAlert title="Historical Note" type="info">
+    The term "satoshi" was adopted by the Bitcoin community to honor Bitcoin's
+    creator, Satoshi Nakamoto. The small unit size allows for very precise value
+    transfer and future-proofs Bitcoin against significant price appreciation.
+</ExpandableAlert>

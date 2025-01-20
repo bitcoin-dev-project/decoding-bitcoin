@@ -1,0 +1,144 @@
+---
+title: "Outputs: Output count"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 2
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
+parent: "fee-calculation"
+---
+
+<TransactionCreation enabledFields={["output_count"]} />
+
+The number of outputs in a transaction is stored as a variable-length integer (varint). Let's examine a real transaction:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-outputcount.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-outputcount.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+The output count tells us how many outputs to expect in this transaction. Like the input count, it uses varint encoding:
+
+<div className="overflow-x-auto">
+    <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+        <thead className="bg-orange-100 dark:bg-orange-900">
+            <tr>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Decimal Range
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Hex Range
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Bytes used
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-semibold">
+                    Format
+                </th>
+            </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4">0 to 252</td>
+                <td className="px-6 py-4">
+                    <code>0x00</code> to <code>0xfc</code>
+                </td>
+                <td className="px-6 py-4">1</td>
+                <td className="px-6 py-4">uint8_t</td>
+            </tr>
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4">253 to 2¹⁶-1</td>
+                <td className="px-6 py-4">
+                    <code>0xfd</code> to <code>0xffff</code>
+                </td>
+                <td className="px-6 py-4">3</td>
+                <td className="px-6 py-4">
+                    <code>0xfd</code> followed by the number as uint16_t
+                </td>
+            </tr>
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4">2¹⁶ to 2³²-1</td>
+                <td className="px-6 py-4">
+                    <code>0x10000</code> to <code>0xffffffff</code>
+                </td>
+                <td className="px-6 py-4">5</td>
+                <td className="px-6 py-4">
+                    <code>0xfe</code> followed by the number as uint32_t
+                </td>
+            </tr>
+            <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+                <td className="px-6 py-4">2³² to 2⁶⁴-1</td>
+                <td className="px-6 py-4">
+                    <code>0x100000000</code> to <code>0xffffffffffffffff</code>
+                </td>
+                <td className="px-6 py-4">9</td>
+                <td className="px-6 py-4">
+                    <code>0xff</code> followed by the number as uint64_t
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+## Common Output Patterns
+
+Most Bitcoin transactions have either one or two outputs:
+
+-   **Single Output**: Typically seen in coinbase transactions (mining rewards) or when moving all funds to a new address
+-   **Two Outputs**: The most common pattern, where one output is the payment and the other is change returned to the sender
+-   **Multiple Outputs**: Used for batching multiple payments into a single transaction, which is more efficient
+
+<ExpandableAlert title="Implementation Example" type="info">
+Here's how you might parse a transaction's output count:
+
+<CodeSnippet
+    code={`def parse_output_count(raw_tx: bytes, offset: int = 0) -> tuple[int, int]:
+    """
+    Parse output count from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (count, new_offset)
+    """
+    # Read the varint
+    count = 0
+    first_byte = raw_tx[offset]
+    
+    if first_byte < 0xfd:
+        count = first_byte
+        offset += 1
+    elif first_byte == 0xfd:
+        count = int.from_bytes(raw_tx[offset+1:offset+3], 'little')
+        offset += 3
+    elif first_byte == 0xfe:
+        count = int.from_bytes(raw_tx[offset+1:offset+5], 'little')
+        offset += 5
+    else:  # 0xff
+        count = int.from_bytes(raw_tx[offset+1:offset+9], 'little')
+        offset += 9
+        
+    return count, offset`}
+    language="python"
+/>
+</ExpandableAlert>
+
+<ExpandableAlert title="Note" type="info">
+    Every valid Bitcoin transaction must have at least one output. A transaction
+    with zero outputs would be invalid and rejected by the network.
+</ExpandableAlert>{" "}
