@@ -1,0 +1,120 @@
+---
+title: "Outputs: ScriptPubKey"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3.3
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/tx-thumbnail-scriptpubkey.jpg"
+    ]
+parent: "transaction-structure"
+---
+
+<TransactionCreation enabledFields={["scriptpubkey"]} />
+
+The ScriptPubKey is a locking script that specifies the conditions that must be met to spend the bitcoins in a transaction output.
+
+Let's examine a real transaction output's ScriptPubKey:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-scriptpubkey.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-scriptpubkey.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+## Common ScriptPubKey Types
+
+The most common types of ScriptPubKey patterns are:
+
+| Type   | Description                    | Pattern                           |
+| ------ | ------------------------------ | --------------------------------- |
+| P2PKH  | Pay to Public Key Hash         | `76a914{20-byte-pubkey-hash}88ac` |
+| P2SH   | Pay to Script Hash             | `a914{20-byte-script-hash}87`     |
+| P2WPKH | Pay to Witness Public Key Hash | `0014{20-byte-witness-program}`   |
+| P2WSH  | Pay to Witness Script Hash     | `0020{32-byte-witness-program}`   |
+
+<ExpandableAlert title="Note" type="info">
+    The ScriptPubKey is what creates the Bitcoin "address". Different
+    ScriptPubKey patterns result in different address formats (like legacy
+    addresses starting with 1, or native segwit addresses starting with bc1).
+</ExpandableAlert>
+
+## Implementation Example
+
+Here's how you might parse a ScriptPubKey:
+
+<CodeSnippet
+    code={`def parse_scriptpubkey(raw_tx: bytes, offset: int = 0) -> tuple[bytes, int]:
+    """
+    Parse a ScriptPubKey from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (scriptpubkey, new_offset)
+    """
+    # Read the script size (varint)
+    script_size, offset = read_varint(raw_tx, offset)
+    
+    # Read the actual script
+    script = raw_tx[offset:offset + script_size]
+    
+    return script, offset + script_size`}
+    language="python"
+/>
+
+## Locking Mechanisms
+
+The ScriptPubKey acts like a smart contract that defines how the bitcoins can be spent. Common locking mechanisms include:
+
+1. **Single Signature**: Requires one digital signature from a specific public key
+2. **Multi-signature**: Requires M-of-N signatures from a set of public keys
+3. **Time Locks**: Prevents spending until a certain time or block height
+4. **Hash Locks**: Requires revealing a preimage that hashes to a specific value
+
+<ExpandableAlert title="Warning" type="warning">
+    An empty or invalid ScriptPubKey will make the output unspendable,
+    permanently locking those bitcoins.
+</ExpandableAlert>
+
+## Validation Rules
+
+When validating a transaction, nodes must:
+
+1. Verify the ScriptPubKey length matches its declared size
+2. Ensure the script follows valid syntax rules
+3. Check that the script type is standard (for policy rules)
+4. Verify the spending conditions are met when the output is spent
+
+## Standard vs Non-Standard Scripts
+
+Bitcoin Core's default policy only relays "standard" transaction types to prevent potential DoS attacks. Standard script types include:
+
+-   P2PKH (Pay to Public Key Hash)
+-   P2SH (Pay to Script Hash)
+-   P2WPKH (Pay to Witness Public Key Hash)
+-   P2WSH (Pay to Witness Script Hash)
+-   P2TR (Pay to Taproot)
+-   Bare Multisig (limited to 3-of-3)
+-   OP_RETURN (limited to 83 bytes)
+
+<ExpandableAlert title="Historical Note" type="info">
+    The standardness rules have evolved over time. For example, P2SH was added
+    in 2012 (BIP 16), and P2WPKH/P2WSH in 2017 (BIP 141). The most recent
+    addition was P2TR in 2021 (BIP 341).
+</ExpandableAlert>

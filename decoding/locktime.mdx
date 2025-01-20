@@ -5,10 +5,175 @@ lastmod: "2024-07-26"
 draft: false
 category: Transactions
 layout: TopicBanner
-order: 3.5
+order: 3.3
 icon: "FaClipboardList"
-images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/tx-thumbnail-locktime.jpg"
+    ]
 parent: "transaction-structure"
 ---
 
-(coming soon)
+<TransactionCreation enabledFields={["locktime"]} />
+
+The locktime field is a 4-byte value that specifies the earliest time a transaction can be added to the blockchain.
+
+Let's examine our transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-locktime.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-locktime.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+In our example transaction, we can see the locktime value is `00000000`. This means:
+
+-   The transaction is valid immediately (can be included in the next block)
+-   No timelock restrictions are applied
+-   This is the most common locktime value used in Bitcoin transactions
+
+## Locktime Values
+
+The interpretation of the locktime value depends on its range:
+
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+    <thead className="bg-orange-100 dark:bg-orange-900">
+      <tr>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Locktime Value</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Interpretation</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>0</code></td>
+        <td className="px-6 py-4">Transaction is valid immediately (most common)</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>< 500.000.000</code></td>
+        <td className="px-6 py-4">Interpreted as a block height</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>≥ 500.000.000</code></td>
+        <td className="px-6 py-4">Interpreted as a Unix timestamp</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+For example:
+
+-   Locktime of 650000 means the transaction is invalid until block 650000
+-   Locktime of 1640995200 means the transaction is invalid until January 1, 2022 (Unix timestamp)
+
+<ExpandableAlert title="Note" type="info">
+    Locktime is only enforced if at least one input has a sequence number below
+    0xffffffff. If all inputs have sequence 0xffffffff, the locktime is ignored.
+</ExpandableAlert>
+
+## Implementation Example
+
+Here's how you might parse a transaction's locktime:
+
+<CodeSnippet
+    code={`def parse_locktime(raw_tx: bytes, offset: int = 0) -> tuple[int, int]:
+    """
+    Parse locktime from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (locktime, new_offset)
+    """
+    # Read 4 bytes for locktime
+    locktime_bytes = raw_tx[offset:offset + 4]
+    
+    # Convert to integer (little-endian)
+    locktime = int.from_bytes(locktime_bytes, 'little')
+    
+    return locktime, offset + 4`}
+    language="python"
+/>
+
+## Use Cases
+
+### 1. Time-Delayed Transactions
+
+Locktime can be used to create transactions that only become valid in the future:
+
+<CodeSnippet
+    code={`def create_future_tx(block_height: int) -> bytes:
+    """Create a transaction valid only after specific block height"""
+    tx = Transaction()
+    # ... add inputs and outputs ...
+    
+    # Set locktime to future block
+    tx.locktime = block_height
+    
+    # Must set sequence < 0xffffffff for locktime to be enforced
+    for tx_in in tx.inputs:
+        tx_in.sequence = 0xfffffffe
+        
+    return tx.serialize()`}
+    language="python"
+/>
+
+### 2. Escrow Transactions
+
+Locktime can be used in escrow services where funds should only be released after a certain time:
+
+<CodeSnippet
+    code={`def create_escrow_tx(release_time: int) -> bytes:
+    """Create a transaction that releases funds at specific time"""
+    tx = Transaction()
+    # ... add inputs and outputs ...
+    
+    # Set locktime to future timestamp
+    tx.locktime = release_time
+    
+    # Enable locktime enforcement
+    for tx_in in tx.inputs:
+        tx_in.sequence = 0xfffffffe
+        
+    return tx.serialize()`}
+    language="python"
+/>
+
+<ExpandableAlert title="Historical Note" type="info">
+    Locktime was originally intended to be used with sequence numbers for
+    <a
+        href="https://gnusha.org/pi/bitcoindev/CANEZrP2PEB8n_Ov1bXi_ZoAkLwfz7_JtM9PPHr+8ei5KCgwdEg@mail.gmail.com/"
+        target="_blank"
+    >
+        "high-frequency trades" - a way to update transactions before they were
+        mined.
+    </a>
+    However, this design was vulnerable to miner manipulation and was later
+    replaced by better payment channel designs like the Lightning Network.
+</ExpandableAlert>
+
+## Validation Rules
+
+When validating a transaction with locktime:
+
+1. If all input sequences are 0xffffffff, locktime is ignored
+2. Otherwise:
+    - If locktime < 500000000: Compare against current block height
+    - If locktime ≥ 500000000: Compare against median time past (MTP)
+3. Transaction is invalid if current time/height is less than locktime
+
+<ExpandableAlert title="Warning" type="warning">
+    Using locktime for time-sensitive applications requires careful
+    consideration of block time variance and potential network reorganizations.
+</ExpandableAlert>

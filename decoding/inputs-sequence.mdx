@@ -1,0 +1,167 @@
+---
+title: "Sequence"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 2
+icon: "FaClipboardList"
+images: ["/bitcoin-topics/static/images/topics/thumbnails/transaction-module/tx-thumbnail-sequence.jpg"]
+parent: "fee-calculation"
+---
+
+<TransactionCreation enabledFields={["sequence"]} />
+
+The sequence field is a 4-byte unsigned integer that appears in each transaction input.  
+Originally intended for <a href="https://gnusha.org/pi/bitcoindev/CANEZrP2PEB8n_Ov1bXi_ZoAkLwfz7_JtM9PPHr+8ei5KCgwdEg@mail.gmail.com/" target="_blank">"high-frequency trades".</a> it now serves different purposes including Replace-By-Fee (RBF) and relative timelocks.
+
+Let's examine our transaction to understand this better:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-sequence.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/fees/tx-sequence.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+In our example transaction, we can see the sequence value is `0xffffffff`. This is the default sequence value (4294967295 in decimal) which:
+
+-   Disables relative timelocks (BIP 68)
+-   Indicates RBF (Replace-By-Fee) is not enabled
+-   Represents the traditional "final" sequence number
+
+## 1- Sequence Values
+
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+    <thead className="bg-orange-100 dark:bg-orange-900">
+      <tr>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Value Range</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Decimal Range</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Description</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Common Use Cases</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>0xffffffff</code></td>
+        <td className="px-6 py-4">4294967295</td>
+        <td className="px-6 py-4">Default value</td>
+        <td className="px-6 py-4">
+          - Standard transactions<br/>
+          - Disables relative timelocks<br/>
+          - RBF disabled
+        </td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>< 0xf0000000</code></td>
+        <td className="px-6 py-4">< 4026531840</td>
+        <td className="px-6 py-4">RBF signaling</td>
+        <td className="px-6 py-4">
+          - Fee bumping<br/>
+          - Transaction replacement<br/>
+          - Unconfirmed tx updates
+        </td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>< 0x80000000</code></td>
+        <td className="px-6 py-4">< 2147483648</td>
+        <td className="px-6 py-4">Relative timelock</td>
+        <td className="px-6 py-4">
+          - Payment channels<br/>
+          - Time-based scripts<br/>
+          - Relative block/time locks
+        </td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>0</code></td>
+        <td className="px-6 py-4">0</td>
+        <td className="px-6 py-4">Minimum value</td>
+        <td className="px-6 py-4">
+          - Maximum replaceability<br/>
+          - No timelock restrictions
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+_We will cover Replace-By-Fee (RBF) and relative timelocks in detail in separate topics. Now just understand what a sequence number is and its range._
+
+<ExpandableAlert title="Note" type="info">
+    These ranges are hierarchical - a value that enables relative timelocks 
+    (< 0x80000000) also automatically enables RBF (< 0xf0000000).
+</ExpandableAlert>
+
+## 2- Implementation Example
+
+Here's how you might parse a transaction input's sequence number:
+
+<CodeSnippet
+    code={`def parse_sequence(raw_tx: bytes, offset: int = 0) -> tuple[int, int]:
+    """
+    Parse a sequence number from raw transaction bytes
+    
+    Args:
+        raw_tx: Raw transaction bytes
+        offset: Starting position in bytes
+        
+    Returns:
+        (sequence, new_offset)
+    """
+    # Read 4 bytes for sequence
+    sequence_bytes = raw_tx[offset:offset + 4]
+    
+    # Convert to integer (little-endian)
+    sequence = int.from_bytes(sequence_bytes, 'little')
+    
+    return sequence, offset + 4`}
+    language="python"
+/>
+
+## 3- Historical Context
+
+<ExpandableAlert title="Original Design" type="info">
+    Satoshi originally designed the sequence number for "high-frequency trades"
+    - a way to update transactions before they were mined. The idea was to
+    create payment channels between parties, where each new payment would
+    increment the sequence number. However, this design was vulnerable to miner
+    manipulation and was later replaced by better payment channel designs like
+    the Lightning Network.
+</ExpandableAlert>
+
+## 4- Modern Uses
+
+### Replace-By-Fee (RBF)
+
+When a transaction's input has a sequence number below 0xf0000000, it signals that the transaction can be replaced by a version with higher fees. This is useful when network fees increase and you want to speed up confirmation of your transaction.
+
+### Relative Timelocks
+
+BIP 68 introduced relative timelocks using sequence numbers below 0x80000000. This allows an input to specify a minimum age (in blocks or time) relative to its previous output before it can be spent.
+
+<CodeSnippet
+    code={`def is_rbf_enabled(sequence: int) -> bool:
+    """Check if RBF is enabled for this sequence number"""
+    return sequence < 0xf0000000
+
+def is_relative_timelock(sequence: int) -> bool:
+"""Check if relative timelock is enabled"""
+return sequence < 0x80000000`}
+language="python"
+/>
+
+<ExpandableAlert title="Note" type="info">
+    The sequence field must be interpreted differently depending on the
+    transaction version. Relative timelocks (BIP 68) only apply to transactions
+    version 2 or higher.
+</ExpandableAlert>{" "}
