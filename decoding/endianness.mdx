@@ -1,0 +1,148 @@
+---
+title: "Endianness"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Taproot
+layout: TopicBanner
+order: 1
+icon: "FaHashtag"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/taproot-roadmap-thumbnail.webp"
+    ]
+---
+
+Endianness refers to the order in which bytes are stored and read in a computer's memory.  
+
+To understand it, imagine reading directions in different languages: while English Hex flows from left to right, Arabic Hex flows from right to left.
+
+Similarly, computers have two ways to store data:
+1. **Big-endian (BE):** Most significant byte first
+2. **Little-endian (LE):** Least significant byte first
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/technical-foundation/communication-endianness.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/technical-foundation/communication-endianness.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+##  1- Big-Endian
+
+Big-endian stores the **most significant byte** first. This is similar to how humans read numbers and Hex in most cases: starting with the most important information.
+
+Suppose we want to store the number **12345678** (hexadecimal: `0x00BC614E`) in memory. In **big-endian**, the bytes are stored in this order:
+
+<CodeSnippet
+    language="Hex"
+    code={`   00   BC   61   4E  `}
+/>
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/technical-foundation/bigendian.jpg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/technical-foundation/bigendian.jpg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+
+- **Most significant byte** (`00`) is stored at the lowest memory address (00).
+- **Least significant byte** (`4E`) is stored at the highest address (03).
+
+Big-endian is considered more "human-readable" because the data is stored in the order we naturally read it.
+
+
+---
+
+## 2. Little-Endian
+
+Little-endian stores the **least significant byte** first. This might feel counterintuitive to humans but is more efficient for modern processors.
+
+Using the same number **12345678** (`0x00BC614E`), here’s how it looks in **little-endian**:
+
+<CodeSnippet
+    language="Hex"
+    code={`   4E   61   BC   00  `}
+/>
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/technical-foundation/littleendian.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/technical-foundation/littleendian.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+
+- **Least significant byte** (`4E`) is stored at the lowest memory address (00).
+- **Most significant byte** (`00`) is stored at the highest address (03).
+
+This "reversal" is common in Bitcoin's internal data representation.
+
+
+## 3. Endianness in Bitcoin
+
+In Bitcoin, **little-endian** is the standard for storing most data, like transaction IDs, block headers, and amounts. However, when this data is displayed to humans (e.g., in block explorers), it is often converted to **big-endian** for readability.
+
+<TransactionCreation enabledFields={["version", "locktime", "amount", "sequence"]} />
+
+---
+
+## Bitcoin Transaction Example
+
+Let's say a transaction output amount is **12345678 satoshis**. In Bitcoin:
+- This value is stored as a **64-bit integer** (8 bytes) in **little-endian** format.
+- To humans, the hexadecimal representation would look like this in **big-endian**:
+
+<CodeSnippet
+    language="Hex"
+    code={`    00   00   00   00   00   BC   61   4E  `}
+/>
+
+- In **little-endian**, this is reversed:
+
+<CodeSnippet
+    language="Hex"
+    code={`    4E   61   BC   00   00   00   00   00  `}
+/>
+
+
+If you were decoding raw Bitcoin transaction data, you'd need to reverse the byte order to understand the values correctly.
+
+---
+
+## Why Does Bitcoin Use Little-Endian?
+
+Bitcoin uses **little-endian** because Satoshi developed it on a little-endian computer.  
+
+Most modern CPUs are little-endian and the network protocols typically use big-endian, which can create a mismatch:
+- **Big-endian** is used for network communication (called **network byte order**).
+- **Little-endian** is used for internal storage in Bitcoin.
+
+This duality requires developers to frequently convert between the two formats when working with Bitcoin data.
+
+---
