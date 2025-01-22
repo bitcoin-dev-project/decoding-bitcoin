@@ -14,4 +14,162 @@ images:
 parent: "technical-foundation"
 ---
 
-(coming soon)
+Compact Size (also known as CompactSize or var_int) is a variable-length integer encoding used in Bitcoin to efficiently represent numbers while minimizing space usage. It's primarily used in transaction data and network messages to indicate:
+
+- Number of inputs/outputs in a transaction
+- Script sizes
+- Number of witness elements
+- Length of upcoming data fields
+
+## Structure
+
+The encoding uses a prefix byte to determine how to read the subsequent bytes:
+
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+    <thead className="bg-orange-100 dark:bg-orange-900">
+      <tr>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Prefix</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Format</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Range</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Total Size</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>≤ 0xFC</code></td>
+        <td className="px-6 py-4">Direct value</td>
+        <td className="px-6 py-4">0-252</td>
+        <td className="px-6 py-4">1 byte</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>0xFD</code></td>
+        <td className="px-6 py-4">Next 2 bytes (LE)</td>
+        <td className="px-6 py-4">253-65,535</td>
+        <td className="px-6 py-4">3 bytes</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>0xFE</code></td>
+        <td className="px-6 py-4">Next 4 bytes (LE)</td>
+        <td className="px-6 py-4">65,536-4,294,967,295</td>
+        <td className="px-6 py-4">5 bytes</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap"><code>0xFF</code></td>
+        <td className="px-6 py-4">Next 8 bytes (LE)</td>
+        <td className="px-6 py-4">4,294,967,296-2^64-1</td>
+        <td className="px-6 py-4">9 bytes</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+### How to Read It
+
+Let's analyze real Bitcoin transactions to understand compact size encoding:
+
+1. **Transaction with 1 Input**
+   -> <a href="https://mempool.space/tx/5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614" target="_blank">5e6e1a9b4ce3f9f...fedc9a758fe614</a>
+   - Looking at input count: `01`
+   - Since 1 < 252, it's a direct value
+   - Meaning: Transaction has 1 input
+   - Total bytes used: 1
+
+2. **ScriptSig of 107 bytes**
+   -> <a href="https://mempool.space/tx/c27c4d2236fce2a7542e024408d7f89b95e50e42a2c3d10be499c3102ccb45ef" target="_blank">c27c4d2236fce2a...99c3102ccb45ef</a>
+   - Looking at scriptsig size: `6b`
+   - Since 107 (0x6b) < 252, it's a direct value
+   - Meaning: ScriptSig is 107 bytes long
+   - Total bytes used: 1
+
+3. **ScriptPubKey of 4,026 bytes**
+   -> <a href="https://mempool.space/tx/e411dbebd2f7d64dafeef9b14b5c59ec60c36779d43f850e5e347abee1e1a455" target="_blank">e411dbebd2f7d64...347abee1e1a455</a>
+   - Looking at scriptpubkey size: `fd ba 0f`
+   - First byte is 0xFD, so read next 2 bytes
+   - Next bytes: `ba 0f` (in little-endian)
+   - Convert from little-endian: `0fba` = 4,026 in decimal
+   - Meaning: ScriptPubKey is 4,026 bytes long
+   - Total bytes used: 3
+
+<ExpandableAlert title="Understanding Little-Endian" type="info">
+    In the third example, we see `ba 0f` instead of `0f ba` because of little-endian encoding.
+    Think of it as reading the bytes from right to left: `0fba` is the actual number in hexadecimal.
+</ExpandableAlert>
+
+<ExpandableAlert title="Tip" type="warning">
+    You can verify these values yourself by looking at the raw transaction data on the block explorer.
+    Click the transaction IDs above and look for the "Raw Transaction" section.
+</ExpandableAlert>
+
+## Implementation
+
+Here's a Python implementation for reading and writing compact size integers:
+
+<CodeSnippet
+    code={`def read_varint(s):
+    '''Reads a variable integer from a stream
+    
+    The first byte determines the format:
+    - If < 0xfd: directly contains the number
+    - If 0xfd: next 2 bytes contain number
+    - If 0xfe: next 4 bytes contain number 
+    - If 0xff: next 8 bytes contain number
+    '''
+    i = s.read(1)[0]
+    if i == 0xfd:
+        return int.from_bytes(s.read(2), 'little')
+    elif i == 0xfe:
+        return int.from_bytes(s.read(4), 'little')
+    elif i == 0xff:
+        return int.from_bytes(s.read(8), 'little')
+    else:
+        return i
+
+def encode_varint(i):
+    '''Encodes an integer as a compact size
+    
+    Returns bytes object with the encoded number
+    '''
+    if i < 0xfd:
+        return bytes([i])
+    elif i < 0x10000:
+        return b'\\xfd' + i.to_bytes(2, 'little')
+    elif i < 0x100000000:
+        return b'\\xfe' + i.to_bytes(4, 'little')
+    else:
+        return b'\\xff' + i.to_bytes(8, 'little')`}
+    language="python"
+/>
+
+## Common Uses in Bitcoin
+
+1. **Transaction Structure**
+   - Input count
+   - Output count
+   - ScriptSig size
+   - ScriptPubKey size
+   - Witness element count
+
+<TransactionCreation enabledFields={["input_count", "output_count", "scriptsig_size", "scriptpubkey_size"]} />
+
+2. **Block Data**
+   - Number of transactions in a block
+
+3. **Network Messages**
+   - Length of upcoming message data
+   - Number of inventory items
+
+
+<ExpandableAlert title="Warning" type="warning">
+    The compact size format is part of Bitcoin's consensus rules. Incorrect encoding
+    or decoding can lead to invalid transactions or network messages.
+</ExpandableAlert>
+
+<ExpandableAlert title="Important Notes" type="info">
+    - Most transactions use single-byte encoding (≤ 252)
+    - The FF prefix (8-byte numbers) is rarely used in practice
+    - All multi-byte numbers must be encoded in little-endian format
+    - This encoding has been part of Bitcoin since its first release
+</ExpandableAlert>
+
+This variable-length integer encoding plays a crucial role in keeping transaction and block data compact while maintaining flexibility for larger values when needed.
