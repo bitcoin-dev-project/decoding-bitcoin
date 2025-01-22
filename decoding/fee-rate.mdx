@@ -11,4 +11,158 @@ images: ["/bitcoin-topics/static/images/topics/thumbnails/musig-thumbnail.webp"]
 parent: "fee-calculation"
 ---
 
-(coming soon)
+When miners select transactions for inclusion in a block, they don't just look at the raw fee amount, they evaluate transactions based on their _fee rate_.
+
+This is how we calculate the fee rate:
+
+<div className="text-center my-4 text-orange-500">
+    $$\mathbf{Fee\ Rate = \frac{Transaction\ Fee}{Transaction\ Size}}$$
+</div>
+
+Miners use the fee rate to maximize their profit by comparing the profitability of including different transactions in their blocks.
+
+For example, consider these two transactions:
+
+1. Transaction A: 50,000 sats fee, 250 vbytes size
+2. Transaction B: 30,000 sats fee, 100 vbytes size
+
+**Fee Rates:**
+- Transaction A: 200 sats/vbyte (50,000 ÷ 250)
+- Transaction B: 300 sats/vbyte (30,000 ÷ 100)
+
+<ExpandableAlert title="Fee Rate Priority" type="info">
+    Even though Transaction A pays a higher absolute fee, Transaction B is more profitable for miners because it provides more fees per unit of block space.
+</ExpandableAlert>
+
+## Fee Rate Units
+
+There are three common ways to measure fee rates:
+
+1. **sats/vbyte (Most Common)**
+2. **sats/wu (Internal)**
+3. **sats/byte (Legacy)**
+
+
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+    <thead className="bg-orange-100 dark:bg-orange-900">
+      <tr>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Unit</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Description</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Usage</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Example</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap font-semibold"><code>sats/vbyte</code></td>
+        <td className="px-6 py-4">Virtual bytes account for witness discount</td>
+        <td className="px-6 py-4">Most common unit used by wallets and block explorers</td>
+        <td className="px-6 py-4">50 sats/vbyte</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap font-semibold"><code>sats/wu</code></td>
+        <td className="px-6 py-4">Weight units used internally by Bitcoin Core</td>
+        <td className="px-6 py-4">Internal Bitcoin Core (4M WU block limit)</td>
+        <td className="px-6 py-4">12.5 sats/wu</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4 whitespace-nowrap font-semibold"><code>sats/byte</code></td>
+        <td className="px-6 py-4">Deprecated since SegWit activation</td>
+        <td className="px-6 py-4">Legacy software only</td>
+        <td className="px-6 py-4">50 sats/byte</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## Understanding Virtual Bytes (vBytes)
+
+Virtual bytes (vBytes) are a way to express transaction size that accounts for the SegWit discount. The formula is simple:
+
+<div className="text-center my-4 text-orange-500">
+    $$\mathbf{Virtual\ Bytes = Transaction\ Weight ÷ 4}$$
+</div>
+
+<div className="overflow-x-auto">
+  <table className="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden">
+    <thead className="bg-orange-100 dark:bg-orange-900">
+      <tr>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Transaction Type</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Weight Units</th>
+        <th className="px-6 py-3 text-left text-sm font-semibold">Virtual Bytes</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4">Legacy (non-SegWit)</td>
+        <td className="px-6 py-4">size × 4</td>
+        <td className="px-6 py-4">Same as raw size</td>
+      </tr>
+      <tr className="hover:bg-gray-100 dark:hover:bg-gray-800">
+        <td className="px-6 py-4">Native SegWit</td>
+        <td className="px-6 py-4">(base × 4) + witness</td>
+        <td className="px-6 py-4">~25% smaller than raw size</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ExpandableAlert title="Example Calculation" type="info"   expandable={true} initialLines={2}>
+    Consider a SegWit transaction with:
+    - Base size: 200 bytes
+    - Witness size: 100 bytes
+    
+    1. Weight = (200 × 4) + 100 = 900 weight units
+    2. Virtual Size = 900 ÷ 4 = 225 vBytes
+    
+    Even though the raw size is 300 bytes (200 + 100), the virtual size is only 225 vBytes thanks to the SegWit discount!
+</ExpandableAlert>
+
+## Minimum Relay Fee Rate
+
+Nodes enforce a minimum fee rate to prevent spam:
+
+- Default minimum: 1 sat/vbyte
+- Transactions below this rate are typically rejected
+- You can check your node's setting:
+
+<CodeSnippet
+    language="bash"
+    code={`$ bitcoin-cli getmempoolinfo
+{
+  "loaded": true,
+  "size": 47293,
+  "bytes": 32883821,
+  "usage": 148075552,
+  "maxmempool": 300000000,
+  "mempoolminfee": 0.00001000,  # 1 sat/vbyte
+  ...
+}`}
+/>
+
+<ExpandableAlert title="NOTE" type="info">
+    💡 The minimum relay fee is a policy rule, not a consensus rule. While
+    theoretically possible, getting a below-minimum fee transaction mined is
+    extremely unlikely unless you have a direct connection to a miner.
+</ExpandableAlert>
+
+## RPC: Current Fee Rates
+
+You can estimate current fee rates using Bitcoin Core:
+
+<CodeSnippet
+    language="bash"
+    code={`$ bitcoin-cli estimatesmartfee 6
+{
+  "feerate": 0.00008124,  # BTC/kB
+  "blocks": 6
+}`}
+/>
+
+Or query popular block explorers:
+- mempool.space
+- blockstream.info
+- bitcoinfees.earn.com
+
+Remember that fee rates are dynamic and can change rapidly based on network demand.

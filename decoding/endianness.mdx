@@ -75,7 +75,7 @@ Big-endian is considered more "human-readable" because the data is stored in the
 
 Little-endian stores the **least significant byte** first. This might feel counterintuitive to humans but is more efficient for modern processors.
 
-Using the same number **12345678** (`0x00BC614E`), here’s how it looks in **little-endian**:
+Using the same number **12345678** (`0x00BC614E`), here's how it looks in **little-endian**:
 
 <CodeSnippet
     language="Hex"
@@ -144,5 +144,62 @@ Most modern CPUs are little-endian and the network protocols typically use big-e
 - **Little-endian** is used for internal storage in Bitcoin.
 
 This duality requires developers to frequently convert between the two formats when working with Bitcoin data.
+
+---
+
+## 4. Working with Endianness in Code
+
+When working with Bitcoin data, you'll frequently need to convert between little-endian and big-endian formats. Here are some common Python functions for handling endianness:
+
+### Little-Endian to Integer
+
+<CodeSnippet
+    language="python"
+    code={`def little_endian_to_int(b):
+    '''Convert little-endian bytes to integer'''
+    return int.from_bytes(b, 'little')
+
+# Example usage
+bytes_data = bytes.fromhex('4E61BC00')  # 12345678 in little-endian
+number = little_endian_to_int(bytes_data)
+print(number)  # Output: 12345678`}
+/>
+
+### Integer to Little-Endian
+
+<CodeSnippet
+    language="python"
+    code={`def int_to_little_endian(n, length):
+    '''Convert integer to little-endian bytes of specified length'''
+    return n.to_bytes(length, 'little')
+
+# Example usage
+number = 12345678
+bytes_data = int_to_little_endian(number, 4)
+print(bytes_data.hex())  # Output: 4e61bc00`}
+/>
+
+### Common Gotchas
+
+1. **Byte Order Confusion**: When reading transaction IDs or hashes:
+
+<CodeSnippet
+    language="python"
+    code={`# INCORRECT - reading txid directly from hex
+txid = "4e61bc0000000000000000000000000000000000000000000000000000000000"
+
+# CORRECT - reverse the bytes for proper txid display
+txid_bytes = bytes.fromhex(txid)
+txid_display = txid_bytes[::-1].hex()`}
+/>
+
+2. **Length Specification**: When converting to little-endian, always specify the correct byte length:
+
+<CodeSnippet
+    language="python"
+    code={`# For Bitcoin amounts (8 bytes)
+amount = int_to_little_endian(12345678, 8)  # Correct
+amount = int_to_little_endian(12345678, 4)  # Wrong - too short!`}
+/>
 
 ---
