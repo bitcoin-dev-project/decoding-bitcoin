@@ -1,0 +1,133 @@
+---
+title: "Step 1: Create Transaction Inputs"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 1
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-1.jpg"
+    ]
+---
+
+Each input in a Bitcoin transaction must specify:
+
+-   Transaction ID (32 bytes): Points to the UTXO being spent
+-   Output Index (4 bytes): Which output from that transaction
+-   ScriptSig: Placeholder for the unlocking script
+-   Sequence (4 bytes): Usually 0xFFFFFFFF
+
+<div className="w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature7.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+The following table summarizes our UTXOs (Transaction IDs shown in big-endian format):
+
+| Input | Transaction ID (big-endian)                                      | Output Index | Sequence |
+| ----- | ---------------------------------------------------------------- | ------------ | -------- |
+| #1    | 9f96add4e4db413543df3eea1781c3be62637f1e2dd44069fa99801a88f7f7ff | 0            | eeffffff |
+| #2    | 8ac60eb9575db5b2d987e29f301b5b819ea83a5c6579d282d189cc04b8e151ef | 1            | ffffffff |
+
+_Note: In the transaction serialization below, these Transaction IDs are converted to little-endian format as required by the Bitcoin protocol._
+
+<CodeSnippet
+    language="text"
+    highlightLines={[6, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20]}
+    showLineNumbers={true}
+    code={`Transaction Breakdown:
+═══════════════════════════════════════════════════════════════════════════════════
+
+Version: 01000000
+
+Input Count: 02
+
+input[0]:
+Previous TXID: fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f
+Output Index: 00000000
+ScriptSig Size: 00
+ScriptSig:
+Sequence: eeffffff
+
+input[1]:
+Previous TXID: ef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a
+Output Index: 01000000
+ScriptSig Size: 00
+ScriptSig:
+Sequence: ffffffff
+
+Locktime: 11000000`}
+/>
+
+<ExpandableAlert
+    title="Why are scriptSig fields empty?"
+    type="info"
+    expandable={true}
+>
+    Transaction signing follows a specific order: 
+    1. First, we create the
+    transaction structure with empty scriptSig fields 
+    2. Then, we calculate the
+    signature hash (sighash) for each input 
+    3. Finally, we add the signatures to
+    create the complete transaction
+</ExpandableAlert>
+
+## Code Implementation
+
+<CodeSnippet
+    code={`def create_input(
+    txid: str,
+    vout: int,
+    script_sig: bytes = b'',
+    sequence: bytes = b'\\xff\\xff\\xff\\xff'
+) -> bytes:
+    # Convert txid from hex string and reverse (to little-endian)
+    txid_bytes = bytes.fromhex(txid)[::-1]
+    
+    # Convert vout to 4 bytes, little-endian
+    vout_bytes = int_to_little_endian(vout, 4)
+    
+    # Script length and script
+    script_sig_length = varint(len(script_sig))
+    
+    return (
+        txid_bytes +           # 32 bytes
+        vout_bytes +          # 4 bytes
+        script_sig_length +   # 1 byte
+        script_sig +          # variable
+        sequence              # 4 bytes
+    )`}
+    language="python"
+/>
+
+<ExpandableAlert title="Helper Functions" type="info" expandable={true}>
+Two essential encoding functions:
+1. int_to_little_endian: Converts integers to little-endian byte format
+2. varint: Encodes variable-length integers used for counts and lengths
+
+<CodeSnippet 
+    code={`def int_to_little_endian(value: int, length: int) -> bytes:
+    """Convert an integer to little-endian bytes"""
+    return value.to_bytes(length, 'little')
+
+def varint(n: int) -> bytes:
+"""Encode an integer as a variable length integer"""
+if n < 0xfd:
+return bytes([n])
+elif n <= 0xffff:
+return b'\\xfd' + n.to_bytes(2, 'little')
+elif n <= 0xffffffff:
+return b'\\xfe' + n.to_bytes(4, 'little')
+else:
+return b'\\xff' + n.to_bytes(8, 'little')`}
+language="python"
+/>
+
+</ExpandableAlert>

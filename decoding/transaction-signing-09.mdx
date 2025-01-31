@@ -1,0 +1,41 @@
+---
+title: "Step 9: Common Errors"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 9
+icon: "FaFileSignature"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-9.jpg"
+    ]
+---
+
+This guide covers three common transaction errors and their solutions:
+
+1. `mandatory-script-verify-flag-failed` (Signature must be zero for failed CHECK(MULTI)SIG operation)
+2. `mandatory-script-verify-flag-failed` (Script evaluated without error but finished with a false/empty top stack element)
+3. `reject-reason: missing-input`
+
+---
+
+When encountering these errors, use this checklist to debug the issue:
+
+| #   | Verification Check                                                                             |
+| --- | ---------------------------------------------------------------------------------------------- |
+| 1   | Validate the transaction ID (txid) is correctly reversed for use in inputs                     |
+| 2   | Ensure the amount field matches the UTXO value in satoshis (8 decimal places)                  |
+| 3   | Check the scriptCode is prefixed with its length byte when used in the transaction commitment  |
+| 4   | Include a 0x00 byte as the first witness element for CHECKMULTISIG bug workaround              |
+| 5   | Verify P2WPKH witness program: prepend `OP_0 OP_PUSHBYTES_20`                                  |
+| 6   | Verify P2WSH witness program: prepend `OP_0 OP_PUSHBYTES_32`                                   |
+| 7   | Verify witness signature SIGHASH_ALL flag: `0x01` (one byte)                                   |
+| 8   | Verify transaction commitment SIGHASH_ALL flag: `\x01\x00\x00\x00` (four bytes, little-endian) |
+| 9   | Test with known test vectors (e.g., BIP143 examples)                                           |
+| 10  | Verify that the signature matches the public key associated with the UTXO                      |
+| 11  | Check that sum of inputs ≥ sum of outputs + fees                                               |
+| 12  | Ensure double SHA256 hashing is performed before signing                                       |
+| 13  | The scriptCode must be prefixed with its length byte when adding to the commitment hash        |
+| 14  | Bitcoin requires double SHA256 hashing before signing                                          |

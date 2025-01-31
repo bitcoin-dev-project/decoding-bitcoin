@@ -9,74 +9,98 @@ order: 7
 icon: "FaClipboardList"
 images:
     [
-        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signing-tx.webp"
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature.jpg"
     ]
+children:
+    - transaction-signing-00
+    - transaction-signing-01
+    - transaction-signing-02
+    - transaction-signing-03
+    - transaction-signing-04
+    - transaction-signing-05
+    - transaction-signing-06
+    - transaction-signing-07
+    - transaction-signing-08
+    - transaction-signing-09
 ---
 
-After creating her transaction, Alice has all the essential parts in place:
+In this tutorial, we'll learn how to sign a transaction by working with a real example from <a href="https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#native-p2wpkh" target="_blank">BIP143's test vectors</a>.  
 
--   **Inputs** referencing her UTXOs.
--   **Outputs** specifying where the bitcoin should go.
+The transaction has two inputs, but we'll focus specifically on signing the second input which is a P2WPKH (native SegWit) input.  
+The first input is a legacy P2PK input which uses a different signing method that we won't cover now.
 
-However, the network will only accept her transaction if it’s **validly signed**. Let’s see how that works.
-
-<div className="dark:hidden w-full rounded-lg">
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
     <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/transactions/transaction3.svg"
+        src="/bitcoin-topics/static/images/topics/transactions/signature/siganture1.svg"
         width="100%"
         height="auto"
     />
 </div>
-<div className="hidden dark:block w-full rounded-lg">
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
     <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/transactions/transaction3.svg"
-        width="100%"
-        height="auto"
-    />
-</div>
-
-## 1. Why Sign the Transaction?
-
-Signing a transaction proves to the Bitcoin network that **you own the private keys** for the UTXOs you’re spending.
-
-Each input in a transaction references a specific previous output, which is “locked” to a Bitcoin script (Public-Key-Hash in this case).
-
-<div className="dark:hidden w-full rounded-lg">
-    <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/transactions/signature2.svg"
-        width="100%"
-        height="auto"
-    />
-</div>
-<div className="hidden dark:block w-full rounded-lg">
-    <SvgDisplay
-        src="/bitcoin-topics/static/images/topics/transactions/signature2.svg"
+        src="/bitcoin-topics/static/images/topics/transactions/signature/siganture1.svg"
         width="100%"
         height="auto"
     />
 </div>
 
-By signing, Alice demonstrates ownership of the private key required to satisfy the conditions of that script.
 
-## 2. The Signing Process
+Our goal is to create and sign this transaction:
 
-Let's look at a transaction with two inputs. Input 0 is locked to PKH1, and Input 1 is locked to PKH2.
+<CodeSnippet
+    language="text"
+    code={`  Unsigned Raw Transaction:
+  ----------------------
+  0100000002fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f
+  0000000000eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57
+  b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85
+  c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2
+  f0167faa815988ac11000000
+  
+  
+  Transaction Breakdown:
+  ----------------------
+  nVersion:  01000000
+  txin:      02 fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f 00000000 00 eeffffff
+                ef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a 01000000 00 ffffffff
+  txout:     02 202cb20600000000 1976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac
+                9093510d00000000 1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac
+  nLockTime: 11000000`}
+/>
 
-Each input requires its own signature. For Input 0, Alice must use the private key that matches PKH1. For Input 1, she needs the private key that matches PKH2.
 
-Before signing, the wallet creates a "cleaned" version of the transaction. This means all signature fields are temporarily empty.
+Below is the complete transaction data. You can refer back to this whenever you need to check any details during the following steps:
 
-Why use a cleaned version? Because:
+<div className="max-w-4xl overflow-x-auto">
+### Inputs
+| Input | Type | Previous Transaction ID | Output Index | Amount | ScriptPubKey | Private Key | Public Key |
+|-------|------|------------------------|--------------|--------|--------------|-------------|------------|
+| #0 | P2PK | 9f96ade4b41d5433f4eda31e1738ec2b36f6e7d1420d94a6af99801a88f7f7ff | 0 | 6.25 BTC | 2103c9f4836b9a4f77fc0d81f7bcb01b7f1b35916864b9476c241ce9fc198bd25432ac | bbc27228ddcb9209d7fd6f36b02f7dfa6252af40bb2f1cbc7a557da8027ff866 | 03c9f4836b9a4f77fc0d81f7bcb01b7f1b35916864b9476c241ce9fc198bd25432 |
+| <span className="bg-orange-500 dark:bg-orange-500 px-2 rounded text-black">#1</span> | <span className="bg-orange-500 dark:bg-orange-500 px-2 rounded text-black">P2WPKH</span> | 8ac60eb9575db5b2d987e29f301b5b819ea83a5c6579d282d189cc04b8e151ef | 1 | 6 BTC | 00141d0f172a0ecb48aee1be1f2687d2963ae33f71a1 | 619c335025c7f4012e556c2a58b2506e30b8511b53ade95ea316fd8c3286feb9 | 025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee6357 |
+</div>
 
--   Each signature needs to commit to the exact same transaction data
--   The order of signing doesn't matter
--   Verification becomes simpler and more reliable
+<div className="max-w-4xl overflow-x-auto">
+### Outputs
+| Output | Amount | ScriptPubKey |
+|--------|---------|--------------|
+| #0 | 1.1234 BTC (112,340,000 satoshis) | 1976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac |
+| #1 | 2.2345 BTC (223,450,000 satoshis) | 1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac |
+</div>
 
-The signing happens in steps:
 
-1. The wallet takes the cleaned transaction
-2. It hashes the entire transaction data
-3. It signs this hash with the appropriate private key
-4. It repeats for each input
 
-(...)
+## Steps We'll Follow
+
+1. Create Basic Transaction Structure
+
+2. Prepare BIP143 Signing Data
+
+3. Create Preimage
+
+4. Generate Signature
+
+5. Build Witness Data
+
+6. Assemble Final Transaction
+
+Each step will be explained in detail in the following sections, with code examples and tests using this exact transaction data.

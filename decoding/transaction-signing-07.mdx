@@ -1,0 +1,151 @@
+---
+title: "Step 7: Add Witness Field"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 7
+icon: "FaFileSignature"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-7.jpg"
+    ]
+---
+
+Our transaction now has all its fields populated except for the witness data.
+
+<div className="w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature9.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+For a P2WPKH input, the witness structure is:
+
+<CodeSnippet
+    code={`   
+    witness = [num_items] [signature_item] [pubkey_item]
+
+    where:
+       - num_items = 0x02 (always 2 items for P2WPKH)
+       - signature_item = [length][DER_signature + SIGHASH_ALL]
+       - pubkey_item = [length][compressed_pubkey]`}
+    language="text"
+    showLineNumbers={true}
+    highlightLines={[2]}
+/>
+
+Our test transaction's witness data:
+
+<CodeSnippet
+    code={`   witness = 02                                      # number of witness items
+             47                                      # signature length (71 bytes)
+             304402203609e17b84f6a7d30c80bfa...01    # DER signature + SIGHASH_ALL
+             21                                      # pubkey length (33 bytes)
+             025476c2e83188368da1ff3e292e7aca...57   # compressed public key`}
+    language="text"
+/>
+
+## Code Implementation
+
+<CodeSnippet
+    code={`def get_p2wpkh_witness(priv: bytes, msg: bytes) -> bytes:
+    """
+    Create witness stack for P2WPKH input with format:
+    [num_items][sig_len][signature][pubkey_len][pubkey]
+    """
+    # Get signature with sighash byte
+    signature_with_sighash = sign(priv, msg)
+    
+    # Get compressed public key
+    compressed_public_key = get_pub_from_priv(priv)
+    
+    # Number of witness items (always 2 for P2WPKH)
+    num_witness_items = bytes([2])
+    
+    # Serialize signature with its length
+    sig_len = bytes([len(signature_with_sighash)])
+    serialized_sig = sig_len + signature_with_sighash
+    
+    # Serialize public key with its length
+    pk_len = bytes([len(compressed_public_key)])
+    serialized_pk = pk_len + compressed_public_key
+    
+    # Combine all parts
+    serialized_witness = num_witness_items + serialized_sig + serialized_pk
+    return serialized_witness`}
+    language="python"
+/>
+
+## BIP143 Test Vector
+
+<CodeSnippet
+    code={`def test_witness_stack():
+    # Private key from BIP143
+    privkey = bytes.fromhex(
+        '619c335025c7f4012e556c2a58b2506e30b8511b53ade95ea316fd8c3286feb9'
+    )
+    
+    # Commitment hash from previous step
+    commitment = bytes.fromhex(
+        'c37af31116d1b27caf68aae9e3ac82f1477929014d5b917657d0eb49478cb670'
+    )
+    
+    # Generate witness stack
+    witness = get_p2wpkh_witness(privkey, commitment)
+    
+    # Expected witness data from BIP143 (broken down for clarity)
+    expected_witness = (
+        b'\\x02' +                    # Number of witness items
+        b'\\x47' +                    # Signature length (71 bytes)
+        bytes.fromhex(                # DER signature + SIGHASH_ALL
+            '304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a' +
+            '0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee01'
+        ) +
+        b'\\x21' +                    # Public key length (33 bytes)
+        bytes.fromhex(                # Compressed public key
+            '025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee6357'
+        )
+    )
+    
+    print("Generated witness:", witness.hex())
+    print("Expected witness:", expected_witness.hex())
+    assert witness == expected_witness, "Witness stack does not match BIP143 test vector"
+    print("Success! Witness stack matches BIP143 test vector")`}
+    language="python"
+/>
+
+When you run this code locally, it will generate the witness stack that matches the BIP143 test vector:
+
+<CodeSnippet
+    code={`# Expected witness stack from BIP143
+witness = "02" +                    # Number of witness items
+         "47" +                    # Signature length (71 bytes)
+         "304402203609e17b84f6a7d30c80bfa...01   # DER signature + SIGHASH_ALL
+         21                                      # pubkey length (33 bytes)
+         025476c2e83188368da1ff3e292e7aca...57   # compressed public key`}
+    language="python"
+/>
+
+<ExpandableAlert title="Note about Browser Execution" type="warning" expandable={true}>
+This code cannot be run directly in the browser as Trinket doesn't support the ECDSA module. Please run the code locally to verify the witness stack generation. Here's what you should see when running locally:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature4.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature4.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+</ExpandableAlert>
