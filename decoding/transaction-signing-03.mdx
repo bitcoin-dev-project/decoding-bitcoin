@@ -1,0 +1,121 @@
+---
+title: "Step 3: Generating the ScriptCode"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 3
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-3.jpg"
+    ]
+---
+
+When signing a P2WPKH (Segregated Witness) input, the signature and public key will be placed in the `witness` field.
+
+This is different from legacy transactions where signatures are placed directly in the `scriptSig`. The witness field starts empty and gets populated during the signing process.
+
+<div className="w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature9.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+For signing a P2WPKH input, we need to generate the `scriptCode`
+
+The scriptCode template for P2WPKH is:
+
+<CodeSnippet
+    language="text"
+    code={`    scriptCode = OP_DUP OP_HASH160 <20-byte-pubkey-hash> OP_EQUALVERIFY OP_CHECKSIG`}
+/>
+
+In hex format:
+
+<CodeSnippet
+    language="text"
+    code={`    scriptCode = 1976a914 {20-byte-pubkey-hash} 88ac`}
+/>
+
+The way we get the `pubkey hash` is by extracting the 20-byte hash from previous transaction scriptPubKey.
+
+For our test vector:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/siganture2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/siganture2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert
+    title="P2WPKH ScriptCode Structure"
+    type="info"
+    expandable={true}
+>
+    For P2WPKH inputs, the scriptCode is equivalent to the script in a legacy P2PKH output: 
+    - `19`: Length (25 bytes) 
+    - `76`: OP_DUP 
+    - `a9`: OP_HASH160 
+    - `14`: Push 20 bytes 
+    - `1d0f172a0ecb48aee1be1f2687d2963ae33f71a1`: Public key hash from witness program 
+    - `88`: OP_EQUALVERIFY 
+    - `ac`: OP_CHECKSIG
+</ExpandableAlert>
+
+## Code Implementation
+
+Here's how you can generate the ScriptCode from a P2WPKH scriptPubKey:
+
+<CodeSnippet 
+    code={`def get_p2wpkh_scriptcode(script_pubkey: bytes) -> bytes:
+
+    if not script_pubkey.startswith(b'\\x00\\x14'):
+        raise ValueError("Not a P2WPKH scriptPubKey")
+
+    # Extract the 20-byte pubkey hash (skip the version and length bytes)
+    pubkey_hash = script_pubkey[2:]
+    
+    # Construct P2PKH script: OP_DUP OP_HASH160 <pubkey_hash> OP_EQUALVERIFY OP_CHECKSIG
+    return (
+        bytes.fromhex('1976a914') +  # OP_DUP OP_HASH160 PUSH20
+        pubkey_hash +                 # 20-byte pubkey hash
+        bytes.fromhex('88ac')        # OP_EQUALVERIFY OP_CHECKSIG
+    )`}
+    language="python"
+
+/>
+
+## Test Vector from BIP143
+
+Let's now test our implementation against the BIP143 test vectors.
+
+If you check the <a href="https://github.com/bitcoin/bips/blob/58ffd93812ff25e87d53d1f202fbb389fdfb85bb/bip-0143.mediawiki?plain=1#L182" target="_blank">official BIP143 proposal</a>, you'll find that the scriptCode we generate matches exactly with the test vectors provided there.
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/f9e3ebfe8850"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(50vh)]"
+    ></iframe>
+</div>
+
+**Next Step:** With the scriptCode ready, we can move on to calculating the transaction digest components (hashPrevouts, hashSequence, hashOutputs) required by BIP143.

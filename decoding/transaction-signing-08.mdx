@@ -1,0 +1,243 @@
+---
+title: "Step 8: Final Transaction Structure"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 8
+icon: "FaFileSignature"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-8.jpg"
+    ]
+---
+
+<div className="w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature10.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+Our final signed transaction hex:
+
+<CodeSnippet
+    code="01000000000102fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f00000000494830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8e5cdd30be022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed01eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac000247304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee0121025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee635711000000"
+    language="text"
+/>
+
+Let's break it down:
+
+<CodeSnippet
+    code={`Version:        01000000
+Marker:         00
+Flag:           01
+
+Input Count:    02
+Input 1:
+    Previous TXID:    fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f
+    Output Index:     00000000
+    ScriptSig:        4830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8e5cdd30be022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed01
+    Sequence:         eeffffff
+Input 2:
+    Previous TXID:    ef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a
+    Output Index:     01000000
+    ScriptSig:        (empty)
+    Sequence:         ffffffff
+
+
+Output Count:   02
+Output 1:
+    Amount:          202cb206000000
+    ScriptPubKey:    76a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac
+
+Output 2:
+    Amount:          9093510d000000
+    ScriptPubKey:    76a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac
+
+Witness:
+    Input 1:         00
+    Input 2:         02 (items)
+                     47 304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee01
+                     21 025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee6357
+
+Locktime:       11000000`}
+    language="text"
+    showLineNumbers={true}
+    highlightLines={[2, 3, 27, 28, 29, 30, 31]}
+/>
+
+
+<ExpandableAlert title="About Input 1's ScriptSig" type="warning" expandable={true}>
+You might notice that we didn't explain how we filled the `scriptSig` for the first input.  
+This uses a legacy signature approach which is similar but slightly different from segwit signature.   
+
+Don't worry, we'll have a GitHub Classroom exercise where we'll explain how legacy signing works too!
+</ExpandableAlert>
+
+
+## Code Implementation
+
+<CodeSnippet
+    code={`def assemble_transaction(
+    inputs: List[bytes],
+    outputs: List[bytes],
+    witnesses: List[bytes]
+) -> bytes:
+    """
+    Assemble the final SegWit transaction.
+    
+    Args:
+        inputs: List of serialized inputs
+        outputs: List of serialized outputs
+        witnesses: List of witness data (one per input, empty bytes for non-witness inputs)
+    """
+    # 4-byte version
+    version = int_to_little_endian(1, 4)
+    
+    # Marker and flag for SegWit
+    marker_flag = b'\\x00\\x01'
+    
+    # Input count and serialized inputs
+    input_count = varint(len(inputs))
+    serialized_inputs = b''.join(inputs)
+    
+    # Output count and serialized outputs
+    output_count = varint(len(outputs))
+    serialized_outputs = b''.join(outputs)
+    
+    # Witness data (already includes counts)
+    witness_data = b''.join(witnesses)
+    print("witness_data:", witness_data.hex())  # Debug print
+    
+    # 4-byte locktime
+    locktime = int_to_little_endian(0x11, 4)
+    
+    # Combine all parts
+    return (
+        version +
+        marker_flag +
+        input_count +
+        serialized_inputs +
+        output_count +
+        serialized_outputs +
+        witness_data +
+        locktime
+    )`}
+    language="python"
+/>
+
+## BIP-143 Test Vector
+
+<ExpandableAlert title="Complete Test Vector Implementation" type="info" expandable={true} initialLines={1}>
+This is the complete implementation that generates the transaction matching BIP143 test vector. You can run this locally to verify the results.
+
+<CodeSnippet 
+    code={`def test_final_transaction():
+    """Test final transaction assembly with BIP143 test vector"""
+    
+    # First input with its signature script
+    input1 = create_input(
+        txid="9f96ade4b41d5433f4eda31e1738ec2b36f6e7d1420d94a6af99801a88f7f7ff",
+        vout=0,
+        sequence=b'\\xee\\xff\\xff\\xff',
+        script_sig=bytes.fromhex(
+            '4830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8e5cdd30be' +
+            '022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed01'
+        )
+    )
+    
+    # Second input (P2WPKH)
+    input2 = create_input(
+        txid="8ac60eb9575db5b2d987e29f301b5b819ea83a5c6579d282d189cc04b8e151ef",
+        vout=1,
+        sequence=b'\\xff\\xff\\xff\\xff'
+    )
+    
+    # Create outputs
+    output1 = create_output(
+        amount=112340000,  # 1.1234 BTC
+        script_pubkey=bytes.fromhex('1976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac')
+    )
+    
+    output2 = create_output(
+        amount=223450000,  # 2.2345 BTC
+        script_pubkey=bytes.fromhex('1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac')
+    )
+    
+    # Get witness data for second input (P2WPKH)
+    privkey = bytes.fromhex('619c335025c7f4012e556c2a58b2506e30b8511b53ade95ea316fd8c3286feb9')
+    outpoint = input2[:36]  # First 36 bytes are outpoint
+    scriptcode = bytes.fromhex('1976a9141d0f172a0ecb48aee1be1f2687d2963ae33f71a188ac')
+    
+    commitment = get_commitment_hash(
+        outpoint=outpoint,
+        scriptcode=scriptcode,
+        value=600000000,  # 6 BTC
+        outputs=[output1, output2],
+        all_inputs=[input1, input2]
+    )
+    
+    # Create witnesses
+    witness1 = b'\\x00'  # Empty witness for first input
+    witness2 = get_p2wpkh_witness(privkey, commitment)
+    
+    # Assemble final transaction
+    final_tx = assemble_transaction(
+        inputs=[input1, input2],
+        outputs=[output1, output2],
+        witnesses=[witness1, witness2]
+    )
+    
+    # Expected final transaction from BIP143
+    expected = bytes.fromhex(
+        '01000000000102fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f' +
+        '00000000494830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8' +
+        'e5cdd30be022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed' +
+        '01eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a010' +
+        '0000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a' +
+        '6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac0' +
+        '00247304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a' +
+        '0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee012102547' +
+        '6c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee635711000000'
+    )
+    
+    print("Generated tx:", final_tx.hex())
+    print("Expected tx:", expected.hex())
+    assert final_tx == expected, "Final transaction does not match BIP143 test vector"
+    print("Success! Final transaction matches BIP143 test vector")`} 
+    language="python" 
+/>
+</ExpandableAlert>
+
+## Decoded Transaction
+
+This is our final signed transaction hex:
+<CodeSnippet 
+    code={`# Unsigned Transaction (Before Signing)
+unsigned_tx = "0100000002fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f0000000000eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac11000000"
+
+# Final Signed Transaction
+
+signed_tx = "01000000000102fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f00000000494830450221008b9d1dc26ba6a9cb62127b02742fa9d754cd3bebf337f7a55d114c8e5cdd30be022040529b194ba3f9281a99f2b1c0a19c0489bc22ede944ccf4ecbab4cc618ef3ed01eeffffffef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a0100000000ffffffff02202cb206000000001976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac9093510d000000001976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac000247304402203609e17b84f6a7d30c80bfa610b5b4542f32a8a0d5447a12fb1366d7f01cc44a0220573a954c4518331561406f90300e8f3358f51928d43c212a8caed02de67eebee0121025476c2e83188368da1ff3e292e7acafcdb3566bb0ad253f62fc70f07aeee635711000000"`}
+language="python"
+/>
+
+When we decode our final transaction using Bitcoin Core's `decoderawtransaction` command, we can see all the components we've assembled:
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/image.png"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/image.png"
+        width="100%"
+        height="auto"
+    />
+</div>

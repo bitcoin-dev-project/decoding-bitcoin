@@ -1,0 +1,110 @@
+---
+title: "Step 0: Create Base Transaction"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 0
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-0.jpg"
+    ]
+---
+
+In this step, we define the base structure of the transaction, which includes:
+
+-   Version (4 bytes)
+-   Marker/Flag (required for SegWit transactions)
+-   Locktime (4 bytes)
+
+Inputs, outputs, and witness data will be added in the next steps.
+
+<div className="dark:hidden w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature6.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature6.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+<ExpandableAlert
+    title="SegWit vs Legacy Transactions"
+    type="important"
+    expandable={true}
+    initialLines={3}
+>
+    If a transaction has at least one SegWit input (native or wrapped), it must
+    include: 
+    - Marker byte (0x00) 
+    - Flag byte (0x01)
+</ExpandableAlert>
+
+The transaction structure at this stage is:
+
+<CodeSnippet
+    language="text"
+    highlightLines={[4, 5, 6, 12]}
+    showLineNumbers={true}
+    code={`Transaction Breakdown:
+═══════════════════════════════════════════════════════════════════════════════════
+
+version: 01000000
+marker: 00
+flag: 01
+
+in: # We'll add inputs in the next step
+
+out: # We'll add outputs later
+
+locktime: 11000000`}
+/>
+
+## Code Implementation
+
+<CodeSnippet
+    code={`def create_basic_tx(
+    version: int,
+    inputs: list,
+    outputs: list,
+    locktime: int,
+    segwit: bool = True
+) -> bytes:
+    # 4-byte version in little-endian
+    tx_version = int_to_little_endian(version, 4)
+    
+    # Marker + Flag for segwit (only if segwit=True)
+    marker_flag = b'\\x00\\x01' if segwit else b''
+    
+    # Number of inputs/outputs (varint)
+    in_count = varint(len(inputs))
+    out_count = varint(len(outputs))
+    
+    # Serialize inputs and outputs
+    serialized_inputs = b''.join(inputs)
+    serialized_outputs = b''.join(outputs)
+    
+    # Locktime (4 bytes)
+    tx_locktime = int_to_little_endian(locktime, 4)
+    
+    return (
+        tx_version +
+        marker_flag +
+        in_count +
+        serialized_inputs +
+        out_count +
+        serialized_outputs +
+        tx_locktime
+    )`}
+    language="python"
+/>
+
+Let's now add inputs and outputs in the next step!

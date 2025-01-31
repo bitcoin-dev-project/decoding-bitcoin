@@ -1,0 +1,87 @@
+---
+title: "Step 4: Calculate Transaction Digest Components"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 4
+icon: "FaFileSignature"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-4.jpg"
+    ]
+---
+
+<div className="w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature9.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+After creating the basic transaction and scriptCode, we need to calculate three important hashes:
+
+-   `hashPrevouts`: Double SHA256 of all input outpoints
+-   `hashSequence`: Double SHA256 of all input sequence numbers
+-   `hashOutputs`: Double SHA256 of all outputs
+
+## Implementation
+
+<CodeSnippet 
+    code={`def dsha256(data: bytes) -> bytes:
+    """Double SHA256 hash"""
+    return hashlib.sha256(hashlib.sha256(data).digest()).digest()
+
+def get_transaction_digest(inputs: List[bytes], outputs: List[bytes]) -> tuple[bytes, bytes, bytes]:
+    """Calculate BIP143 transaction digest components"""
+    # For hashPrevouts: concatenate all outpoints (txid + vout)
+    outpoints = b''
+    sequences = b''
+    
+    for tx_input in inputs:
+        outpoints += tx_input[:36]  # first 36 bytes are outpoint (txid + vout)
+        sequences += tx_input[-4:]   # last 4 bytes are sequence
+
+    # Calculate all three hashes
+    hash_prevouts = dsha256(outpoints)
+    hash_sequence = dsha256(sequences)
+    hash_outputs = dsha256(b''.join(outputs))
+
+    return hash_prevouts, hash_sequence, hash_outputs`}
+    language="python"
+
+/>
+
+## Test Vector from BIP143
+
+Let's verify our implementation against the official BIP143 test vectors.
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/89c62594519d"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(50vh)]"
+    ></iframe>
+</div>
+
+You can check the <a href="https://github.com/bitcoin/bips/blob/58ffd93812ff25e87d53d1f202fbb389fdfb85bb/bip-0143.mediawiki?plain=1#L164" target="_blank">official BIP143 specification</a> to confirm that our generated hashes match exactly with the test vectors provided there.
+
+<CodeSnippet
+    code={`# Expected hashes from BIP143 test vector
+hashPrevouts = "96b827c8483d4e9b96712b6713a7b68d6e8003a781feba36c31143470b4efd37"
+hashSequence = "52b0a642eea2fb7ae638c36f6252b6750293dbe574a806984b8e4d8548339a3b"
+hashOutputs = "863ef3e1a92afbfdb97f31ad0fc7683ee943e9abcf2501590ff8f6551f47e5e5"`}
+    language="python"
+/>
+
+## Next Step
+
+With these digest components ready, we'll move on to creating the complete signature hash preimage.

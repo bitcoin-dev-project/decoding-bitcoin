@@ -1,0 +1,113 @@
+---
+title: "Step 2: Create Transaction Outputs"
+date: 2024-01-25
+lastmod: "2024-01-25"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 2
+icon: "FaClipboardList"
+images:
+    [
+        "/bitcoin-topics/static/images/topics/thumbnails/transaction-module/signature/tx-thumbnail-signature-2.jpg"
+    ]
+---
+
+Each output in a Bitcoin transaction requires:
+
+-   Amount (8 bytes): Value in satoshis
+-   ScriptPubKey: Locking script that defines spending conditions
+
+<div className="w-full rounded-xl overflow-hidden full-width">
+    <SvgDisplay
+        src="/bitcoin-topics/static/images/topics/transactions/signature/signature8.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+---
+
+## Code Implementation
+
+<CodeSnippet
+    code={`def create_output(
+    amount: int,
+    script_pubkey: bytes
+) -> bytes:
+    # Amount (8 bytes, little-endian)
+    amount_bytes = int_to_little_endian(amount, 8)
+    
+    return (
+        amount_bytes +          # value in satoshis
+        script_pubkey          # includes length prefix
+    )`}
+    language="python"
+/>
+
+The following table summarizes our outputs from test vector:
+
+| Output | Amount (BTC) | ScriptPubKey                                         |
+| ------ | ------------ | ---------------------------------------------------- |
+| #1     | 1.2          | 1976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac |
+| #2     | 2.2          | 1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac |
+
+Our transaction structure at this stage is:
+
+<CodeSnippet
+    language="text"
+    highlightLines={[22, 24, 25, 26, 27, 29, 30, 31, 32]}
+    showLineNumbers={true}
+    code={`Transaction Breakdown:
+═══════════════════════════════════════════════════════════════════════════════════
+
+Version: 01000000
+
+Input Count: 02
+
+input[0]:
+Previous TXID: fff7f7881a8099afa6940d42d1e7f6362bec38171ea3edf433541db4e4ad969f
+Output Index: 00000000
+ScriptSig Size: 00
+ScriptSig:
+Sequence: eeffffff
+
+input[1]:
+Previous TXID: ef51e1b804cc89d182d279655c3aa89e815b1b309fe287d9b2b55d57b90ec68a
+Output Index: 01000000
+ScriptSig Size: 00
+ScriptSig:
+Sequence: ffffffff
+
+Output Count: 02
+
+output[0]:
+Amount: 202cb20600000000
+ScriptPubKey Size: 19
+ScriptPubKey: 76a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac
+
+output[1]:
+Amount: 9093510d00000000
+ScriptPubKey Size: 19
+ScriptPubKey: 76a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac
+
+Locktime: 11000000`}
+/>
+
+## Test Vector from BIP-143
+
+Let's test our code with the test vector from the <a href="https://github.com/bitcoin/bips/blob/58ffd93812ff25e87d53d1f202fbb389fdfb85bb/bip-0143.mediawiki?plain=1#L146" target="_blank">official BIP143 proposal</a>.
+
+<div className="flex justify-center items-center w-full full-width">
+    <iframe
+        src="https://trinket.io/embed/python3/e3098585e3c8"
+        width="100%"
+        height="100%"
+        style={{
+            border: "none",
+            margin: 0
+        }}
+        allowFullScreen
+        className="rounded-md shadow-sm h-[calc(50vh)]"
+    ></iframe>
+</div>
