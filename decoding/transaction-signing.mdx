@@ -98,16 +98,22 @@ Below is the complete transaction data. You can refer back to this whenever you 
 
 ## Steps We'll Follow
 
-1. Create Basic Transaction Structure
+0. Create Base Transaction
 
-2. Prepare BIP143 Signing Data
+1. Adding Inputs
 
-3. Create Preimage
+2. Adding Outputs
 
-4. Generate Signature
+3. Generate ScriptCode
 
-5. Build Witness Data
+4. Calculate Transaction Digest
 
-6. Assemble Final Transaction
+5. Calculate Preimage and Sighash
+
+6. Generate and Encode the Signature
+
+7. Add Witness Field
+
+8. Assemble Final Transaction
 
 Each step will be explained in detail in the following sections, with code examples and tests using this exact transaction data.
