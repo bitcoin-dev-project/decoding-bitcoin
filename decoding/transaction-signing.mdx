@@ -24,7 +24,7 @@ children:
     - transaction-signing-09
 ---
 
-In this tutorial, we'll learn how to sign a transaction by working with a real example from <a href="https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#native-p2wpkh" target="_blank">BIP143's test vectors</a>.  
+In this tutorial, we'll learn how to sign a transaction by working with a real example from <a href="https://github.com/bitcoin/bips/blob/master/bip-0143.mediawiki#native-p2wpkh" target="_blank">BIP143's test vectors</a>.
 
 The transaction has two inputs, but we'll focus specifically on signing the second input which is a P2WPKH (native SegWit) input.  
 The first input is a legacy P2PK input which uses a different signing method that we won't cover now.
@@ -68,6 +68,13 @@ Our goal is to create and sign this transaction:
   nLockTime: 11000000`}
 />
 
+<ExpandableAlert
+    title="Transaction Decoder Tool"
+    type="info"
+    expandable={false}
+>
+    💡 You can explore this transaction in detail using our [Transaction Decoder](/decoding/transaction-decoder) tool.
+</ExpandableAlert>
 
 Below is the complete transaction data. You can refer back to this whenever you need to check any details during the following steps:
 
