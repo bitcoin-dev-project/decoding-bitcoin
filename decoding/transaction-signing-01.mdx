@@ -21,20 +21,31 @@ Each input in a Bitcoin transaction must specify:
 -   ScriptSig: Placeholder for the unlocking script
 -   Sequence (4 bytes): Usually 0xFFFFFFFF
 
-<div className="w-full rounded-xl overflow-hidden full-width">
-    <SvgDisplay
-        src="/decoding-bitcoin/static/images/topics/transactions/signature/signature7.svg"
-        width="100%"
-        height="auto"
-    />
+<div className="w-full rounded-xl overflow-x-auto overflow-y-hidden full-width">
+    <div className="min-w-[800px]">
+        <SvgDisplay
+            src="/decoding-bitcoin/static/images/topics/transactions/signature/signature7.svg"
+            width="100%"
+            height="100%"
+            className="min-h-[400px] md:min-h-[500px] lg:min-h-[600px] object-contain"
+            style={{
+                aspectRatio: "16/9",
+                maxHeight: "800px",
+                transform: "scale(1.2)",
+                transformOrigin: "center center"
+            }}
+        />
+    </div>
 </div>
 
-The following table summarizes our UTXOs (Transaction IDs shown in big-endian format):
-
-| Input | Transaction ID (big-endian)                                      | Output Index | Sequence |
-| ----- | ---------------------------------------------------------------- | ------------ | -------- |
-| #1    | 9f96add4e4db413543df3eea1781c3be62637f1e2dd44069fa99801a88f7f7ff | 0            | eeffffff |
-| #2    | 8ac60eb9575db5b2d987e29f301b5b819ea83a5c6579d282d189cc04b8e151ef | 1            | ffffffff |
+<div className="w-full rounded-xl overflow-x-auto overflow-y-hidden">
+    <div className="min-w-[800px]">
+        | Input | Transaction ID (big-endian) | Output Index | Sequence |
+        | ----- | -------------------------- | ------------ | -------- |
+        | #1    | 9f96add4e4db413543df3eea1781c3be62637f1e2dd44069fa99801a88f7f7ff | 0 | eeffffff |
+        | #2    | 8ac60eb9575db5b2d987e29f301b5b819ea83a5c6579d282d189cc04b8e151ef | 1 | ffffffff |
+    </div>
+</div>
 
 _Note: In the transaction serialization below, these Transaction IDs are converted to little-endian format as required by the Bitcoin protocol._
 

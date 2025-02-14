@@ -16,12 +16,15 @@ parent: "transaction-signing"
 
 Our transaction now has all its fields populated except for the witness data.
 
-<div className="w-full rounded-xl overflow-hidden full-width">
-    <SvgDisplay
-        src="/decoding-bitcoin/static/images/topics/transactions/signature/signature9.svg"
-        width="100%"
-        height="auto"
-    />
+<div className="w-full rounded-xl overflow-x-auto overflow-y-hidden full-width">
+    <div className="min-w-[800px]">
+        <SvgDisplay
+            src="/decoding-bitcoin/static/images/topics/transactions/signature/signature9.svg"
+            width="100%"
+            height="auto"
+            className="min-h-[150px] md:min-h-[180px] lg:min-h-[220px] object-contain"
+        />
+    </div>
 </div>
 
 For a P2WPKH input, the witness structure is:
