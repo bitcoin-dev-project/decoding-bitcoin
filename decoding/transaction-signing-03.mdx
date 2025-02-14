@@ -18,12 +18,15 @@ When signing a P2WPKH (Segregated Witness) input, the signature and public key w
 
 This is different from legacy transactions where signatures are placed directly in the `scriptSig`. The witness field starts empty and gets populated during the signing process.
 
-<div className="w-full rounded-xl overflow-hidden full-width">
-    <SvgDisplay
-        src="/decoding-bitcoin/static/images/topics/transactions/signature/signature9.svg"
-        width="100%"
-        height="auto"
-    />
+<div className="w-full rounded-xl overflow-x-auto overflow-y-hidden full-width">
+    <div className="min-w-[800px]">
+        <SvgDisplay
+            src="/decoding-bitcoin/static/images/topics/transactions/signature/signature9.svg"
+            width="100%"
+            height="auto"
+            className="min-h-[150px] md:min-h-[180px] lg:min-h-[220px] object-contain"
+        />
+    </div>
 </div>
 
 For signing a P2WPKH input, we need to generate the `scriptCode`

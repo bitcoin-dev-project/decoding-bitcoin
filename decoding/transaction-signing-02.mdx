@@ -19,12 +19,15 @@ Each output in a Bitcoin transaction requires:
 -   Amount (8 bytes): Value in satoshis
 -   ScriptPubKey: Locking script that defines spending conditions
 
-<div className="w-full rounded-xl overflow-hidden full-width">
-    <SvgDisplay
-        src="/decoding-bitcoin/static/images/topics/transactions/signature/signature8.svg"
-        width="100%"
-        height="auto"
-    />
+<div className="w-full rounded-xl overflow-x-auto overflow-y-hidden full-width">
+    <div className="min-w-[800px]">
+        <SvgDisplay
+            src="/decoding-bitcoin/static/images/topics/transactions/signature/signature8.svg"
+            width="100%"
+            height="auto"
+            className="min-h-[150px] md:min-h-[180px] lg:min-h-[220px] object-contain"
+        />
+    </div>
 </div>
 
 ---
@@ -48,10 +51,14 @@ Each output in a Bitcoin transaction requires:
 
 The following table summarizes our outputs from test vector:
 
-| Output | Amount (BTC) | ScriptPubKey                                         |
-| ------ | ------------ | ---------------------------------------------------- |
-| #1     | 1.2          | 1976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac |
-| #2     | 2.2          | 1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac |
+<div className="w-full rounded-xl overflow-x-auto overflow-y-hidden">
+    <div className="min-w-[800px]">
+        | Output | Amount (BTC) | ScriptPubKey                                         |
+        | ------ | ------------ | ---------------------------------------------------- |
+        | #1     | 1.2          | 1976a9148280b37df378db99f66f85c95a783a76ac7a6d5988ac |
+        | #2     | 2.2          | 1976a9143bde42dbee7e4dbe6a21b2d50ce2f0167faa815988ac |
+    </div>
+</div>
 
 Our transaction structure at this stage is:
 
