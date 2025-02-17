@@ -138,7 +138,9 @@ The TXID is created differently depending on the transaction type:
 This difference in segwit transactions was intentionally designed to prevent transaction malleability, as signatures are no longer part of the TXID calculation.
 
 <ExpandableAlert title="Historical Note" type="info">
-    There was a unique situation in Bitcoin's history where duplicate TXIDs occurred in blocks 91,722 and 91,880. As a result, BIP 30 was implemented to prevent blocks from containing duplicate TXIDs, and BIP 34 was introduced to require coinbase transactions to include block height in their data.
+    Duplicate TXID: `e3bf3d07d4b0375638d5f1db5255fe07ba2c4cb067cd81b84ee974b6585fb468`
+
+    There was a unique situation in Bitcoin's history where the same TXID (above) occurred in multiple blocks: [91,722](https://mempool.space/block/00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e) and [91,880](https://mempool.space/block/00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721). As a result, BIP 30 was implemented to prevent blocks from containing duplicate TXIDs, and BIP 34 was introduced to require coinbase transactions to include block height in their data.
 </ExpandableAlert>
 
 ## Implementation Details

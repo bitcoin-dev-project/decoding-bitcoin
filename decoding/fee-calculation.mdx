@@ -70,9 +70,9 @@ Without fees, miners would have no reason to include transactions in their block
 
 ### How Miners Select Transactions ?
 
-Miners receive two types of rewards for securing the network:
+Miners receive two types of payment for securing the network:
 
-1. **Block Reward**
+1. **Block Subsidy**
 2. **Transaction Fees**
 
 <div className="dark:hidden w-full rounded-lg">
@@ -96,7 +96,7 @@ A miner who mines a block will have revenue as:
     $$Revenue = Tx\ Fees + Block\ Subsidy$$
 </div>
 
-To maximize their revenue, miners prioritize transactions that pay higher fees. The way they determine which transactions pay more will be covered in the next topic when we discuss fee rates.
+To maximize their revenue, miners prioritize transactions that pay higher fees. The way they determine which transactions pay more will be covered in the [Fee Rate](/decoding/fee-rate) topic.
 
 For now, understand that:
 
@@ -127,7 +127,7 @@ While miners can choose which transactions to include based on fees, there's act
 This is called the **minimum relay fee**.
 
 -   It's the minimum fee required for nodes to relay and accept a transaction
--   Default is typically 1 sat/vbyte (we'll explain this unit sat/vbyte in the next topic)
+-   Default is typically 1 sat/vbyte (we'll explain this unit sat/vbyte in the [Transaction Weight](/decoding/transaction-weight) topic)
 -   Transactions below this threshold will be rejected by nodes
 -   Helps prevent spam and DoS attacks on the network
 
