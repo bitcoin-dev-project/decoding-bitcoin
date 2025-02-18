@@ -141,7 +141,7 @@ If you were decoding raw Bitcoin transaction data, you'd need to reverse the byt
 Bitcoin uses **little-endian** because Satoshi developed it on a little-endian computer.  
 
 Most modern CPUs are little-endian and the network protocols typically use big-endian, which can create a mismatch:
-- **Big-endian** is used for network communication (called **network byte order**).
+- **Big-endian** is mainly seen when searching for transactions in block explorers or making RPC calls to Bitcoin Core.
 - **Little-endian** is used for internal storage in Bitcoin.
 
 This duality requires developers to frequently convert between the two formats when working with Bitcoin data.
