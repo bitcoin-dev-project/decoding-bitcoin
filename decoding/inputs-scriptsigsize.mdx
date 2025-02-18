@@ -49,8 +49,8 @@ Like the input count, the ScriptSig size uses varint encoding:
 | 2³² to 2⁶⁴-1  | 0x100000000 to 0xffffffffffffffff | 9          | `0xff` followed by uint64_t |
 
 <ExpandableAlert title="Note" type="info">
-    Most ScriptSig sizes are small enough to fit in a single byte, as they
-    typically contain just a signature and public key.
+    Most ScriptSig sizes are small enough to fit in a single byte, as the ScriptSig
+    typically contains just a signature and public key that combined are less than 253 bytes in size.
 </ExpandableAlert>
 
 ## Implementation Example

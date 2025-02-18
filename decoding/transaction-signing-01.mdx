@@ -130,15 +130,15 @@ Two essential encoding functions:
     return value.to_bytes(length, 'little')
 
 def varint(n: int) -> bytes:
-"""Encode an integer as a variable length integer"""
-if n < 0xfd:
-return bytes([n])
-elif n <= 0xffff:
-return b'\\xfd' + n.to_bytes(2, 'little')
-elif n <= 0xffffffff:
-return b'\\xfe' + n.to_bytes(4, 'little')
-else:
-return b'\\xff' + n.to_bytes(8, 'little')`}
+    """Encode an integer as a variable length integer"""
+    if n < 0xfd:
+        return bytes([n])
+    elif n <= 0xffff:
+        return b'\\xfd' + n.to_bytes(2, 'little')
+    elif n <= 0xffffffff:
+        return b'\\xfe' + n.to_bytes(4, 'little')
+    else:
+        return b'\\xff' + n.to_bytes(8, 'little')`}
 language="python"
 />
 
