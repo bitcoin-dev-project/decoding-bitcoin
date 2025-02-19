@@ -45,7 +45,6 @@ The txid uses Bitcoin's internal byte order (little-endian). Let's examine this 
 display_txid = "5e6e1a9b4ce3f9f39467d7129e3ecfbe6c81c08dd377aac666fedc9a758fe614"
 
 # Internal order (how it appears in raw transaction)
-
 internal_txid = "14e68f759adcfe66c6aa77d38dc0816cbecf3e9e12d76794f3f9e34c9b1a6e5e"`}
 language="python"
 />
@@ -140,7 +139,10 @@ This difference in segwit transactions was intentionally designed to prevent tra
 <ExpandableAlert title="Historical Note" type="info">
     Duplicate TXID: `e3bf3d07d4b0375638d5f1db5255fe07ba2c4cb067cd81b84ee974b6585fb468`
 
-    There was a unique situation in Bitcoin's history where the same TXID (above) occurred in multiple blocks: [91,722](https://mempool.space/block/00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e) and [91,880](https://mempool.space/block/00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721). As a result, BIP 30 was implemented to prevent blocks from containing duplicate TXIDs, and BIP 34 was introduced to require coinbase transactions to include block height in their data.
+    There was a unique situation in Bitcoin's history where the same TXID (above) occurred in multiple blocks:
+    <a href="https://mempool.space/block/00000000000271a2dc26e7667f8419f2e15416dc6955e5a6c6cdf3f2574dd08e" target="_blank" rel="noopener noreferrer">91,722</a> and
+    <a href="https://mempool.space/block/00000000000743f190a18c5577a3c2d2a1f610ae9601ac046a38084ccb7cd721" target="_blank" rel="noopener noreferrer">91,880</a>.
+    As a result, BIP 30 was implemented to prevent blocks from containing duplicate TXIDs, and BIP 34 was introduced to require coinbase transactions to include block height in their data.
 </ExpandableAlert>
 
 ## Implementation Details
