@@ -131,8 +131,8 @@ Here's how you might parse a transaction input's sequence number:
 ## 3- Historical Context
 
 <ExpandableAlert title="Original Design" type="info">
-    Satoshi originally designed the sequence number for "high-frequency trades"
-    - a way to update transactions before they were mined. The idea was to
+    Satoshi originally designed the sequence number for "high-frequency trades" -
+    a way to update transactions before they were mined. The idea was to
     create payment channels between parties, where each new payment would
     increment the sequence number. However, this design was vulnerable to miner
     manipulation and was later replaced by better payment channel designs like
@@ -155,8 +155,8 @@ BIP 68 introduced relative timelocks using sequence numbers below 0x80000000. Th
     return sequence < 0xf0000000
 
 def is_relative_timelock(sequence: int) -> bool:
-"""Check if relative timelock is enabled"""
-return sequence < 0x80000000`}
+    """Check if relative timelock is enabled"""
+    return sequence < 0x80000000`}
 language="python"
 />
 
