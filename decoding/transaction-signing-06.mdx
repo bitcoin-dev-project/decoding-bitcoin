@@ -16,8 +16,8 @@ parent: "transaction-signing"
 
 When signing a transaction input, we follow these steps:
 1. Create an ECDSA signature using the private key and commitment hash
-2. Encode it in DER format
-3. Ensure it has a low S value (BIP62)
+2. Ensure it has a low S value (BIP62)
+3. Encode it in DER format
 4. Append the SIGHASH_ALL byte (0x01)
 
 ---
