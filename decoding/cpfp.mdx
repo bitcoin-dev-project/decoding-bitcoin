@@ -1,0 +1,93 @@
+---
+title: "Child Pay For Parent (CPFP)"
+date: 2024-01-25T15:32:14Z
+lastmod: "2024-07-26"
+draft: false
+category: Transactions
+layout: TopicBanner
+order: 4
+icon: "FaClipboardList"
+images: ["/decoding-bitcoin/static/images/topics/thumbnails/musig-thumbnail.webp"]
+parent: "fee-calculation"
+---
+
+Imagine receiving bitcoin but the transaction is stuck in the mempool.  
+The sender used a fee that's too low, and miners aren't picking it up.  
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/decoding-bitcoin/static/images/topics/transactions/fees/cpfp-1.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/decoding-bitcoin/static/images/topics/transactions/fees/cpfp-1.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+What can you do? This is where Child Pays For Parent (CPFP) comes in.
+
+
+## What is CPFP?
+
+CPFP is a fee-bumping strategy where the recipient of an unconfirmed transaction creates a new transaction (child) that spends the pending funds and includes a high enough fee to incentivize miners to confirm both transactions together.
+
+
+## How Does CPFP Work?
+
+Let's break it down with an example:
+
+1. Alice sends 1 BTC to Bob with a very low fee
+2. The transaction gets stuck in the mempool because miners ignore low-fee transactions
+3. Bob creates a new transaction (child) spending the unconfirmed bitcoin
+4. Bob attaches a high fee to the child transaction
+5. Miners see they can collect both fees by including both transactions
+6. Both transactions get confirmed in the next block
+
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/decoding-bitcoin/static/images/topics/transactions/fees/cpfp-2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full  rounded-lg">
+    <SvgDisplay
+        src="/decoding-bitcoin/static/images/topics/transactions/fees/cpfp-2.svg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+## Technical Details
+
+CPFP works because of two key Bitcoin concepts:
+
+1. **UTXO Model**: Bitcoin allows spending unconfirmed outputs, enabling the creation of child transactions
+2. **Mempool Package Evaluation**: Miners evaluate related transactions as a package, considering their combined size and fees
+
+### Fee Calculation
+
+The effective fee rate for a CPFP package is:
+
+<div className="text-center my-4 text-orange-500">
+  $$\text{Effective Fee Rate} = \frac{\text{Parent Fee + Child Fee}}{\text{Parent Size + Child Size}}$$
+</div>
+
+CPFP is particularly useful when:
+- You receive a transaction with too low fees
+- The sender didn't enable RBF (Replace-By-Fee)
+- You need urgent confirmation of incoming funds
+
+## Limitations
+
+While powerful, CPFP has some constraints:
+- Only the recipient can initiate CPFP
+- Requires enough funds to cover the new transaction fee
+- Some wallets don't support CPFP natively
+- May not work during extreme network congestion

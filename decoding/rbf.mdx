@@ -1,5 +1,5 @@
 ---
-title: "RBF"
+title: "Replace-By-Fee (RBF)"
 date: 2024-01-25T15:32:14Z
 lastmod: "2024-07-26"
 draft: false
@@ -11,4 +11,42 @@ images: ["/decoding-bitcoin/static/images/topics/thumbnails/musig-thumbnail.webp
 parent: "fee-calculation"
 ---
 
-(coming soon)
+
+Imagine you send a Bitcoin transaction to your friend. You eagerly wait for it to be confirmed, but it gets stuck in the mempool.  
+
+Why? **Because the fee you set was too low**, and miners aren't interested in including it in a block.
+
+## The Problem
+
+Your transaction is sitting in the mempool, unconfirmed for 48 hours. Frustrated, you wonder why it's taking so long. The answer is simple: your transaction fee is too low, and no miner is picking it up.
+
+<div className="dark:hidden w-full rounded-lg">
+    <SvgDisplay
+        src="/decoding-bitcoin/static/images/topics/topics/transactions/fees/rbf-1.jpg"
+        width="100%"
+        height="auto"
+    />
+</div>
+<div className="hidden dark:block w-full rounded-lg">
+    <SvgDisplay
+        src="/decoding-bitcoin/static/images/topics/transactions/fees/rbf-1.jpg"
+        width="100%"
+        height="auto"
+    />
+</div>
+
+## The Solution: RBF
+
+To fix this, you can use Replace-By-Fee (RBF). RBF allows you to replace your stuck transaction with a new one that offers a higher fee, making it more attractive to miners.
+
+## How Does RBF Work?
+
+To increase the fee, you create a conflicting version of the transaction. This new transaction spends at least one of the same UTXOs as the original transaction you want to replace.  
+
+By doing this, you signal to the network that your transaction can be replaced by one with a higher fee.
+
+## Types of RBF
+
+1. **Opt-in RBF**: Here, the transaction must specify and signal to miners that it can be replaced by a higher fee transaction. This is done by setting the `nSequence` to a value below `0xffffffff`.
+
+2. **Full RBF**: Any unconfirmed transaction can be replaced without signaling. This method offers more flexibility but may face network policy restrictions.
