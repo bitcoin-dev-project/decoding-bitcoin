@@ -809,21 +809,18 @@
                             "expertise": "Bitcoin Educator"
                         },
                         "students": [
-                            {"name": "tushar1846"},
-                            {"name": "Nurulkhsnh"},
-                            {"name": "sennagraphy"},
-                            {"name": "belublem"},
-                            {"name": "awzbgr"},
-                            {"name": "regulus_kai"},
-                            {"name": "zweisg"},
-                            {"name": "Salvixen"},
-                            {"name": "igpkanda"},
-                            {"name": "BangAU"},
-                            {"name": "lolikingz"},
-                            {"name": "pegasus308"},
-                            {"name": "Catatan.aman"},
-                            {"name": "alexxie"},
-                            {"name": "SimK"}
+                            { "name": "3Folls" },
+                            { "name": "4WZ" },
+                            { "name": "abcde22" },
+                            { "name": "Albert" },
+                            { "name": "Alex Xie" },
+                            { "name": "Anton Setiawan" },
+                            { "name": "belublem" },
+                            { "name": "Chobiek" },
+                            { "name": "edelwise" },
+                            { "name": "Harris" },
+                            { "name": "hermansrj" },
+                            { "name": "hubi21" }
                         ]
                     },
                     {
@@ -834,46 +831,20 @@
                             "expertise": "Bitcoin Open Source Developer"
                         },
                         "students": [
-                            {"name": "budylim"},
-                            {"name": "albert_alt"},
-                            {"name": "elchapo000000"},
-                            {"name": "Cryptohashreview"},
-                            {"name": "bangjalimon"},
-                            {"name": "cahesomad3213"},
-                            {"name": "yohanesbrilian"},
-                            {"name": "Arraafiq"},
-                            {"name": "hermansrj2502"},
-                            {"name": "abcdedelw"},
-                            {"name": "704959697081597992"},
-                            {"name": "amardamar"},
-                            {"name": "dewacrypto"},
-                            {"name": "davidhiu"},
-                            {"name": "prscrv"}
-                        ]
-                    },
-                    {
-                        "id": 3,
-                        "name": "Group C",
-                        "chaperon": {
-                            "name": "Anmol",
-                            "expertise": "Bitcoin Open Source Developer"
-                        },
-                        "students": [
-                            {"name": "techtitan87"},
-                            {"name": "otis5d"},
-                            {"name": "souj.is.anicca"},
-                            {"name": "satssmith"},
-                            {"name": "mangasa_rs"},
-                            {"name": "aia_fx"},
-                            {"name": "s3n_dy"},
-                            {"name": "jeffreycahyono"},
-                            {"name": "yuurtrash"},
-                            {"name": "wino"},
-                            {"name": "firzarbofficial"},
-                            {"name": "tradingchiqui"},
-                            {"name": "andressa.maris"},
-                            {"name": "arifdanny"},
-                            {"name": "RickySaif"}
+                            { "name": "igpkanda" },
+                            { "name": "Jeffrey Calyono" },
+                            { "name": "nostrodotion | monshape" },
+                            { "name": "Regulus Kai" },
+                            { "name": "roaringstars" },
+                            { "name": "Sendy" },
+                            { "name": "Sila-Kelima.com" },
+                            { "name": "sennagraphy" },
+                            { "name": "Techistan" },
+                            { "name": "trpambudi" },
+                            { "name": "Tushar" },
+                            { "name": "Wahyu Agung Rahma" },
+                            { "name": "Yoxgtaro" },
+                            { "name": "zweisg" }
                         ]
                     }
                 ]
@@ -896,11 +867,275 @@
                         },
                         "description": ""
                     },
-                    "groupAssignments": [],
+                    "groupAssignments": [
+                        {
+                            "groupId": 1,
+                            "deputyName": "Alex Xie"
+                        },
+                        {
+                            "groupId": 2,
+                            "deputyName": "Regulus Kai"
+                        }
+                    ],
                     "additionalResources": []
                 },
                 {
                     "weekNumber": 2,
+                    "topic": "Transaction Structure",
+                    "topicSlug": "transaction-structure",
+                    "description": "",
+                    "resources": [
+                        {
+                            "id": 1,
+                            "title": "Transaction Lifecycle",
+                            "link": "transaction-lifecycle",
+                            "parentTopic": "transaction-structure"
+                        },
+                        {
+                            "id": 2,
+                            "title": "Transaction Structure",
+                            "link": "transaction-structure",
+                            "parentTopic": "transaction-structure"
+                        }
+                    ],
+                    "baseQuestions": [
+                        {
+                            "text": "What is the purpose of the version number in a Bitcoin transaction, and how do different versions affect transaction rules?",
+                            "relatedMaterial": "/decoding/version"
+                        },
+                        {
+                            "text": "How do the marker and flag indicate a SegWit transaction, and how do old nodes handle these fields?",
+                            "relatedMaterial": "/decoding/marker-flag"
+                        },
+                        {
+                            "text": "How does Bitcoin determine which previous transaction outputs can be used as inputs in a new transaction?",
+                            "relatedMaterial": "/decoding/inputs-prev-txid"
+                        },
+                        {
+                            "text": "What is the purpose of the locktime field, and how does it affect when a transaction becomes valid?",
+                            "relatedMaterial": "/decoding/locktime"
+                        },
+                        {
+                            "text": "How do ScriptSig and ScriptPubKey work together to validate Bitcoin transactions? Explain with an example.",
+                            "relatedMaterial": "/decoding/inputs-scriptsig"
+                        },
+                        {
+                            "text": "Why is the output index (vout) necessary in a transaction input, and what happens if an incorrect vout is referenced?",
+                            "relatedMaterial": "/decoding/inputs-output-index"
+                        },
+                        {
+                            "text": "How are transaction fees determined based on inputs and outputs, and why are they necessary for miners?",
+                            "relatedMaterial": "/decoding/outputs-amount"
+                        },
+                        {
+                            "text": "What is the role of the witness field in SegWit transactions, and how does it help reduce transaction malleability?",
+                            "relatedMaterial": "/decoding/transaction-structure"
+                        },
+                        {
+                            "text": "How do sequence numbers enable Replace-By-Fee (RBF), and why would a user want to use RBF?",
+                            "relatedMaterial": "/decoding/inputs-sequence"
+                        },
+                        {
+                            "text": "Why is Bitcoin transaction data serialized in little-endian format, and how does this affect how transactions are displayed on explorers?",
+                            "relatedMaterial": "/decoding/inputs-prev-txid"
+                        }
+                    ],
+                    "weeklyCall": {
+                        "date": "2025-03-25T12:00:00Z",
+                        "discordLink": "https://discord.gg/6XPJ96sCY4",
+                        "time": {
+                            "hour": 20,
+                            "minute": 0,
+                            "timeZone": "Asia/Makassar"
+                        },
+                        "description": ""
+                    },
+                    "groupAssignments": [
+                        {
+                            "groupId": 1,
+                            "deputyName": "Anton Setiawan"
+                        },
+                        {
+                            "groupId": 2,
+                            "deputyName": "Sendy"
+                        }
+                    ],
+                    "additionalResources": []
+                },
+                {
+                    "weekNumber": 3,
+                    "topic": "Transaction Creation and Fee Calculation",
+                    "topicSlug": "transaction-creation",
+                    "description": "",
+                    "resources": [
+                        {
+                            "id": 1,
+                            "title": "UTXO vs Account Model",
+                            "link": "utxo",
+                            "parentTopic": ""
+                        },
+                        {
+                            "id": 2,
+                            "title": "Technical Foundation",
+                            "link": "technical-foundation",
+                            "parentTopic": ""
+                        },
+                        {
+                            "id": 3,
+                            "title": "Transaction Creation",
+                            "link": "transaction-creation",
+                            "parentTopic": ""
+                        },
+                        {
+                            "id": 4,
+                            "title": "Fee Calculation",
+                            "link": "fee-calculation",
+                            "parentTopic": ""
+                        }
+                    ],
+                    "baseQuestions": [
+                        {
+                            "text": "Why does Bitcoin use the UTXO model instead of the account model, and what are the trade-offs?",
+                            "relatedMaterial": "/decoding/utxo"
+                        },
+                        {
+                            "text": "How does transaction creation differ in the UTXO model compared to the account model?",
+                            "relatedMaterial": "/decoding/transaction-creation"
+                        },
+                        {
+                            "text": "What is the difference between big-endian and little-endian, and how does Bitcoin use them?",
+                            "relatedMaterial": "/decoding/endianness"
+                        },
+                        {
+                            "text": "What is transaction weight, and why was it introduced in Bitcoin?",
+                            "relatedMaterial": "/decoding/transaction-weight"
+                        },
+                        {
+                            "text": "What factors determine the transaction fee in Bitcoin, and how is the fee rate calculated?",
+                            "relatedMaterial": "/decoding/fee-calculation"
+                        },
+                        {
+                            "text": "What is Compact Size (var_int) encoding, and where is it used in Bitcoin transactions?",
+                            "relatedMaterial": "/decoding/compact-size"
+                        },
+                        {
+                            "text": "What is Replace-By-Fee (RBF), and how does it help users get their transactions confirmed faster?",
+                            "relatedMaterial": "/decoding/rbf"
+                        },
+                        {
+                            "text": "What is the main difference between Opt-in RBF and Full RBF?",
+                            "relatedMaterial": "/decoding/rbf"
+                        },
+                        {
+                            "text": "How does the Child Pays for Parent (CPFP) mechanism work, and when should it be used?",
+                            "relatedMaterial": "/decoding/cpfp"
+                        },
+                        {
+                            "text": "Why would a user choose CPFP instead of RBF when dealing with a stuck transaction?",
+                            "relatedMaterial": "/decoding/cpfp"
+                        }
+                    ],
+                    "weeklyCall": {
+                        "date": "2025-03-25T12:00:00Z",
+                        "discordLink": "https://discord.gg/6XPJ96sCY4",
+                        "time": {
+                            "hour": 20,
+                            "minute": 0,
+                            "timeZone": "Asia/Makassar"
+                        },
+                        "description": ""
+                    },
+                    "groupAssignments": [
+                        {
+                            "groupId": 1,
+                            "deputyName": "Chobiek"
+                        },
+                        {
+                            "groupId": 2,
+                            "deputyName": "Techistan"
+                        }
+                    ],
+                    "additionalResources": []
+                },
+                {
+                    "weekNumber": 4,
+                    "topic": "Transaction Signing",
+                    "topicSlug": "transaction-signing",
+                    "description": "",
+                    "resources": [
+                        {
+                            "id": 1,
+                            "title": "Transaction Signing",
+                            "link": "transaction-signing",
+                            "parentTopic": ""
+                        }
+                    ],
+                    "baseQuestions": [
+                        {
+                            "text": "What is the purpose of signing a Bitcoin transaction, and how does it ensure security?",
+                            "relatedMaterial": "/decoding/transaction-signing"
+                        },
+                        {
+                            "text": "What is the difference between signing a legacy transaction (P2PKH) and a SegWit transaction (P2WPKH)?",
+                            "relatedMaterial": "/decoding/transaction-signing-07"
+                        },
+                        {
+                            "text": "Why do SegWit transactions require a special field called 'witness,' and how does it change the transaction format?",
+                            "relatedMaterial": "/decoding/transaction-signing-04"
+                        },
+                        {
+                            "text": "What are the key components of the signing process in a Bitcoin transaction?",
+                            "relatedMaterial": "/decoding/transaction-signing-05"
+                        },
+                        {
+                            "text": "What is a sighash, and how does it determine which parts of a transaction are signed?",
+                            "relatedMaterial": "/decoding/transaction-signing-05"
+                        },
+                        {
+                            "text": "Why does Bitcoin use double SHA-256 hashing before signing a transaction?",
+                            "relatedMaterial": "/decoding/transaction-signing-09"
+                        },
+                        {
+                            "text": "What are some common errors that can cause a Bitcoin transaction signature to fail?",
+                            "relatedMaterial": "/decoding/transaction-signing-05"
+                        },
+                        {
+                            "text": "Why does Bitcoin require a 'low S value' in signatures, and how does it prevent malleability?",
+                            "relatedMaterial": "/decoding/transaction-signing-09"
+                        },
+                        {
+                            "text": "Why do SegWit transactions still require a scriptCode when signing a P2WPKH input?",
+                            "relatedMaterial": "/decoding/transaction-signing"
+                        },
+                        {
+                            "text": "How does Bitcoin ensure that a signed transaction cannot be modified after broadcasting?",
+                            "relatedMaterial": "/decoding/transaction-signing"
+                        }
+                    ],
+                    "weeklyCall": {
+                        "date": "2025-03-25T12:00:00Z",
+                        "discordLink": "https://discord.gg/6XPJ96sCY4",
+                        "time": {
+                            "hour": 20,
+                            "minute": 0,
+                            "timeZone": "Asia/Makassar"
+                        },
+                        "description": ""
+                    },
+                    "groupAssignments": [
+                        {
+                            "groupId": 1,
+                            "deputyName": "Harris"
+                        },
+                        {
+                            "groupId": 2,
+                            "deputyName": "Yoxgtaro"
+                        }
+                    ],
+                    "additionalResources": []
+                },
+                {
+                    "weekNumber": 5,
                     "topic": "Script Overview",
                     "topicSlug": "script-overview",
                     "description": "Dive into Bitcoin's scripting language, understanding how the stack-based execution model works, different types of opcodes, and the relationship between locking and unlocking scripts. Learn about script validation rules and standardness policies.",
@@ -1003,15 +1238,11 @@
                     "groupAssignments": [
                         {
                             "groupId": 1,
-                            "deputyName": "Fernando"
+                            "deputyName": "Anton Setiawan"
                         },
                         {
                             "groupId": 2,
-                            "deputyName": "stackeduary"
-                        },
-                        {
-                            "groupId": 3,
-                            "deputyName": "flu0rescen"
+                            "deputyName": "Sendy"
                         }
                     ],
                     "additionalResources": [
@@ -1029,14 +1260,14 @@
                     ]
                 },
                 {
-                    "weekNumber": 3,
-                    "topic": "Pay to Public Key (P2PK)",
+                    "weekNumber": 6,
+                    "topic": "Public Key Scripts (P2PK & P2PKH)",
                     "topicSlug": "p2pk",
-                    "description": "Study the earliest and simplest form of Bitcoin transactions - Pay to Public Key (P2PK). Analyze historical transactions, understand the role of public key cryptography, and learn why this script type was eventually superseded.",
+                    "description": "Explore the evolution of Bitcoin's transaction scripts, from the earliest Pay-to-Public-Key (P2PK) to the more advanced Pay-to-Public-Key-Hash (P2PKH). Study historical transactions, understand public key cryptography, and learn how P2PKH improved upon P2PK by introducing better privacy and security features through public key hashing.",
                     "resources": [
                         {
                             "id": 1,
-                            "title": "P2PK Introduction",
+                            "title": "Pay to Public Key (P2PK)",
                             "link": "p2pk",
                             "parentTopic": "p2pk"
                         },
@@ -1063,44 +1294,66 @@
                             "title": "P2PK Exercise 3",
                             "link": "p2pk-exercise3",
                             "parentTopic": "p2pk"
+                        },
+                        {
+                            "id": 6,
+                            "title": "Pay to Public Key Hash (P2PKH)",
+                            "link": "p2pkh",
+                            "parentTopic": "5-p2pkh"
+                        },
+                        {
+                            "id": 7,
+                            "title": "P2PKH Exercise 1",
+                            "link": "p2pkh-exercise1",
+                            "parentTopic": "5-p2pkh"
+                        },
+                        {
+                            "id": 8,
+                            "title": "P2PKH Exercise 2",
+                            "link": "p2pkh-exercise2",
+                            "parentTopic": "5-p2pkh"
                         }
                     ],
                     "baseQuestions": [
                         {
-                            "text": "What are the three main challenges associated with P2PK transactions? Explain each challenge.",
-                            "relatedMaterial": "/decoding/p2pk"
+                            "text": "Compare and contrast P2PK and P2PKH transactions in terms of script structure, security, and privacy. What specific improvements does P2PKH offer over P2PK?",
+                            "relatedMaterial": "/decoding/p2pkh"
                         },
                         {
                             "text": "In the first Bitcoin transaction (block 170), Satoshi sent 10 BTC to Hal Finney using a P2PK script. Analyze the provided hex code for the transaction, breaking down the input, output, and script components.",
                             "relatedMaterial": "/decoding/p2pk-problems"
                         },
                         {
-                            "text": "Why did Satoshi Nakamoto use uncompressed public keys in early Bitcoin transactions, and what are the benefits of compressed keys?",
+                            "text": "Describe in detail how OP_CHECKSIG operates on the stack in both P2PK and P2PKH transactions. What inputs does it consume, and what outputs does it produce in each case?",
+                            "relatedMaterial": "/decoding/p2pk-problems"
+                        },
+                        {
+                            "text": "For a P2PKH transaction, explain the complete validation process from scriptSig to scriptPubKey execution, including the role of OP_DUP and OP_HASH160. How does this differ from P2PK validation?",
+                            "relatedMaterial": "/decoding/p2pkh"
+                        },
+                        {
+                            "text": "Given a P2PKH scriptPubKey '76a9147d1980cd67f0ed29a94793823b866bf47eab965e88ac', decode each component and explain its purpose. How would this differ in a P2PK script?",
+                            "relatedMaterial": "/decoding/p2pkh"
+                        },
+                        {
+                            "text": "Why did Satoshi Nakamoto use uncompressed public keys in early P2PK transactions, and how has key compression evolved in P2PKH? What are the technical benefits and tradeoffs?",
                             "relatedMaterial": "/decoding/p2pk"
                         },
                         {
-                            "text": "During transaction validation, explain how are ScriptPubKey and ScriptSig combined, and why?",
-                            "relatedMaterial": "/decoding/p2pk"
+                            "text": "Analyze the security implications of revealing public keys in P2PK vs P2PKH transactions. How does this affect quantum resistance and address reuse?",
+                            "relatedMaterial": "/decoding/p2pkh"
                         },
                         {
-                            "text": "In the examples provided, what are the hex representations of OP_PUSHBYTES_65 and OP_CHECKSIG in the ScriptPubKey?",
-                            "relatedMaterial": "/decoding/p2pk"
-                        },
-                        {
-                            "text": "Describe in detail how OP_CHECKSIG operates on the stack in a P2PK transaction. What inputs does it consume, and what outputs does it produce? (You can also refer to the OpCode animations we have seen in previous week lesson)",
+                            "text": "For a concatenated P2PK script '<Signature> <Public Key> OP_CHECKSIG', describe each step of stack evaluation. Then compare this with the more complex P2PKH stack operations.",
                             "relatedMaterial": "/decoding/p2pk-problems"
                         },
                         {
-                            "text": "For a concatenated script <Signature Finney> <Public Key Finney> OP_CHECKSIG, describe each step of its evaluation during the unlocking process. How does the stack state evolve?",
-                            "relatedMaterial": "/decoding/p2pk-problems"
+                            "text": "Given a transaction with both P2PK and P2PKH inputs, calculate the total size in bytes for both scriptSigs and scriptPubKeys. Explain why P2PKH transactions are generally larger, and discuss the implications for transaction fees.",
+                            "relatedMaterial": "/decoding/p2pk-p2pkh"
                         },
                         {
-                            "text": "The ScriptPubKey in a P2PK transaction includes the public key directly. If a compression method were used, how would the hex representation of the script change?",
-                            "relatedMaterial": "/decoding/p2pk-problems"
-                        },
-                        {
-                            "text": "What are the specific conditions under which OP_CHECKSIG would return FALSE during script execution in a P2PK transaction?",
-                            "relatedMaterial": "/decoding/p2pk-problems"
+                            "text": "Design a script that combines both P2PK and P2PKH elements in a single output (theoretical exercise). Explain why this would or wouldn't be practical, considering script evaluation rules, standardness policies, and potential security implications.",
+                            "relatedMaterial": "/decoding/p2pk-p2pkh"
                         }
                     ],
                     "weeklyCall": {
@@ -1116,114 +1369,17 @@
                     "groupAssignments": [
                         {
                             "groupId": 1,
-                            "deputyName": "Olanna"
+                            "deputyName": "Albert"
                         },
                         {
                             "groupId": 2,
-                            "deputyName": "toxinityy"
-                        },
-                        {
-                            "groupId": 3,
-                            "deputyName": "hkmiadli"
+                            "deputyName": "trpambudi"
                         }
                     ],
                     "additionalResources": []
                 },
                 {
-                    "weekNumber": 4,
-                    "topic": "Pay to Public Key Hash (P2PKH)",
-                    "topicSlug": "p2pkh",
-                    "description": "Examine the most common historical Bitcoin script type - P2PKH. Learn about the benefits of hashing public keys, improved privacy features, and analyze real-world transactions including the famous Bitcoin pizza transaction.",
-                    "resources": [
-                        {
-                            "id": 1,
-                            "title": "P2PKH Introduction",
-                            "link": "p2pkh",
-                            "parentTopic": "5-p2pkh"
-                        },
-                        {
-                            "id": 2,
-                            "title": "P2PKH Exercise 1",
-                            "link": "p2pkh-exercise1",
-                            "parentTopic": "5-p2pkh"
-                        },
-                        {
-                            "id": 3,
-                            "title": "P2PKH Exercise 2",
-                            "link": "p2pkh-exercise2",
-                            "parentTopic": "5-p2pkh"
-                        }
-                    ],
-                    "baseQuestions": [
-                        {
-                            "text": "What is the difference between P2PKH and P2PK transactions?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "What is the purpose of the OP_DUP and OP_HASH160 opcodes in a P2PKH locking script?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "Describe the process of constructing a P2PKH scriptPubKey from a given public key. What are the exact steps and opcodes used?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "Why does P2PKH lock bitcoins to the hash of a public key instead of the public key itself?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "What opcodes are used in a P2PKH scriptPubKey, and what are their functions?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "At what point is the public key revealed in a P2PKH transaction?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "Why is P2PKH considered more private and secure compared to revealing the full public key in the transaction output?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "What steps must Bob take to spend the bitcoins sent to his P2PKH address?",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "Given the hexadecimal representation of a scriptPubKey, describe the process to decode it into its ASM (Assembly) equivalent.",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        },
-                        {
-                            "text": "If you were provided with the following P2PKH scriptPubKey: `76a9147d1980cd67f0ed29a94793823b866bf47eab965e88ac`, decode it to identify the public key hash and explain the purpose of each component.",
-                            "relatedMaterial": "/decoding/p2pkh"
-                        }
-                    ],
-                    "weeklyCall": {
-                        "date": "2025-04-08T12:00:00Z",
-                        "discordLink": "https://discord.gg/6XPJ96sCY4",
-                        "time": {
-                            "hour": 20,
-                            "minute": 0,
-                            "timeZone": "Asia/Makassar"
-                        },
-                        "description": ""
-                    },
-                    "groupAssignments": [
-                        {
-                            "groupId": 1,
-                            "deputyName": "Rads0909"
-                        },
-                        {
-                            "groupId": 2,
-                            "deputyName": "sayf_001"
-                        },
-                        {
-                            "groupId": 3,
-                            "deputyName": "0xZaddy"
-                        }
-                    ],
-                    "additionalResources": []
-                },
-                {
-                    "weekNumber": 5,
+                    "weekNumber": 7,
                     "topic": "Pay to Script Hash (P2SH)",
                     "topicSlug": "p2sh",
                     "description": "Understand how P2SH revolutionized Bitcoin's scripting capabilities by allowing complex redemption conditions to be hidden in a hash. Learn about script composition, validation rules, and the flexibility P2SH brought to Bitcoin.",
@@ -1294,21 +1450,17 @@
                     "groupAssignments": [
                         {
                             "groupId": 1,
-                            "deputyName": "hkmiadli"
+                            "deputyName": "belublem"
                         },
                         {
                             "groupId": 2,
-                            "deputyName": ""
-                        },
-                        {
-                            "groupId": 3,
-                            "deputyName": ""
+                            "deputyName": "Jeffrey Calyono"
                         }
                     ],
                     "additionalResources": []
                 },
                 {
-                    "weekNumber": 6,
+                    "weekNumber": 8,
                     "topic": "Pay to MultiSig (P2MS)",
                     "topicSlug": "p2ms",
                     "description": "Explore multi-signature scripts in Bitcoin, both in their bare form and wrapped in P2SH. Learn about threshold signatures, key management considerations, and how multisig enhances Bitcoin's security model.",
@@ -1379,120 +1531,13 @@
                     "groupAssignments": [
                         {
                             "groupId": 1,
-                            "deputyName": "hkmiadli"
+                            "deputyName": "hermansrj"
                         },
                         {
                             "groupId": 2,
-                            "deputyName": "0xZaddy"
-                        },
-                        {
-                            "groupId": 3,
-                            "deputyName": "future5962"
+                            "deputyName": "roaringstars"
                         }
                     ],
-                    "additionalResources": []
-                },
-                {
-                    "weekNumber": 7,
-                    "topic": "Taproot Basics",
-                    "topicSlug": "taproot-basics",
-                    "description": "Begin your journey into Bitcoin's latest script upgrade - Taproot. Learn about Schnorr signatures, tagged hashes, and the fundamental building blocks that enable improved privacy and scalability in Bitcoin.",
-                    "resources": [
-                        {
-                            "id": 1,
-                            "title": "Tagged Hashes",
-                            "link": "tagged-hashes",
-                            "parentTopic": "taproot"
-                        },
-                        {
-                            "id": 2,
-                            "title": "Schnorr Signature",
-                            "link": "schnorr-signature",
-                            "parentTopic": "taproot"
-                        },
-                        {
-                            "id": 3,
-                            "title": "Nonce Reuse Attack",
-                            "link": "nonce-reuse-attack",
-                            "parentTopic": "taproot"
-                        },
-                        {
-                            "id": 4,
-                            "title": "MuSig",
-                            "link": "musig",
-                            "parentTopic": "taproot"
-                        }
-                    ],
-                    "baseQuestions": [
-                        {
-                            "text": "What is the purpose of a nonce in Schnorr signatures, and why is it crucial not to reuse it?",
-                            "relatedMaterial": "/decoding/taproot"
-                        },
-                        {
-                            "text": "What security vulnerability could occur if you implement MuSig public key aggregation by simply adding the public keys together (P_agg = P_a + P_b + P_c)?",
-                            "relatedMaterial": "/decoding/taproot"
-                        },
-                        {
-                            "text": "What are the three rounds of communication required in MuSig signature generation, and why are they necessary?",
-                            "relatedMaterial": "/decoding/taproot"
-                        },
-                        {
-                            "text": "If an attacker observes two different Schnorr signatures that used the same nonce k, explain step by step how they can derive the private key d.",
-                            "relatedMaterial": "/decoding/taproot"
-                        },
-                        {
-                            "text": "Explain how MuSig improves privacy and transaction efficiency in Bitcoin.",
-                            "relatedMaterial": "/decoding/taproot"
-                        },
-                        {
-                            "text": "Describe the key cancellation attack in the context of MuSig",
-                            "relatedMaterial": "/decoding/taproot"
-                        }
-                    ],
-                    "weeklyCall": {
-                        "date": "2025-04-29T12:00:00Z",
-                        "discordLink": "https://discord.gg/6XPJ96sCY4",
-                        "time": {
-                            "hour": 20,
-                            "minute": 0,
-                            "timeZone": "Asia/Makassar"
-                        },
-                        "description": ""
-                    },
-                    "groupAssignments": [
-                        {
-                            "groupId": 1,
-                            "deputyName": ""
-                        },
-                        {
-                            "groupId": 2,
-                            "deputyName": ""
-                        },
-                        {
-                            "groupId": 3,
-                            "deputyName": ""
-                        }
-                    ],
-                    "additionalResources": []
-                },
-                {
-                    "weekNumber": 8,
-                    "topic": "Taproot Advanced",
-                    "topicSlug": "taproot-advanced",
-                    "description": "Deep dive into advanced Taproot concepts including MuSig, key aggregation, and taptweak operations. Understand how these components work together to create more efficient and private Bitcoin transactions.",
-                    "resources": [],
-                    "baseQuestions": [],
-                    "weeklyCall": {
-                        "date": "2025-05-06T12:00:00Z",
-                        "discordLink": "https://discord.gg/6XPJ96sCY4",
-                        "time": {
-                            "hour": 20,
-                            "minute": 0,
-                            "timeZone": "Asia/Makassar"
-                        },
-                        "description": ""
-                    },
-                    "groupAssignments": [],
                     "additionalResources": []
                 }
             ],
