@@ -817,10 +817,12 @@
                             { "name": "Anton Setiawan" },
                             { "name": "belublem" },
                             { "name": "Chobiek" },
+                            { "name": "cryptohashreview" },
                             { "name": "edelwise" },
                             { "name": "Harris" },
                             { "name": "hermansrj" },
-                            { "name": "hubi21" }
+                            { "name": "hubi21" },
+                            { "name": "Kurc" }
                         ]
                     },
                     {
@@ -844,7 +846,10 @@
                             { "name": "Tushar" },
                             { "name": "Wahyu Agung Rahma" },
                             { "name": "Yoxgtaro" },
-                            { "name": "zweisg" }
+                            { "name": "zweisg" },
+                            { "name": "Anmol Sharma" },
+                            { "name": "4W2" },
+                            { "name": "abcde022" }
                         ]
                     }
                 ]
@@ -1036,7 +1041,7 @@
                         }
                     ],
                     "weeklyCall": {
-                        "date": "2025-03-25T12:00:00Z",
+                        "date": "2025-04-01T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
                         "time": {
                             "hour": 20,
@@ -1048,7 +1053,7 @@
                     "groupAssignments": [
                         {
                             "groupId": 1,
-                            "deputyName": "Chobiek"
+                            "deputyName": "cryptohashreview"
                         },
                         {
                             "groupId": 2,
@@ -1113,7 +1118,7 @@
                         }
                     ],
                     "weeklyCall": {
-                        "date": "2025-03-25T12:00:00Z",
+                        "date": "2025-04-08T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
                         "time": {
                             "hour": 20,
@@ -1226,7 +1231,7 @@
                         }
                     ],
                     "weeklyCall": {
-                        "date": "2025-03-25T12:00:00Z",
+                        "date": "2025-04-15T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
                         "time": {
                             "hour": 20,
@@ -1357,7 +1362,7 @@
                         }
                     ],
                     "weeklyCall": {
-                        "date": "2025-04-01T12:00:00Z",
+                        "date": "2025-04-22T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
                         "time": {
                             "hour": 20,
@@ -1438,7 +1443,7 @@
                         }
                     ],
                     "weeklyCall": {
-                        "date": "2025-04-15T12:00:00Z",
+                        "date": "2025-04-29T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
                         "time": {
                             "hour": 20,
@@ -1519,7 +1524,7 @@
                         }
                     ],
                     "weeklyCall": {
-                        "date": "2025-04-22T12:00:00Z",
+                        "date": "2025-05-06T12:00:00Z",
                         "discordLink": "https://discord.gg/6XPJ96sCY4",
                         "time": {
                             "hour": 20,
