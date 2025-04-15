@@ -49,7 +49,7 @@
     "communities": [
         {
             "id": "bitcoin-indonesia",
-            "name": "Bitcoin Indonesia #1",
+            "name": "Bitcoin Indonesia",
             "logo": "/communities/images/bitcoin-indonesia.png",
             "description": "Bitcoin Indonesia is a non-profit organization dedicated to promoting Bitcoin adoption through education and community building across Indonesia.",
             "language": "Indonesian",
@@ -789,9 +789,9 @@
             "nextCohortDate": "2025-01-15"
         },
         {
-            "id": "bitcoin-indonesia-2",
-            "name": "Bitcoin Indonesia #2",
-            "logo": "/communities/images/bitcoin-indonesia.png",
+            "id": "code-orange",
+            "name": "Code Orange",
+            "logo": "/communities/images/code-orange.jpg",
             "description": "Bitcoin Indonesia is a non-profit organization dedicated to promoting Bitcoin adoption through education and community building across Indonesia.",
             "language": "Indonesian",
             "timezone": "GMT+8",
