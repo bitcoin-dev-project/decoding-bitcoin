@@ -1,0 +1,1144 @@
+[
+  {
+    "id": "cpfp-child-pays-for-parent",
+    "title": "CPFP - Child Pays For Parent",
+    "description": "Understanding how child transactions can accelerate parent transactions through higher fees",
+    "category": "Transactions",
+    "difficulty": "Intermediate",
+    "slideCount": 12,
+    "tags": ["cpfp", "fees", "mempool", "transaction-acceleration", "mining"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "CPFP Introduction",
+        "description": "Introduction to Child Pays For Parent concept and why it's needed",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-1.png",
+        "altText": "CPFP Child Pays For Parent introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Problem: Stuck Transaction",
+        "description": "Understanding the problem of low-fee transactions stuck in mempool",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-2.png",
+        "altText": "Low fee transaction stuck in mempool"
+      },
+      {
+        "id": "slide-3",
+        "title": "Traditional Fee Market",
+        "description": "How transaction fees work in the traditional Bitcoin fee market",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-3.png",
+        "altText": "Traditional Bitcoin fee market explanation"
+      },
+      {
+        "id": "slide-4",
+        "title": "CPFP Concept",
+        "description": "How a child transaction can incentivize miners to include both transactions",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-4.png",
+        "altText": "CPFP concept visualization"
+      },
+      {
+        "id": "slide-5",
+        "title": "Fee Rate Calculation",
+        "description": "How miners calculate the combined fee rate for parent and child transactions",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-5.png",
+        "altText": "CPFP fee rate calculation"
+      },
+      {
+        "id": "slide-6",
+        "title": "Creating a Child Transaction",
+        "description": "Step-by-step process of creating a child transaction to accelerate the parent",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-6.png",
+        "altText": "Creating a CPFP child transaction"
+      },
+      {
+        "id": "slide-7",
+        "title": "Miner Incentives",
+        "description": "Why miners are incentivized to include both parent and child in a block",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-7.png",
+        "altText": "CPFP miner incentives"
+      },
+      {
+        "id": "slide-8",
+        "title": "CPFP vs RBF",
+        "description": "Comparing Child Pays For Parent with Replace-By-Fee mechanisms",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-8.png",
+        "altText": "CPFP vs RBF comparison"
+      },
+      {
+        "id": "slide-9",
+        "title": "When to Use CPFP",
+        "description": "Scenarios where CPFP is the best solution for transaction acceleration",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-9.png",
+        "altText": "When to use CPFP"
+      },
+      {
+        "id": "slide-10",
+        "title": "CPFP Limitations",
+        "description": "Understanding the limitations and considerations of CPFP",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-10.png",
+        "altText": "CPFP limitations and considerations"
+      },
+      {
+        "id": "slide-11",
+        "title": "Real-world Example",
+        "description": "A real-world example of CPFP being used to accelerate a transaction",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-11.png",
+        "altText": "CPFP real-world example"
+      },
+      {
+        "id": "slide-12",
+        "title": "CPFP Summary",
+        "description": "Summary of key takeaways about Child Pays For Parent",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cpfp/slide-12.png",
+        "altText": "CPFP summary and key takeaways"
+      }
+    ]
+  },
+  {
+    "id": "bip-158-compact-block-filters",
+    "title": "BIP-158: Compact Block Filters",
+    "description": "Understanding Bitcoin's compact block filters for lightweight client privacy and efficiency",
+    "category": "BIPs",
+    "difficulty": "Advanced",
+    "slideCount": 10,
+    "tags": ["bip-158", "compact-filters", "privacy", "lightweight-clients", "spv"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "BIP-158 Introduction",
+        "description": "Introduction to Compact Block Filters and their purpose in Bitcoin",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-1.png",
+        "altText": "BIP-158 Compact Block Filters introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Lightweight Client Problems",
+        "description": "Understanding the privacy and efficiency challenges faced by lightweight Bitcoin clients",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-2.png",
+        "altText": "Lightweight client privacy and efficiency problems"
+      },
+      {
+        "id": "slide-3",
+        "title": "Bloom Filters vs Compact Filters",
+        "description": "Comparing traditional Bloom filters with the new Compact Block Filters approach",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-3.png",
+        "altText": "Bloom filters vs compact filters comparison"
+      },
+      {
+        "id": "slide-4",
+        "title": "Golomb-Rice Coding",
+        "description": "Understanding the Golomb-Rice coding technique used in compact filters",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-4.png",
+        "altText": "Golomb-Rice coding in compact filters"
+      },
+      {
+        "id": "slide-5",
+        "title": "Filter Construction",
+        "description": "How compact block filters are constructed from transaction data",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-5.png",
+        "altText": "Compact block filter construction process"
+      },
+      {
+        "id": "slide-6",
+        "title": "Client-Server Protocol",
+        "description": "How lightweight clients interact with full nodes using compact filters",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-6.png",
+        "altText": "BIP-158 client-server protocol"
+      },
+      {
+        "id": "slide-7",
+        "title": "Privacy Benefits",
+        "description": "How compact filters improve privacy for lightweight Bitcoin clients",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-7.png",
+        "altText": "Privacy benefits of compact block filters"
+      },
+      {
+        "id": "slide-8",
+        "title": "Bandwidth Efficiency",
+        "description": "Analyzing the bandwidth savings achieved with compact filters",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-8.png",
+        "altText": "Bandwidth efficiency of compact filters"
+      },
+      {
+        "id": "slide-9",
+        "title": "Implementation Considerations",
+        "description": "Key considerations for implementing BIP-158 in Bitcoin software",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-9.png",
+        "altText": "BIP-158 implementation considerations"
+      },
+      {
+        "id": "slide-10",
+        "title": "Future of Lightweight Clients",
+        "description": "How BIP-158 shapes the future of private and efficient Bitcoin light clients",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/bip-158/slide-10.png",
+        "altText": "Future of lightweight Bitcoin clients with BIP-158"
+      }
+    ]
+  },
+  {
+    "id": "cisa-cross-input-signature-aggregation",
+    "title": "CISA: Cross-Input Signature Aggregation",
+    "description": "Understanding how CISA can improve Bitcoin transaction efficiency and privacy through signature aggregation",
+    "category": "Cryptography",
+    "difficulty": "Advanced",
+    "slideCount": 12,
+    "tags": ["cisa", "signature-aggregation", "efficiency", "privacy", "schnorr"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "CISA Introduction",
+        "description": "Introduction to Cross-Input Signature Aggregation and its benefits",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-1.jpg",
+        "altText": "CISA Cross-Input Signature Aggregation introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Current Signature Model",
+        "description": "How Bitcoin currently handles signatures for multiple inputs",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-2.jpg",
+        "altText": "Current Bitcoin signature model"
+      },
+      {
+        "id": "slide-3",
+        "title": "Signature Aggregation Concept",
+        "description": "Understanding the concept of aggregating signatures across transaction inputs",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-3.jpg",
+        "altText": "Signature aggregation concept explanation"
+      },
+      {
+        "id": "slide-4",
+        "title": "Schnorr Prerequisites",
+        "description": "How Schnorr signatures enable cross-input signature aggregation",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-4.jpg",
+        "altText": "Schnorr signatures as prerequisite for CISA"
+      },
+      {
+        "id": "slide-5",
+        "title": "CISA Implementation",
+        "description": "Technical implementation details of cross-input signature aggregation",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-5.jpg",
+        "altText": "CISA implementation details"
+      },
+      {
+        "id": "slide-6",
+        "title": "Space Savings",
+        "description": "Analyzing the block space savings achieved through CISA",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-6.jpg",
+        "altText": "CISA block space savings analysis"
+      },
+      {
+        "id": "slide-7",
+        "title": "Privacy Improvements",
+        "description": "How CISA improves transaction privacy through signature aggregation",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-7.jpg",
+        "altText": "CISA privacy improvements"
+      },
+      {
+        "id": "slide-8",
+        "title": "Validation Process",
+        "description": "How nodes validate transactions with aggregated signatures",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-8.jpg",
+        "altText": "CISA validation process"
+      },
+      {
+        "id": "slide-9",
+        "title": "Implementation Challenges",
+        "description": "Technical and practical challenges in implementing CISA",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-9.jpg",
+        "altText": "CISA implementation challenges"
+      },
+      {
+        "id": "slide-10",
+        "title": "Economic Impact",
+        "description": "Economic implications of CISA for Bitcoin users and miners",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-10.jpg",
+        "altText": "CISA economic impact analysis"
+      },
+      {
+        "id": "slide-11",
+        "title": "Compatibility Considerations",
+        "description": "Backward compatibility and soft fork considerations for CISA",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-11.jpg",
+        "altText": "CISA compatibility considerations"
+      },
+      {
+        "id": "slide-12",
+        "title": "Future of Bitcoin Efficiency",
+        "description": "How CISA shapes the future of Bitcoin transaction efficiency",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/cisa/slide-12.jpg",
+        "altText": "Future of Bitcoin efficiency with CISA"
+      }
+    ]
+  },
+  {
+    "id": "commit-delay-reveal-protocol",
+    "title": "Commit-Delay-Reveal Protocol",
+    "description": "Understanding commitment schemes and reveal protocols in cryptographic systems",
+    "category": "Cryptography",
+    "difficulty": "Advanced",
+    "slideCount": 20,
+    "tags": ["commit-reveal", "cryptography", "protocols", "commitments", "privacy"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "Protocol Introduction",
+        "description": "Introduction to commit-delay-reveal protocols and their applications",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-1.png",
+        "altText": "Commit-delay-reveal protocol introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Commitment Schemes",
+        "description": "Understanding cryptographic commitment schemes and their properties",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-2.png",
+        "altText": "Cryptographic commitment schemes explanation"
+      },
+      {
+        "id": "slide-3",
+        "title": "Hiding and Binding",
+        "description": "The fundamental properties of commitment schemes: hiding and binding",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-3.png",
+        "altText": "Hiding and binding properties of commitments"
+      },
+      {
+        "id": "slide-4",
+        "title": "Delay Mechanisms",
+        "description": "How delay mechanisms add security to commitment protocols",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-4.png",
+        "altText": "Delay mechanisms in commitment protocols"
+      },
+      {
+        "id": "slide-5",
+        "title": "Reveal Phase",
+        "description": "Understanding the reveal phase and verification process",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-5.png",
+        "altText": "Reveal phase in commitment protocols"
+      },
+      {
+        "id": "slide-6",
+        "title": "Bitcoin Applications",
+        "description": "How commit-reveal protocols are used in Bitcoin systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-6.png",
+        "altText": "Commit-reveal protocols in Bitcoin"
+      },
+      {
+        "id": "slide-7",
+        "title": "Hash-based Commitments",
+        "description": "Using hash functions to create secure commitments",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-7.png",
+        "altText": "Hash-based commitment schemes"
+      },
+      {
+        "id": "slide-8",
+        "title": "Time-locked Commitments",
+        "description": "Adding time-lock mechanisms to commitment schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-8.png",
+        "altText": "Time-locked commitment schemes"
+      },
+      {
+        "id": "slide-9",
+        "title": "Privacy Benefits",
+        "description": "How commit-reveal protocols enhance privacy in blockchain systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-9.png",
+        "altText": "Privacy benefits of commit-reveal protocols"
+      },
+      {
+        "id": "slide-10",
+        "title": "Attack Vectors",
+        "description": "Common attack vectors against commitment schemes and their mitigations",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-10.png",
+        "altText": "Attack vectors on commitment schemes"
+      },
+      {
+        "id": "slide-11",
+        "title": "Multi-party Protocols",
+        "description": "Extending commit-reveal to multi-party scenarios",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-11.png",
+        "altText": "Multi-party commit-reveal protocols"
+      },
+      {
+        "id": "slide-12",
+        "title": "Verification Process",
+        "description": "Step-by-step verification of commit-reveal protocol execution",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-12.png",
+        "altText": "Commit-reveal verification process"
+      },
+      {
+        "id": "slide-13",
+        "title": "Smart Contract Integration",
+        "description": "Implementing commit-reveal protocols in smart contracts",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-13.png",
+        "altText": "Smart contract commit-reveal implementation"
+      },
+      {
+        "id": "slide-14",
+        "title": "Randomness Generation",
+        "description": "Using commit-reveal for secure randomness generation",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-14.png",
+        "altText": "Randomness generation with commit-reveal"
+      },
+      {
+        "id": "slide-15",
+        "title": "Auction Applications",
+        "description": "Commit-reveal protocols in sealed-bid auction systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-15.png",
+        "altText": "Commit-reveal in auction systems"
+      },
+      {
+        "id": "slide-16",
+        "title": "Performance Considerations",
+        "description": "Analyzing the performance impact of commit-reveal protocols",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-16.png",
+        "altText": "Performance analysis of commit-reveal"
+      },
+      {
+        "id": "slide-17",
+        "title": "Implementation Best Practices",
+        "description": "Best practices for implementing secure commit-reveal protocols",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-17.png",
+        "altText": "Commit-reveal implementation best practices"
+      },
+      {
+        "id": "slide-18",
+        "title": "Real-world Examples",
+        "description": "Real-world applications of commit-reveal protocols",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-18.png",
+        "altText": "Real-world commit-reveal examples"
+      },
+      {
+        "id": "slide-19",
+        "title": "Future Developments",
+        "description": "Future developments and research in commitment schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-19.png",
+        "altText": "Future of commitment schemes"
+      },
+      {
+        "id": "slide-20",
+        "title": "Protocol Summary",
+        "description": "Summary of key concepts in commit-delay-reveal protocols",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Commit-Delay-Reveal-Protocol/slide-20.png",
+        "altText": "Commit-delay-reveal protocol summary"
+      }
+    ]
+  },
+  {
+    "id": "common-input-ownership-heuristic",
+    "title": "Common Input Ownership Heuristic",
+    "description": "Understanding how blockchain analysis uses input clustering to trace Bitcoin transactions",
+    "category": "Privacy",
+    "difficulty": "Intermediate",
+    "slideCount": 18,
+    "tags": ["privacy", "blockchain-analysis", "heuristics", "clustering", "transaction-tracing"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "Heuristic Introduction",
+        "description": "Introduction to the common input ownership heuristic in blockchain analysis",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-1.jpg",
+        "altText": "Common input ownership heuristic introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Transaction Structure Review",
+        "description": "Review of Bitcoin transaction structure and multiple inputs",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-2.jpg",
+        "altText": "Bitcoin transaction structure with multiple inputs"
+      },
+      {
+        "id": "slide-3",
+        "title": "Ownership Assumption",
+        "description": "The fundamental assumption that all inputs belong to the same entity",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-3.jpg",
+        "altText": "Common input ownership assumption"
+      },
+      {
+        "id": "slide-4",
+        "title": "Clustering Algorithm",
+        "description": "How clustering algorithms group addresses using this heuristic",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-4.jpg",
+        "altText": "Address clustering algorithm"
+      },
+      {
+        "id": "slide-5",
+        "title": "Analysis Example",
+        "description": "Step-by-step example of applying the heuristic to real transactions",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-5.jpg",
+        "altText": "Heuristic analysis example"
+      },
+      {
+        "id": "slide-6",
+        "title": "Privacy Implications",
+        "description": "How this heuristic undermines Bitcoin transaction privacy",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-6.jpg",
+        "altText": "Privacy implications of input clustering"
+      },
+      {
+        "id": "slide-7",
+        "title": "False Positives",
+        "description": "When the heuristic fails: collaborative transactions and mixing",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-7.jpg",
+        "altText": "False positives in input clustering"
+      },
+      {
+        "id": "slide-8",
+        "title": "CoinJoin Transactions",
+        "description": "How CoinJoin transactions break the common input ownership assumption",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-8.jpg",
+        "altText": "CoinJoin breaking input ownership heuristic"
+      },
+      {
+        "id": "slide-9",
+        "title": "PayJoin Impact",
+        "description": "How PayJoin transactions confuse blockchain analysis",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-9.jpg",
+        "altText": "PayJoin impact on input clustering"
+      },
+      {
+        "id": "slide-10",
+        "title": "Detection Methods",
+        "description": "Methods analysts use to detect when the heuristic might be invalid",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-10.jpg",
+        "altText": "Detecting invalid heuristic applications"
+      },
+      {
+        "id": "slide-11",
+        "title": "Wallet Fingerprinting",
+        "description": "How input patterns can reveal wallet software and user behavior",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-11.jpg",
+        "altText": "Wallet fingerprinting through input patterns"
+      },
+      {
+        "id": "slide-12",
+        "title": "Countermeasures",
+        "description": "Techniques users can employ to counter this analysis method",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-12.jpg",
+        "altText": "Countermeasures against input clustering"
+      },
+      {
+        "id": "slide-13",
+        "title": "UTXO Management",
+        "description": "How proper UTXO management can improve privacy",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-13.jpg",
+        "altText": "UTXO management for privacy"
+      },
+      {
+        "id": "slide-14",
+        "title": "Exchange Clustering",
+        "description": "How exchanges create large clusters through input consolidation",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-14.jpg",
+        "altText": "Exchange clustering patterns"
+      },
+      {
+        "id": "slide-15",
+        "title": "Temporal Analysis",
+        "description": "Using timing information to strengthen clustering accuracy",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-15.jpg",
+        "altText": "Temporal analysis in clustering"
+      },
+      {
+        "id": "slide-16",
+        "title": "Graph Analysis",
+        "description": "Visualizing transaction graphs to identify ownership clusters",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-16.jpg",
+        "altText": "Transaction graph clustering visualization"
+      },
+      {
+        "id": "slide-17",
+        "title": "Regulatory Implications",
+        "description": "How this heuristic is used in compliance and law enforcement",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-17.jpg",
+        "altText": "Regulatory use of input clustering"
+      },
+      {
+        "id": "slide-18",
+        "title": "Future of Privacy",
+        "description": "The ongoing arms race between analysis and privacy techniques",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/common-input-heuristic/slide-18.jpg",
+        "altText": "Future of Bitcoin privacy vs analysis"
+      }
+    ]
+  },
+  {
+    "id": "steal-burn-dilemma",
+    "title": "Steal-Burn Dilemma",
+    "description": "Understanding the economic security dilemma in cryptocurrency systems",
+    "category": "Security",
+    "difficulty": "Advanced",
+    "slideCount": 14,
+    "tags": ["security", "economics", "game-theory", "attacks", "incentives"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "Dilemma Introduction",
+        "description": "Introduction to the steal-burn dilemma in cryptocurrency economics",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-1.png",
+        "altText": "Steal-burn dilemma introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Economic Security Basics",
+        "description": "Understanding the fundamentals of economic security in blockchain systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-2.png",
+        "altText": "Economic security basics"
+      },
+      {
+        "id": "slide-3",
+        "title": "Rational Actor Model",
+        "description": "How rational economic actors behave in cryptocurrency systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-3.png",
+        "altText": "Rational actor economic model"
+      },
+      {
+        "id": "slide-4",
+        "title": "Attack Incentives",
+        "description": "Analyzing the economic incentives for attacking a blockchain network",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-4.png",
+        "altText": "Economic attack incentives"
+      },
+      {
+        "id": "slide-5",
+        "title": "Stealing vs Burning",
+        "description": "Comparing the economics of stealing value versus destroying it",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-5.png",
+        "altText": "Stealing vs burning economic comparison"
+      },
+      {
+        "id": "slide-6",
+        "title": "Cost of Attack",
+        "description": "Calculating the true cost of mounting an economic attack",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-6.png",
+        "altText": "Economic attack cost calculation"
+      },
+      {
+        "id": "slide-7",
+        "title": "Defense Mechanisms",
+        "description": "Economic mechanisms that defend against steal-burn attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-7.png",
+        "altText": "Economic defense mechanisms"
+      },
+      {
+        "id": "slide-8",
+        "title": "Game Theory Analysis",
+        "description": "Game theoretical analysis of the steal-burn scenario",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-8.png",
+        "altText": "Game theory analysis"
+      },
+      {
+        "id": "slide-9",
+        "title": "Nash Equilibrium",
+        "description": "Finding equilibrium points in the steal-burn game",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-9.png",
+        "altText": "Nash equilibrium in steal-burn game"
+      },
+      {
+        "id": "slide-10",
+        "title": "Real-world Examples",
+        "description": "Real-world examples of steal-burn dilemmas in cryptocurrency",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-10.png",
+        "altText": "Real-world steal-burn examples"
+      },
+      {
+        "id": "slide-11",
+        "title": "Mitigation Strategies",
+        "description": "Strategies to mitigate steal-burn attack vectors",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-11.png",
+        "altText": "Steal-burn mitigation strategies"
+      },
+      {
+        "id": "slide-12",
+        "title": "Long-term Implications",
+        "description": "Long-term implications of the steal-burn dilemma for cryptocurrency",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-12.png",
+        "altText": "Long-term steal-burn implications"
+      },
+      {
+        "id": "slide-13",
+        "title": "Policy Considerations",
+        "description": "Policy and governance considerations for addressing the dilemma",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-13.png",
+        "altText": "Policy considerations for steal-burn"
+      },
+      {
+        "id": "slide-14",
+        "title": "Future Research",
+        "description": "Future research directions in cryptocurrency economic security",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/steal-burn-dillema/slide-14.png",
+        "altText": "Future research in economic security"
+      }
+    ]
+  },
+  {
+    "id": "lamport-signatures",
+    "title": "Lamport Signatures",
+    "description": "Understanding one-time quantum-resistant digital signature schemes",
+    "category": "Cryptography",
+    "difficulty": "Advanced",
+    "slideCount": 16,
+    "tags": ["lamport", "signatures", "quantum-resistant", "one-time", "post-quantum"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "Lamport Signatures Introduction",
+        "description": "Introduction to Lamport one-time signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-1.png",
+        "altText": "Lamport signatures introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Quantum Computing Threat",
+        "description": "Why quantum computers threaten current digital signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-2.png",
+        "altText": "Quantum computing threat to signatures"
+      },
+      {
+        "id": "slide-3",
+        "title": "One-Time Signatures",
+        "description": "Understanding the concept of one-time use signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-3.png",
+        "altText": "One-time signature concept"
+      },
+      {
+        "id": "slide-4",
+        "title": "Key Generation",
+        "description": "How Lamport signature keys are generated using hash functions",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-4.png",
+        "altText": "Lamport key generation process"
+      },
+      {
+        "id": "slide-5",
+        "title": "Signing Process",
+        "description": "Step-by-step process of creating a Lamport signature",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-5.png",
+        "altText": "Lamport signing process"
+      },
+      {
+        "id": "slide-6",
+        "title": "Verification Process",
+        "description": "How to verify the authenticity of a Lamport signature",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-6.png",
+        "altText": "Lamport signature verification"
+      },
+      {
+        "id": "slide-7",
+        "title": "Security Properties",
+        "description": "Security properties and assumptions of Lamport signatures",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-7.png",
+        "altText": "Lamport signature security properties"
+      },
+      {
+        "id": "slide-8",
+        "title": "Hash Function Requirements",
+        "description": "Requirements for hash functions used in Lamport signatures",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-8.png",
+        "altText": "Hash function requirements"
+      },
+      {
+        "id": "slide-9",
+        "title": "Size Considerations",
+        "description": "Analyzing the size overhead of Lamport signatures",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-9.png",
+        "altText": "Lamport signature size analysis"
+      },
+      {
+        "id": "slide-10",
+        "title": "Performance Analysis",
+        "description": "Performance characteristics of Lamport signature operations",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-10.png",
+        "altText": "Lamport signature performance"
+      },
+      {
+        "id": "slide-11",
+        "title": "Limitations",
+        "description": "Understanding the limitations of one-time signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-11.png",
+        "altText": "Lamport signature limitations"
+      },
+      {
+        "id": "slide-12",
+        "title": "Merkle Tree Extensions",
+        "description": "Extending Lamport signatures with Merkle trees for multiple uses",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-12.png",
+        "altText": "Merkle tree signature extensions"
+      },
+      {
+        "id": "slide-13",
+        "title": "Bitcoin Applications",
+        "description": "Potential applications of Lamport signatures in Bitcoin",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-13.png",
+        "altText": "Lamport signatures in Bitcoin"
+      },
+      {
+        "id": "slide-14",
+        "title": "Implementation Considerations",
+        "description": "Practical considerations for implementing Lamport signatures",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-14.png",
+        "altText": "Lamport implementation considerations"
+      },
+      {
+        "id": "slide-15",
+        "title": "Comparison with Other Schemes",
+        "description": "Comparing Lamport signatures with other post-quantum schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-15.png",
+        "altText": "Comparison with other signature schemes"
+      },
+      {
+        "id": "slide-16",
+        "title": "Future of Post-Quantum Cryptography",
+        "description": "The role of Lamport signatures in post-quantum cryptography",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Lamport signatures/slide-16.png",
+        "altText": "Future of post-quantum cryptography"
+      }
+    ]
+  },
+  {
+    "id": "quantum-computer-threats",
+    "title": "Quantum Computer Threats",
+    "description": "Understanding how quantum computing poses threats to current cryptographic systems",
+    "category": "Security",
+    "difficulty": "Advanced",
+    "slideCount": 15,
+    "tags": ["quantum-computing", "cryptography", "threats", "post-quantum", "security"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "Quantum Computing Introduction",
+        "description": "Introduction to quantum computing and its computational advantages",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-1.jpg",
+        "altText": "Quantum computing introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Quantum vs Classical Computing",
+        "description": "Comparing quantum and classical computing paradigms",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-2.jpg",
+        "altText": "Quantum vs classical computing comparison"
+      },
+      {
+        "id": "slide-3",
+        "title": "Cryptographic Vulnerabilities",
+        "description": "How quantum computers threaten current cryptographic systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-3.jpg",
+        "altText": "Cryptographic vulnerabilities to quantum attacks"
+      },
+      {
+        "id": "slide-4",
+        "title": "Shor's Algorithm",
+        "description": "Understanding Shor's algorithm and its threat to RSA and ECDSA",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-4.jpg",
+        "altText": "Shor's algorithm explanation"
+      },
+      {
+        "id": "slide-5",
+        "title": "Grover's Algorithm",
+        "description": "How Grover's algorithm affects hash function security",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-5.jpg",
+        "altText": "Grover's algorithm and hash functions"
+      },
+      {
+        "id": "slide-6",
+        "title": "Bitcoin's Vulnerability",
+        "description": "Specific threats quantum computing poses to Bitcoin",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-6.jpg",
+        "altText": "Bitcoin vulnerability to quantum attacks"
+      },
+      {
+        "id": "slide-7",
+        "title": "Timeline Predictions",
+        "description": "Predictions for when quantum computers might break current crypto",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-7.jpg",
+        "altText": "Quantum computing timeline predictions"
+      },
+      {
+        "id": "slide-8",
+        "title": "Post-Quantum Cryptography",
+        "description": "Introduction to quantum-resistant cryptographic schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-8.jpg",
+        "altText": "Post-quantum cryptography introduction"
+      },
+      {
+        "id": "slide-9",
+        "title": "Migration Strategies",
+        "description": "Strategies for migrating to quantum-resistant systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-9.jpg",
+        "altText": "Quantum-resistant migration strategies"
+      },
+      {
+        "id": "slide-10",
+        "title": "NIST Standards",
+        "description": "NIST post-quantum cryptography standardization efforts",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-10.jpg",
+        "altText": "NIST post-quantum cryptography standards"
+      },
+      {
+        "id": "slide-11",
+        "title": "Quantum Key Distribution",
+        "description": "How quantum mechanics can be used for secure communication",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-11.jpg",
+        "altText": "Quantum key distribution"
+      },
+      {
+        "id": "slide-12",
+        "title": "Preparation Recommendations",
+        "description": "Recommendations for preparing for the quantum era",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-12.jpg",
+        "altText": "Quantum era preparation recommendations"
+      },
+      {
+        "id": "slide-13",
+        "title": "Industry Response",
+        "description": "How the cryptocurrency industry is responding to quantum threats",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-13.jpg",
+        "altText": "Industry response to quantum threats"
+      },
+      {
+        "id": "slide-14",
+        "title": "Research Developments",
+        "description": "Current research developments in quantum-resistant technology",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-14.jpg",
+        "altText": "Quantum-resistant research developments"
+      },
+      {
+        "id": "slide-15",
+        "title": "Future Outlook",
+        "description": "Future outlook for cryptography in the quantum era",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Quantum-Computer-threats/slide-15.jpg",
+        "altText": "Future cryptography outlook"
+      }
+    ]
+  },
+  {
+    "id": "sphincs-plus",
+    "title": "SPHINCS+",
+    "description": "Understanding the SPHINCS+ post-quantum digital signature scheme",
+    "category": "Cryptography",
+    "difficulty": "Advanced",
+    "slideCount": 10,
+    "tags": ["sphincs", "post-quantum", "signatures", "hash-based", "quantum-resistant"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "SPHINCS+ Introduction",
+        "description": "Introduction to the SPHINCS+ post-quantum signature scheme",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-1.png",
+        "altText": "SPHINCS+ post-quantum signatures introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Hash-Based Signatures",
+        "description": "Understanding hash-based digital signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-2.png",
+        "altText": "Hash-based signature schemes"
+      },
+      {
+        "id": "slide-3",
+        "title": "Merkle Tree Foundation",
+        "description": "How SPHINCS+ builds upon Merkle tree signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-3.png",
+        "altText": "Merkle tree foundation for SPHINCS+"
+      },
+      {
+        "id": "slide-4",
+        "title": "Stateless Design",
+        "description": "The benefits of SPHINCS+ stateless signature design",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-4.png",
+        "altText": "SPHINCS+ stateless design benefits"
+      },
+      {
+        "id": "slide-5",
+        "title": "Security Assumptions",
+        "description": "Security assumptions and properties of SPHINCS+",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-5.png",
+        "altText": "SPHINCS+ security assumptions"
+      },
+      {
+        "id": "slide-6",
+        "title": "Performance Analysis",
+        "description": "Performance characteristics of SPHINCS+ signatures",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-6.png",
+        "altText": "SPHINCS+ performance analysis"
+      },
+      {
+        "id": "slide-7",
+        "title": "Parameter Sets",
+        "description": "Different parameter sets and security levels in SPHINCS+",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-7.png",
+        "altText": "SPHINCS+ parameter sets"
+      },
+      {
+        "id": "slide-8",
+        "title": "Implementation Considerations",
+        "description": "Practical considerations for implementing SPHINCS+",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-8.png",
+        "altText": "SPHINCS+ implementation considerations"
+      },
+      {
+        "id": "slide-9",
+        "title": "Comparison with Alternatives",
+        "description": "Comparing SPHINCS+ with other post-quantum signature schemes",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-9.png",
+        "altText": "SPHINCS+ vs other post-quantum schemes"
+      },
+      {
+        "id": "slide-10",
+        "title": "Future Applications",
+        "description": "Potential future applications of SPHINCS+ in blockchain systems",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/Sphincs+/slide-10.png",
+        "altText": "Future SPHINCS+ applications"
+      }
+    ]
+  },
+  {
+    "id": "long-short-range-attacks",
+    "title": "Long & Short Range Attacks",
+    "description": "Understanding long-range and short-range attacks on blockchain networks",
+    "category": "Security",
+    "difficulty": "Advanced",
+    "slideCount": 19,
+    "tags": ["attacks", "consensus", "security", "blockchain", "network-attacks"],
+    "lastUpdated": "2024-12-19",
+    "slides": [
+      {
+        "id": "slide-1",
+        "title": "Attack Types Introduction",
+        "description": "Introduction to long-range and short-range blockchain attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-1.jpg",
+        "altText": "Long and short range attacks introduction"
+      },
+      {
+        "id": "slide-2",
+        "title": "Blockchain Security Model",
+        "description": "Understanding the security model of blockchain networks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-2.jpg",
+        "altText": "Blockchain security model"
+      },
+      {
+        "id": "slide-3",
+        "title": "Short-Range Attacks",
+        "description": "Definition and characteristics of short-range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-3.jpg",
+        "altText": "Short-range attacks definition"
+      },
+      {
+        "id": "slide-4",
+        "title": "Long-Range Attacks",
+        "description": "Definition and characteristics of long-range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-4.jpg",
+        "altText": "Long-range attacks definition"
+      },
+      {
+        "id": "slide-5",
+        "title": "Attack Vectors",
+        "description": "Common attack vectors for long and short range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-5.jpg",
+        "altText": "Common attack vectors"
+      },
+      {
+        "id": "slide-6",
+        "title": "Proof-of-Stake Vulnerabilities",
+        "description": "How PoS systems are vulnerable to long-range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-6.jpg",
+        "altText": "Proof-of-stake vulnerabilities"
+      },
+      {
+        "id": "slide-7",
+        "title": "Nothing-at-Stake Problem",
+        "description": "Understanding the nothing-at-stake problem in PoS",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-7.jpg",
+        "altText": "Nothing-at-stake problem"
+      },
+      {
+        "id": "slide-8",
+        "title": "Weak Subjectivity",
+        "description": "The concept of weak subjectivity as a defense mechanism",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-8.jpg",
+        "altText": "Weak subjectivity concept"
+      },
+      {
+        "id": "slide-9",
+        "title": "Checkpointing Systems",
+        "description": "How checkpointing can prevent long-range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-9.jpg",
+        "altText": "Checkpointing defense systems"
+      },
+      {
+        "id": "slide-10",
+        "title": "Social Consensus",
+        "description": "The role of social consensus in preventing attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-10.jpg",
+        "altText": "Social consensus role"
+      },
+      {
+        "id": "slide-11",
+        "title": "Attack Economics",
+        "description": "Economic analysis of long and short range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-11.jpg",
+        "altText": "Attack economics analysis"
+      },
+      {
+        "id": "slide-12",
+        "title": "Detection Methods",
+        "description": "Methods for detecting long and short range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-12.jpg",
+        "altText": "Attack detection methods"
+      },
+      {
+        "id": "slide-13",
+        "title": "Prevention Strategies",
+        "description": "Strategies for preventing these types of attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-13.jpg",
+        "altText": "Attack prevention strategies"
+      },
+      {
+        "id": "slide-14",
+        "title": "Real-World Examples",
+        "description": "Real-world examples of long and short range attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-14.jpg",
+        "altText": "Real-world attack examples"
+      },
+      {
+        "id": "slide-15",
+        "title": "Network Partitioning",
+        "description": "How network partitioning can enable these attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-15.jpg",
+        "altText": "Network partitioning attacks"
+      },
+      {
+        "id": "slide-16",
+        "title": "Eclipse Attacks",
+        "description": "Understanding eclipse attacks as a form of network attack",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-16.jpg",
+        "altText": "Eclipse attacks explanation"
+      },
+      {
+        "id": "slide-17",
+        "title": "Consensus Implications",
+        "description": "How these attacks affect consensus mechanisms",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-17.jpg",
+        "altText": "Consensus mechanism implications"
+      },
+      {
+        "id": "slide-18",
+        "title": "Mitigation Techniques",
+        "description": "Advanced mitigation techniques for network attacks",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-18.jpg",
+        "altText": "Advanced mitigation techniques"
+      },
+      {
+        "id": "slide-19",
+        "title": "Future Research",
+        "description": "Future research directions in blockchain attack prevention",
+        "imageUrl": "/decoding-bitcoin/static/explainers/images/long-short-range-attacks/slide-19.jpg",
+        "altText": "Future blockchain security research"
+      }
+    ]
+  }
+]
