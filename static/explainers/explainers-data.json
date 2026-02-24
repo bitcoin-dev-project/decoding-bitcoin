@@ -1200,5 +1200,301 @@
                 "altText": "Future blockchain security research"
             }
         ]
+    },
+    {
+        "id": "wormhole-attack",
+        "title": "Wormhole Attack",
+        "description": "How two colluding nodes in the Lightning Network can steal routing fees by bypassing intermediate nodes using the HTLC pre-image",
+        "category": "Lightning Network",
+        "difficulty": "Intermediate",
+        "slideCount": 4,
+        "tags": ["lightning", "htlc", "routing", "attack", "security", "ptlc"],
+        "lastUpdated": "2026-02-24",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Wormhole Attack Introduction",
+                "description": "Overview of the wormhole attack: two colluding nodes that steal routing fees in the Lightning Network",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/wormhole-attack/slide-1.png",
+                "altText": "Wormhole attack introduction with A to E node diagram"
+            },
+            {
+                "id": "slide-2",
+                "title": "Normal Payment Routing",
+                "description": "How a normal Lightning payment is routed through intermediate nodes using HTLCs",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/wormhole-attack/slide-2.png",
+                "altText": "Normal HTLC payment routing from A to E through B, C, D"
+            },
+            {
+                "id": "slide-3",
+                "title": "The Attack: Pre-image Theft",
+                "description": "How malicious nodes B and D bypass C by sharing the pre-image out-of-band, leaving C unpaid",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/wormhole-attack/slide-3.png",
+                "altText": "B and D share pre-image bypassing C to steal routing fees"
+            },
+            {
+                "id": "slide-4",
+                "title": "Mitigation: PTLC",
+                "description": "How Point-Time-Locked Contracts (PTLCs) prevent the wormhole attack",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/wormhole-attack/slide-4.png",
+                "altText": "PTLC mitigation strategy for wormhole attack"
+            }
+        ]
+    },
+    {
+        "id": "coinjoin",
+        "title": "CoinJoin",
+        "description": "How CoinJoin combines multiple Bitcoin transactions into one to enhance privacy by obscuring the link between inputs and outputs",
+        "category": "Privacy",
+        "difficulty": "Beginner",
+        "slideCount": 4,
+        "tags": ["coinjoin", "privacy", "mixing", "transactions", "anonymity"],
+        "lastUpdated": "2026-02-24",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "CoinJoin Introduction",
+                "description": "Introduction to CoinJoin and why Bitcoin transaction privacy matters",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/coinjoin/slide-1.png",
+                "altText": "CoinJoin introduction slide"
+            },
+            {
+                "id": "slide-2",
+                "title": "How CoinJoin Works",
+                "description": "How multiple participants combine their transactions into a single transaction",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/coinjoin/slide-2.png",
+                "altText": "CoinJoin transaction combining diagram"
+            },
+            {
+                "id": "slide-3",
+                "title": "Privacy Benefits",
+                "description": "The privacy benefits of CoinJoin and how it breaks transaction graph analysis",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/coinjoin/slide-3.png",
+                "altText": "CoinJoin privacy benefits"
+            },
+            {
+                "id": "slide-4",
+                "title": "CoinJoin Implementations",
+                "description": "Real-world CoinJoin implementations and their trade-offs",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/coinjoin/slide-4.png",
+                "altText": "CoinJoin implementations overview"
+            }
+        ]
+    },
+    {
+        "id": "full-node",
+        "title": "Full Node",
+        "description": "What a Bitcoin full node is, why it matters, and how it enforces the rules of the Bitcoin network without trusting anyone",
+        "category": "Bitcoin Basics",
+        "difficulty": "Beginner",
+        "slideCount": 5,
+        "tags": ["full-node", "validation", "consensus", "decentralization", "trust"],
+        "lastUpdated": "2026-02-24",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "What is a Full Node?",
+                "description": "Introduction to Bitcoin full nodes and their role in the network",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/full-node/slide-1.png",
+                "altText": "Full node introduction"
+            },
+            {
+                "id": "slide-2",
+                "title": "What a Full Node Does",
+                "description": "How a full node downloads, validates, and stores the entire Bitcoin blockchain",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/full-node/slide-2.png",
+                "altText": "Full node downloading and validating the blockchain"
+            },
+            {
+                "id": "slide-3",
+                "title": "Why Run a Full Node?",
+                "description": "The benefits of running your own full node: trustless verification and network contribution",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/full-node/slide-3.png",
+                "altText": "Benefits of running a full node"
+            },
+            {
+                "id": "slide-4",
+                "title": "Full Node vs SPV",
+                "description": "Comparing full nodes to lightweight SPV clients and the trust trade-offs",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/full-node/slide-4.png",
+                "altText": "Full node vs SPV comparison"
+            },
+            {
+                "id": "slide-5",
+                "title": "Running a Full Node",
+                "description": "Requirements and options for running your own Bitcoin full node",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/full-node/slide-5.png",
+                "altText": "How to run a Bitcoin full node"
+            }
+        ]
+    },
+    {
+        "id": "sha256-message-schedule",
+        "title": "SHA256 Message Schedule",
+        "description": "A deep dive into the SHA256 message schedule — how the 16 input words are expanded into 64 words used in the compression function",
+        "category": "Cryptography",
+        "difficulty": "Advanced",
+        "slideCount": 9,
+        "tags": ["sha256", "hashing", "cryptography", "message-schedule", "bitcoin-mining"],
+        "lastUpdated": "2026-02-24",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "SHA256 Overview",
+                "description": "Introduction to SHA256 and its role in Bitcoin",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-1.png",
+                "altText": "SHA256 overview"
+            },
+            {
+                "id": "slide-2",
+                "title": "Input Preparation",
+                "description": "How the input message is prepared and split into 512-bit blocks",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-2.png",
+                "altText": "SHA256 input preparation"
+            },
+            {
+                "id": "slide-3",
+                "title": "The 16 Initial Words",
+                "description": "How the 512-bit block is divided into 16 32-bit words (W0–W15)",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-3.png",
+                "altText": "SHA256 initial 16 words"
+            },
+            {
+                "id": "slide-4",
+                "title": "Word Expansion",
+                "description": "The formula for expanding W0–W15 into W16–W63",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-4.png",
+                "altText": "SHA256 word expansion formula"
+            },
+            {
+                "id": "slide-5",
+                "title": "Sigma Functions",
+                "description": "The sigma0 and sigma1 bitwise rotation and shift functions used in expansion",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-5.png",
+                "altText": "SHA256 sigma functions"
+            },
+            {
+                "id": "slide-6",
+                "title": "Full 64-Word Schedule",
+                "description": "The complete 64-word message schedule ready for the compression rounds",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-6.png",
+                "altText": "SHA256 full 64-word message schedule"
+            },
+            {
+                "id": "slide-7",
+                "title": "Compression Function Link",
+                "description": "How the message schedule feeds into the SHA256 compression function",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-7.png",
+                "altText": "SHA256 message schedule feeding compression function"
+            },
+            {
+                "id": "slide-8",
+                "title": "Why Message Expansion Matters",
+                "description": "The security rationale behind expanding 16 words to 64",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-8.png",
+                "altText": "Why SHA256 message expansion matters for security"
+            },
+            {
+                "id": "slide-9",
+                "title": "Summary",
+                "description": "Summary of the SHA256 message schedule and key takeaways",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-message-schedule/slide-9.png",
+                "altText": "SHA256 message schedule summary"
+            }
+        ]
+    },
+    {
+        "id": "sha256-padding",
+        "title": "SHA256 Padding",
+        "description": "How SHA256 pads messages to a multiple of 512 bits before hashing, including the length encoding",
+        "category": "Cryptography",
+        "difficulty": "Advanced",
+        "slideCount": 6,
+        "tags": ["sha256", "hashing", "cryptography", "padding", "merkle-damgard"],
+        "lastUpdated": "2026-02-24",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Why Padding is Needed",
+                "description": "Why SHA256 requires messages to be padded to a multiple of 512 bits",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-padding/slide-1.png",
+                "altText": "SHA256 padding introduction"
+            },
+            {
+                "id": "slide-2",
+                "title": "Step 1: Append a 1 Bit",
+                "description": "The first step of SHA256 padding: appending a single 1 bit after the message",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-padding/slide-2.png",
+                "altText": "SHA256 padding step 1 append 1 bit"
+            },
+            {
+                "id": "slide-3",
+                "title": "Step 2: Append Zero Bits",
+                "description": "Padding with zeros until the message length is 448 mod 512",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-padding/slide-3.png",
+                "altText": "SHA256 padding step 2 zero bits"
+            },
+            {
+                "id": "slide-4",
+                "title": "Step 3: Append Message Length",
+                "description": "Appending the original message length as a 64-bit big-endian integer",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-padding/slide-4.png",
+                "altText": "SHA256 padding step 3 message length"
+            },
+            {
+                "id": "slide-5",
+                "title": "Complete Padded Block",
+                "description": "The final padded 512-bit block ready for SHA256 processing",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-padding/slide-5.png",
+                "altText": "SHA256 complete padded block"
+            },
+            {
+                "id": "slide-6",
+                "title": "Summary",
+                "description": "Summary of the SHA256 padding scheme and why it prevents length extension attacks",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/sha256-padding/slide-6.png",
+                "altText": "SHA256 padding summary"
+            }
+        ]
+    },
+    {
+        "id": "tx-pinning",
+        "title": "Transaction Pinning",
+        "description": "How transaction pinning attacks exploit mempool rules to prevent fee bumping, and why this matters for Lightning Network security",
+        "category": "Security",
+        "difficulty": "Advanced",
+        "slideCount": 4,
+        "tags": ["tx-pinning", "mempool", "lightning", "rbf", "cpfp", "security", "fees"],
+        "lastUpdated": "2026-02-24",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Transaction Pinning Introduction",
+                "description": "What transaction pinning is and why it's a concern for time-sensitive Bitcoin protocols",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tx-pinning/slide-1.png",
+                "altText": "Transaction pinning introduction"
+            },
+            {
+                "id": "slide-2",
+                "title": "How Pinning Works",
+                "description": "How an attacker exploits mempool policy rules (RBF, CPFP limits) to pin a transaction",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tx-pinning/slide-2.png",
+                "altText": "Transaction pinning attack mechanism"
+            },
+            {
+                "id": "slide-3",
+                "title": "Impact on Lightning Network",
+                "description": "Why transaction pinning is especially dangerous for Lightning channel closures and HTLCs",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tx-pinning/slide-3.png",
+                "altText": "Transaction pinning impact on Lightning Network"
+            },
+            {
+                "id": "slide-4",
+                "title": "Mitigations",
+                "description": "Proposed and deployed mitigations including package relay and v3 transactions",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tx-pinning/slide-4.png",
+                "altText": "Transaction pinning mitigations"
+            }
+        ]
     }
 ]
