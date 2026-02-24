@@ -177,12 +177,12 @@ Your task is to implement the `generateP2SHAddress` and `hexToASM` functions in 
     - For push data operations, extract the correct number of bytes as a hex string.
     - Join the parsed elements with spaces.
 
-Test your implementation with this redeem script: `5221031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe1321031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe1352ae`
+Test your implementation with this redeem script: `5121022afc20bf379bc96a2f4e9e63ffceb8652b2b6a097f63fbee6ecec2a49a48010e2103a767c7221e9f15f870f1ad9311f5ab937d79fcaeee15bb2c722bca515581b4c052ae`
 
 Expected results:
 
--   P2SH Address: `3PRx8wvqghQB1S8xGpFBmcVjN5fxGvpjLE`
--   ASM: `OP_2 031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe13 031e71524a170c87855f7e9bd3b212a0a3e28e3c91c19f24a9a0d9e251e5ffe13 OP_2 OP_CHECKMULTISIG`
+-   P2SH Address: `3QwJXQQu82a9jErSkTJxX3a1TABmvCqbae`
+-   ASM: `OP_1 OP_PUSHBYTES_33 022afc20bf379bc96a2f4e9e63ffceb8652b2b6a097f63fbee6ecec2a49a48010e OP_PUSHBYTES_33 03a767c7221e9f15f870f1ad9311f5ab937d79fcaeee15bb2c722bca515581b4c0 OP_2 OP_CHECKMULTISIG`
 
 This script represents a 2-of-2 multisig P2SH address.
 
