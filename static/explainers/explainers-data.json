@@ -1,5 +1,239 @@
 [
     {
+        "id": "dkg",
+        "title": "Distributed Key Generation (DKG)",
+        "description": "How a group of participants jointly generate a shared public key and secret shares — without any single party ever knowing the full private key.",
+        "category": "Cryptography",
+        "difficulty": "Advanced",
+        "slideCount": 8,
+        "tags": [
+            "dkg",
+            "threshold",
+            "key-generation",
+            "multisig",
+            "cryptography"
+        ],
+        "lastUpdated": "2026-07-01",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Distributed Key Generation — Slide 1",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-1.png",
+                "altText": "Distributed Key Generation, slide 1"
+            },
+            {
+                "id": "slide-2",
+                "title": "Distributed Key Generation — Slide 2",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-2.png",
+                "altText": "Distributed Key Generation, slide 2"
+            },
+            {
+                "id": "slide-3",
+                "title": "Distributed Key Generation — Slide 3",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-3.png",
+                "altText": "Distributed Key Generation, slide 3"
+            },
+            {
+                "id": "slide-4",
+                "title": "Distributed Key Generation — Slide 4",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-4.png",
+                "altText": "Distributed Key Generation, slide 4"
+            },
+            {
+                "id": "slide-5",
+                "title": "Distributed Key Generation — Slide 5",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-5.png",
+                "altText": "Distributed Key Generation, slide 5"
+            },
+            {
+                "id": "slide-6",
+                "title": "Distributed Key Generation — Slide 6",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-6.png",
+                "altText": "Distributed Key Generation, slide 6"
+            },
+            {
+                "id": "slide-7",
+                "title": "Distributed Key Generation — Slide 7",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-7.png",
+                "altText": "Distributed Key Generation, slide 7"
+            },
+            {
+                "id": "slide-8",
+                "title": "Distributed Key Generation — Slide 8",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/dkg/slide-8.png",
+                "altText": "Distributed Key Generation, slide 8"
+            }
+        ]
+    },
+    {
+        "id": "frost",
+        "title": "FROST: Threshold Schnorr Signatures",
+        "description": "How FROST produces efficient threshold Schnorr signatures, letting t-of-n signers create what looks like a single signature on-chain.",
+        "category": "Cryptography",
+        "difficulty": "Advanced",
+        "slideCount": 4,
+        "tags": [
+            "frost",
+            "schnorr",
+            "threshold-signatures",
+            "multisig",
+            "taproot"
+        ],
+        "lastUpdated": "2026-07-01",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "FROST — Slide 1",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/frost/slide-1.png",
+                "altText": "FROST, slide 1"
+            },
+            {
+                "id": "slide-2",
+                "title": "FROST — Slide 2",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/frost/slide-2.png",
+                "altText": "FROST, slide 2"
+            },
+            {
+                "id": "slide-3",
+                "title": "FROST — Slide 3",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/frost/slide-3.png",
+                "altText": "FROST, slide 3"
+            },
+            {
+                "id": "slide-4",
+                "title": "FROST — Slide 4",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/frost/slide-4.png",
+                "altText": "FROST, slide 4"
+            }
+        ]
+    },
+    {
+        "id": "shamir-secret-sharing",
+        "title": "Shamir Secret Sharing",
+        "description": "How a secret can be split into shares so that any threshold of them reconstructs it, while fewer reveal nothing at all.",
+        "category": "Cryptography",
+        "difficulty": "Intermediate",
+        "slideCount": 9,
+        "tags": [
+            "shamir",
+            "secret-sharing",
+            "backup",
+            "key-management",
+            "cryptography"
+        ],
+        "lastUpdated": "2026-07-01",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Shamir Secret Sharing — Slide 1",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-1.png",
+                "altText": "Shamir Secret Sharing, slide 1"
+            },
+            {
+                "id": "slide-2",
+                "title": "Shamir Secret Sharing — Slide 2",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-2.png",
+                "altText": "Shamir Secret Sharing, slide 2"
+            },
+            {
+                "id": "slide-3",
+                "title": "Shamir Secret Sharing — Slide 3",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-3.png",
+                "altText": "Shamir Secret Sharing, slide 3"
+            },
+            {
+                "id": "slide-4",
+                "title": "Shamir Secret Sharing — Slide 4",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-4.png",
+                "altText": "Shamir Secret Sharing, slide 4"
+            },
+            {
+                "id": "slide-5",
+                "title": "Shamir Secret Sharing — Slide 5",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-5.png",
+                "altText": "Shamir Secret Sharing, slide 5"
+            },
+            {
+                "id": "slide-6",
+                "title": "Shamir Secret Sharing — Slide 6",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-6.png",
+                "altText": "Shamir Secret Sharing, slide 6"
+            },
+            {
+                "id": "slide-7",
+                "title": "Shamir Secret Sharing — Slide 7",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-7.png",
+                "altText": "Shamir Secret Sharing, slide 7"
+            },
+            {
+                "id": "slide-8",
+                "title": "Shamir Secret Sharing — Slide 8",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-8.png",
+                "altText": "Shamir Secret Sharing, slide 8"
+            },
+            {
+                "id": "slide-9",
+                "title": "Shamir Secret Sharing — Slide 9",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shamir-secret-sharing/slide-9.png",
+                "altText": "Shamir Secret Sharing, slide 9"
+            }
+        ]
+    },
+    {
+        "id": "tor",
+        "title": "Tor: Onion Routing",
+        "description": "How Tor wraps traffic in layers of encryption and routes it through relays to preserve network-level privacy.",
+        "category": "Privacy",
+        "difficulty": "Intermediate",
+        "slideCount": 6,
+        "tags": [
+            "tor",
+            "privacy",
+            "networking",
+            "anonymity",
+            "onion-routing"
+        ],
+        "lastUpdated": "2026-07-01",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Tor — Slide 1",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tor/slide-1.png",
+                "altText": "Tor, slide 1"
+            },
+            {
+                "id": "slide-2",
+                "title": "Tor — Slide 2",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tor/slide-2.png",
+                "altText": "Tor, slide 2"
+            },
+            {
+                "id": "slide-3",
+                "title": "Tor — Slide 3",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tor/slide-3.png",
+                "altText": "Tor, slide 3"
+            },
+            {
+                "id": "slide-4",
+                "title": "Tor — Slide 4",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tor/slide-4.png",
+                "altText": "Tor, slide 4"
+            },
+            {
+                "id": "slide-5",
+                "title": "Tor — Slide 5",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tor/slide-5.png",
+                "altText": "Tor, slide 5"
+            },
+            {
+                "id": "slide-6",
+                "title": "Tor — Slide 6",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/tor/slide-6.png",
+                "altText": "Tor, slide 6"
+            }
+        ]
+    },
+    {
         "id": "cpfp-child-pays-for-parent",
         "title": "CPFP - Child Pays For Parent",
         "description": "Understanding how child transactions can accelerate parent transactions through higher fees",
