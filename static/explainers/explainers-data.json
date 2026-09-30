@@ -1,5 +1,325 @@
 [
     {
+        "id": "liquid-attack",
+        "title": "Liquid Attack Explained",
+        "description": "A visual walkthrough of Liquid peg-ins and peg-outs, confidential transactions, and how a range-proof cache bypass can lead to unbacked L-BTC.",
+        "category": "Security",
+        "difficulty": "Advanced",
+        "slideCount": 12,
+        "tags": [
+            "liquid",
+            "sidechain",
+            "confidential-transactions",
+            "pedersen-commitments",
+            "range-proofs",
+            "peg-out",
+            "security"
+        ],
+        "lastUpdated": "2026-09-30",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Liquid and Peg-ins",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-1.png",
+                "altText": "Liquid Attack Explained cover introducing the Liquid sidechain, L-BTC, and Bitcoin peg-ins."
+            },
+            {
+                "id": "slide-2",
+                "title": "Peg-outs and Functionaries",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-2.png",
+                "altText": "A Liquid peg-out converts L-BTC back to Bitcoin with approval from federation functionaries."
+            },
+            {
+                "id": "slide-3",
+                "title": "Peg-out Authorization",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-3.png",
+                "altText": "Peg-out authorization and the role of SideSwap in receiving Bitcoin for regular users."
+            },
+            {
+                "id": "slide-4",
+                "title": "Confidential Transactions",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-4.png",
+                "altText": "A comparison of visible Bitcoin transaction amounts and hidden amounts in Liquid confidential transactions."
+            },
+            {
+                "id": "slide-5",
+                "title": "Pedersen Commitments",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-5.png",
+                "altText": "A transaction diagram and the Pedersen commitment formula show how amounts are hidden with blinding factors."
+            },
+            {
+                "id": "slide-6",
+                "title": "Checking the Balance",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-6.png",
+                "altText": "Input and output commitments balance without revealing transaction amounts when the blinding factors balance."
+            },
+            {
+                "id": "slide-7",
+                "title": "The Negative Amount Problem",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-7.png",
+                "altText": "A malicious transaction pairs a positive output with a negative output while passing the commitment balance check."
+            },
+            {
+                "id": "slide-8",
+                "title": "Range Proofs and Caching",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-8.png",
+                "altText": "Range proofs reject negative output amounts, and a cache stores previously verified proofs."
+            },
+            {
+                "id": "slide-9",
+                "title": "Bypassing Range-proof Verification",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-9.png",
+                "altText": "An attack diagram shows a malicious transaction reusing a cached verification key so its range proof is skipped."
+            },
+            {
+                "id": "slide-10",
+                "title": "Creating Unbacked L-BTC",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-10.png",
+                "altText": "The malicious transaction passes the balance check after range-proof verification is skipped, creating unbacked L-BTC."
+            },
+            {
+                "id": "slide-11",
+                "title": "Requesting a Peg-out",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-11.png",
+                "altText": "The attacker sends L-BTC to SideSwap, which creates a peg-out for the functionaries to authorize."
+            },
+            {
+                "id": "slide-12",
+                "title": "Completing the Bitcoin Payout",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/liquid-attack/slide-12.png",
+                "altText": "The federation sends Bitcoin to SideSwap, which forwards the payout to the attacker, followed by a closing panel."
+            }
+        ]
+    },
+    {
+        "id": "replay-attack",
+        "title": "Replay Attack",
+        "description": "How a transaction can be copied and replayed across two chains that share a history after a Bitcoin fork.",
+        "category": "Security",
+        "difficulty": "Intermediate",
+        "slideCount": 4,
+        "tags": [
+            "replay-attack",
+            "forks",
+            "transactions",
+            "utxo",
+            "replay-protection",
+            "security"
+        ],
+        "lastUpdated": "2026-09-30",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "A Fork with New Rules",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/replay-attack/slide-1.png",
+                "altText": "Replay Attack cover introducing a hypothetical Bitcoin fork that activates new rules at block 100."
+            },
+            {
+                "id": "slide-2",
+                "title": "Shared History Before the Fork",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/replay-attack/slide-2.png",
+                "altText": "Two chains share blocks and UTXOs before diverging, including a UTXO owned by Alice."
+            },
+            {
+                "id": "slide-3",
+                "title": "Spending on One Chain",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/replay-attack/slide-3.png",
+                "altText": "Alice signs and broadcasts a transaction on Bitcoin while her pre-fork UTXO also exists on the other chain."
+            },
+            {
+                "id": "slide-4",
+                "title": "Replaying the Transaction",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/replay-attack/slide-4.png",
+                "altText": "An attacker copies the same transaction to the fork, where it is also valid, illustrating a replay attack."
+            }
+        ]
+    },
+    {
+        "id": "shielded-bitcoin",
+        "title": "Shielded Bitcoin",
+        "description": "Follow a shielded transfer through encrypted notes, nullifiers, zero-knowledge proofs, Bitcoin transfer envelopes, indexers, and wallet note discovery.",
+        "category": "Privacy",
+        "difficulty": "Advanced",
+        "slideCount": 12,
+        "tags": [
+            "shielded-bitcoin",
+            "privacy",
+            "encrypted-notes",
+            "nullifiers",
+            "zero-knowledge-proofs",
+            "op-return",
+            "indexers"
+        ],
+        "lastUpdated": "2026-09-30",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Introducing Shielded Bitcoin",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-1.png",
+                "altText": "Shielded Bitcoin cover with a black-box overview of Bitcoin entering and leaving the shielded system."
+            },
+            {
+                "id": "slide-2",
+                "title": "Inside a Shielded Transfer",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-2.png",
+                "altText": "Encrypted notes, nullifiers, zero-knowledge proofs, and indexers are introduced before Alice pays Bob 0.7 BTC."
+            },
+            {
+                "id": "slide-3",
+                "title": "From UTXOs to Notes",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-3.png",
+                "altText": "Public Bitcoin UTXOs are compared with private shielded notes before following Alice through a transfer."
+            },
+            {
+                "id": "slide-4",
+                "title": "Creating Bob's Note",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-4.png",
+                "altText": "Alice creates a 0.7 BTC note for Bob containing an amount, a diversifier, and randomness."
+            },
+            {
+                "id": "slide-5",
+                "title": "Encrypting Notes and Creating Change",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-5.png",
+                "altText": "Alice encrypts Bob's note using his shielded address and creates a 0.3 BTC change note for herself."
+            },
+            {
+                "id": "slide-6",
+                "title": "Consuming a Note and Adding a Nullifier",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-6.png",
+                "altText": "Alice consumes her original note, creates new notes, and adds the spent note's nullifier to the nullifier set."
+            },
+            {
+                "id": "slide-7",
+                "title": "Preventing Double-spending and Publishing an Envelope",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-7.png",
+                "altText": "Repeated nullifiers are rejected, and Alice publishes a transfer envelope in a Bitcoin OP_RETURN output."
+            },
+            {
+                "id": "slide-8",
+                "title": "What the Zero-knowledge Proof Shows",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-8.png",
+                "altText": "The transfer envelope contains encrypted notes, a nullifier, and a proof of note existence, spending authority, and balanced amounts."
+            },
+            {
+                "id": "slide-9",
+                "title": "Indexers Reconstruct the State",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-9.png",
+                "altText": "Indexers scan transfer envelopes published on Bitcoin and reconstruct a note tree and a nullifier set."
+            },
+            {
+                "id": "slide-10",
+                "title": "Discovering Notes with a Viewing Key",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-10.png",
+                "altText": "The shielded state grows as notes and nullifiers are added, while Bob's wallet tries to decrypt notes with his viewing key."
+            },
+            {
+                "id": "slide-11",
+                "title": "Saving and Spending a Received Note",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-11.png",
+                "altText": "Bob's wallet successfully decrypts his note and saves it for later spending, introducing the recap."
+            },
+            {
+                "id": "slide-12",
+                "title": "Shielded Bitcoin Recap",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/shielded-bitcoin/slide-12.png",
+                "altText": "A recap connects encrypted notes, nullifiers, zero-knowledge proofs, Bitcoin, indexers, and wallets."
+            }
+        ]
+    },
+    {
+        "id": "mining-pool",
+        "title": "Mining Pool",
+        "description": "How miners combine hash power in a pool, submit shares against an easier target, find blocks, and divide rewards using different payout methods.",
+        "category": "Bitcoin Basics",
+        "difficulty": "Beginner",
+        "slideCount": 12,
+        "tags": [
+            "mining",
+            "mining-pool",
+            "proof-of-work",
+            "hashrate",
+            "shares",
+            "rewards",
+            "pps",
+            "pplns"
+        ],
+        "lastUpdated": "2026-09-30",
+        "slides": [
+            {
+                "id": "slide-1",
+                "title": "Introducing Mining Pools",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-1.png",
+                "altText": "Mining Pool cover showing several miners connected to a shared pool."
+            },
+            {
+                "id": "slide-2",
+                "title": "The Network Target",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-2.png",
+                "altText": "Miners compete to find a block hash below the Bitcoin network target."
+            },
+            {
+                "id": "slide-3",
+                "title": "Solo Mining",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-3.png",
+                "altText": "A solo miner makes repeated hashing attempts and expends energy without finding a valid block."
+            },
+            {
+                "id": "slide-4",
+                "title": "Combining Hash Power",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-4.png",
+                "altText": "A mining pool combines the efforts of multiple miners for more consistent rewards."
+            },
+            {
+                "id": "slide-5",
+                "title": "Assigning a Pool Target",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-5.png",
+                "altText": "The pool sets an easier target and assigns it to participating miners."
+            },
+            {
+                "id": "slide-6",
+                "title": "Submitting Work to the Pool",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-6.png",
+                "altText": "A miner submits a hash meeting the pool target, and the pool compares it with the network target."
+            },
+            {
+                "id": "slide-7",
+                "title": "Counting Shares",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-7.png",
+                "altText": "A miner earns a share for work meeting the pool target even when it does not meet the network target."
+            },
+            {
+                "id": "slide-8",
+                "title": "Finding a Block",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-8.png",
+                "altText": "When a submitted hash meets the network target, the pool broadcasts the new block."
+            },
+            {
+                "id": "slide-9",
+                "title": "Dividing the Rewards",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-9.png",
+                "altText": "The pool must distribute the rewards among its participating miners."
+            },
+            {
+                "id": "slide-10",
+                "title": "Rewarding Contributed Shares",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-10.png",
+                "altText": "Miners have different share counts that represent their contributed work."
+            },
+            {
+                "id": "slide-11",
+                "title": "Pool Payout Methods",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-11.png",
+                "altText": "Pay-Per-Share, Pay-Per-Last-N-Shares, and proportional payouts are introduced as mining pool payout methods."
+            },
+            {
+                "id": "slide-12",
+                "title": "Learn More About Bitcoin",
+                "imageUrl": "/decoding-bitcoin/static/explainers/images/mining-pool/slide-12.png",
+                "altText": "Closing slide inviting readers to follow bitcoin_devs for more Bitcoin technical content."
+            }
+        ]
+    },
+    {
         "id": "dkg",
         "title": "Distributed Key Generation (DKG)",
         "description": "How a group of participants jointly generate a shared public key and secret shares — without any single party ever knowing the full private key.",
